@@ -7,16 +7,16 @@
 /// 
 /// @jujuadams 2020-05-01
 
-function sna_to_json_string()
+function sna_to_json()
 {
     var _ds          = argument[0];
     var _pretty      = ((argument_count > 1) && (argument[1] != undefined))? argument[1] : false;
     var _alphabetise = ((argument_count > 2) && (argument[2] != undefined))? argument[2] : false;
     
-    return (new __sna_to_json_string_parser(_ds, _pretty, _alphabetise)).result;
+    return (new __sna_to_json_parser(_ds, _pretty, _alphabetise)).result;
 }
 
-function __sna_to_json_string_parser(_ds, _pretty, _alphabetise) constructor
+function __sna_to_json_parser(_ds, _pretty, _alphabetise) constructor
 {
     root        = _ds;
     pretty      = _pretty;

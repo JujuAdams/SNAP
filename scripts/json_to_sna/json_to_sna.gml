@@ -5,7 +5,7 @@
 /// 
 /// @jujuadams 2020-05-01
 
-function json_string_to_sna(_string)
+function json_to_sna(_string)
 {
     var _buffer = buffer_create(string_byte_length(_string), buffer_fixed, 1);
     buffer_write(_buffer, buffer_text, _string);
@@ -13,7 +13,7 @@ function json_string_to_sna(_string)
     
     var _cache_buffer = buffer_create(256, buffer_grow, 1);
     
-    var _parser = new __json_string_to_sna_parser(_buffer, buffer_get_size(_buffer), _cache_buffer);
+    var _parser = new __json_to_sna_parser(_buffer, buffer_get_size(_buffer), _cache_buffer);
     
     buffer_delete(_buffer);
     buffer_delete(_cache_buffer);
@@ -21,7 +21,7 @@ function json_string_to_sna(_string)
     return _parser.root;
 }
 
-function __json_string_to_sna_parser(_buffer, _buffer_size, _cache_buffer) constructor
+function __json_to_sna_parser(_buffer, _buffer_size, _cache_buffer) constructor
 {
     buffer          = _buffer;
     buffer_size     = _buffer_size;
@@ -207,7 +207,7 @@ function __json_string_to_sna_parser(_buffer, _buffer_size, _cache_buffer) const
                     {
                         buffer_seek(buffer, buffer_seek_relative, -1);
                         cache_started = true;
-                        cache_value = (new __json_string_to_sna_parser(buffer, buffer_size, cache_buffer)).root;
+                        cache_value = (new __json_to_sna_parser(buffer, buffer_size, cache_buffer)).root;
                     }
                     else
                     {
@@ -226,7 +226,7 @@ function __json_string_to_sna_parser(_buffer, _buffer_size, _cache_buffer) const
                     {
                         buffer_seek(buffer, buffer_seek_relative, -1);
                         cache_started = true;
-                        cache_value = (new __json_string_to_sna_parser(buffer, buffer_size, cache_buffer)).root;
+                        cache_value = (new __json_to_sna_parser(buffer, buffer_size, cache_buffer)).root;
                     }
                     else
                     {
