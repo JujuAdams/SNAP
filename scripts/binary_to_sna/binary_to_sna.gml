@@ -1,6 +1,8 @@
 /// @return Nested struct/array data decoded from the buffer
 /// 
 /// @param buffer           Binary data to be decoded, created by sna_to_binary()
+/// @param [offset]         Start position for binary decoding in the buffer. Defaults to 0, the start of the buffer
+/// @param [size]           Number of bytes of data to be decoded. Set to -1 to use the entire size of the buffer. Defaults to -1
 /// @param [destroyBuffer]  Set to <true> to destroy the input buffer. Defaults to <false>
 /// 
 /// @jujuadams 2020-05-02
@@ -8,9 +10,16 @@
 function binary_to_sna()
 {
     var _buffer         = argument[0];
-    var _destroy_buffer = ((argument_count > 1) && (argument[1] != undefined))? argument[1] : false;
+    var _offset         = ((argument_count > 1) && (argument[1] != undefined))? argument[1] : 0;
+    var _size           = ((argument_count > 2) && (argument[2] != undefined))? argument[2] : -1;
+    var _destroy_buffer = ((argument_count > 3) && (argument[3] != undefined))? argument[3] : false;
     
-    var _result = (new __binary_to_sna_parser(_buffer, buffer_get_size(_buffer))).root;
+    if (_size < 0) _size = buffer_get_size(_buffer) - _offset;
+    
+    var _old_tell = buffer_tell(_buffer);
+    buffer_seek(_buffer, buffer_seek_start, _offset);
+    var _result = (new __binary_to_sna_parser(_buffer, _size)).root;
+    buffer_seek(_buffer, buffer_seek_start, _old_tell);
     
     if (_destroy_buffer) buffer_delete(_buffer);
     
