@@ -209,6 +209,25 @@ function __sna_to_json_string_parser(_ds, _pretty, _alphabetise) constructor
         {
             buffer_write(buffer, buffer_text, value? "true" : "false");
         }
+        else if (is_real(value))
+        {
+            //Strip off trailing zeroes, and if necessary, the decimal point too
+            value = string_format(value, 0, 10);
+            
+            var _length = string_length(value);
+            var _i = _length;
+            repeat(_length)
+            {
+                if (string_char_at(value, _i) != "0") break;
+                --_i;
+            }
+            
+            if (string_char_at(value, _i) == ".") _i--;
+            
+            value = string_delete(value, _i + 1, _length - _i);
+            
+            buffer_write(buffer, buffer_text, value);
+        }
         else
         {
             buffer_write(buffer, buffer_text, string(value));
