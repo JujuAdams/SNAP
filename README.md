@@ -1,4 +1,4 @@
-<h1 align="center">Struct n' Array JSON 1.1.0</h1>
+<h1 align="center">Struct n' Array 1.1.0</h1>
 
 <p align="center">Replacement for ds_map/ds_list-based JSON encoding/decoding</p>
 
