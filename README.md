@@ -18,4 +18,4 @@ Turns struct and array nested data into a JSON string. The root data type can be
 
 ### json_string_to_sna(string) ###
 
-Decodes a JSON string into nested struct/array data. This function will happily ignore whitespace and handles `\\`, `\"`, `\n`, `\r`, and `\t` escaped characters. Also supports `true`, `false`, and `null` values.
+Decodes a JSON string into nested struct/array data. This function will happily ignore formatting whitespace and handles `\\`, `\"`, `\n`, `\r`, and `\t` escaped characters. Also supports `true`, `false`, and `null` values.
