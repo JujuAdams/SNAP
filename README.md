@@ -2,7 +2,7 @@
 
 <p align="center">Replacement for ds_map/ds_list-based JSON encoding/decoding</p>
 
-<p align="center"><a href="https://github.com/JujuAdams/struct-n-array-JSON/releases/tag/1.1.0">Download the .yymps here</a></p>
+<p align="center"><a href="https://github.com/JujuAdams/SNAP/releases/tag/2.0.0">Download the .yymps here</a></p>
 
 &nbsp;
 
