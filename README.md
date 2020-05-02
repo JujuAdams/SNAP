@@ -36,10 +36,16 @@ Unpacks binary encoded struct/array data. An `[offset]` and total `[size]` for t
 
 ### snap_deep_copy(struct/array)
 
+Returns a copy of a struct or array, including a copy of any nested structs and arrays.
+
 &nbsp;
 
 ### snap_difference(old, new)
 
+Returns a data structure (itself made from structs and arrays) that describes the difference between two structs/arrays.
+
 &nbsp;
 
 ### snap_difference_apply(struct/array, differenceStruct)
+
+Applies a difference delta structure created by `snap_difference()` to a struct/array.
