@@ -80,6 +80,6 @@ function __snap_deep_copy(_value) constructor
     }
     else
     {
-        show_error("Value not struct or array. Returning <undefined>\n ", false);
+        copy = source;
     }
 }
