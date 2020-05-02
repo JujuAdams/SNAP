@@ -30,7 +30,7 @@ function __snap_difference_apply(_source, _diff) constructor
             switch(_diff[0])
             {
                 case 0x02: //Remove
-                    variable_struct_set(_source, _name, undefined); //TODO - Replace this with a proper deletion 
+                    variable_struct_set(_source, _name, undefined); //TODO - Replace this with a proper deletion once GMS2.3.0 supports it
                 break;
                 
                 case 0x03: //Add
@@ -78,7 +78,7 @@ function __snap_difference_apply(_source, _diff) constructor
             switch(_diff[0])
             {
                 case 0x02: //Remove
-                    _source[@ _index] = undefined;
+                    _source[@ _index] = undefined; //TODO - Replace this with a proper deletion once GMS2.3.0 supports it
                 break;
                 
                 case 0x03: //Add
