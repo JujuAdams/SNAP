@@ -46,8 +46,8 @@
     "PhysicsWorldPixToMetres": 0.1,
   },
   "parent": {
-    "name": "SnA",
-    "path": "SnA.yyp",
+    "name": "snap",
+    "path": "snap.yyp",
   },
   "resourceVersion": "1.0",
   "name": "rMain",

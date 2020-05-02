@@ -7,7 +7,7 @@
 /// 
 /// @jujuadams 2020-05-02
 
-function binary_to_sna()
+function snap_from_binary()
 {
     var _buffer         = argument[0];
     var _offset         = ((argument_count > 1) && (argument[1] != undefined))? argument[1] : 0;
@@ -18,7 +18,7 @@ function binary_to_sna()
     
     var _old_tell = buffer_tell(_buffer);
     buffer_seek(_buffer, buffer_seek_start, _offset);
-    var _result = (new __binary_to_sna_parser(_buffer, _size)).root;
+    var _result = (new __snap_from_binary_parser(_buffer, _size)).root;
     buffer_seek(_buffer, buffer_seek_start, _old_tell);
     
     if (_destroy_buffer) buffer_delete(_buffer);
@@ -26,7 +26,7 @@ function binary_to_sna()
     return _result;
 }
 
-function __binary_to_sna_parser(_buffer, _buffer_size) constructor
+function __snap_from_binary_parser(_buffer, _buffer_size) constructor
 {
     buffer          = _buffer;
     buffer_size     = _buffer_size;
@@ -89,7 +89,7 @@ function __binary_to_sna_parser(_buffer, _buffer_size) constructor
                     case 0x01: //struct
                     case 0x02: //array
                         buffer_seek(buffer, buffer_seek_relative, -1);
-                        value = (new __binary_to_sna_parser(_buffer, _buffer_size)).root;
+                        value = (new __snap_from_binary_parser(_buffer, _buffer_size)).root;
                     break;
                     
                     case 0x03: //string

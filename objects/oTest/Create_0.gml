@@ -3,6 +3,7 @@ struct = {
     b : false,
     c : undefined,
     d : 1/9,
+    e : 15/100,
     array : [
         5,
         6,
@@ -24,8 +25,8 @@ struct = {
     url : "https://www.jujuadams.com/"
 };
 
-show_debug_message(sna_to_json(struct, true));
-show_debug_message(sna_to_json(struct, false));
-show_debug_message(sna_to_json(json_to_sna(sna_to_json(struct))));
+show_debug_message(snap_to_json_string(struct, true));
+show_debug_message(snap_to_json_string(struct, false));
+show_debug_message(snap_to_json_string(snap_from_json_string(snap_to_json_string(struct))));
 
-show_debug_message(sna_to_json(binary_to_sna(sna_to_binary(struct))));
+show_debug_message(snap_to_json_string(snap_from_binary(snap_to_binary(struct))));

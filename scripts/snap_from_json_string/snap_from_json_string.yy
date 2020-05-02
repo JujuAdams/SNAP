@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Struct n' Array",
-    "path": "folders/Struct n' Array.yy",
+    "name": "Struct N' Array Parser",
+    "path": "folders/Struct N' Array Parser.yy",
   },
   "resourceVersion": "1.0",
-  "name": "sna_to_json",
+  "name": "snap_from_json_string",
   "tags": [],
   "resourceType": "GMScript",
 }

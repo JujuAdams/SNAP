@@ -23,8 +23,8 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "SnA",
-    "path": "SnA.yyp",
+    "name": "snap",
+    "path": "snap.yyp",
   },
   "resourceVersion": "1.0",
   "name": "oTest",

@@ -4,12 +4,12 @@
 /// 
 /// @jujuadams 2020-05-02
 
-function sna_to_binary(_ds)
+function snap_to_binary(_ds)
 {
-    return (new __sna_to_binary_parser(_ds)).buffer;
+    return (new __snap_to_binary_parser(_ds)).buffer;
 }
 
-function __sna_to_binary_parser(_ds) constructor
+function __snap_to_binary_parser(_ds) constructor
 {
     root = _ds;
     buffer = buffer_create(1024, buffer_grow, 1);
