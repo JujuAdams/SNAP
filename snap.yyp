@@ -1,5 +1,6 @@
 {
   "resources": [
+    {"id":{"name":"snap_deep_copy","path":"scripts/snap_deep_copy/snap_deep_copy.yy",},"order":4,},
     {"id":{"name":"snap_from_json_string","path":"scripts/snap_from_json_string/snap_from_json_string.yy",},"order":1,},
     {"id":{"name":"snap_to_json_string","path":"scripts/snap_to_json_string/snap_to_json_string.yy",},"order":0,},
     {"id":{"name":"snap_to_binary","path":"scripts/snap_to_binary/snap_to_binary.yy",},"order":2,},
