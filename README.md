@@ -42,4 +42,4 @@ Unpacks binary encoded struct/array data. An `[offset]` and total `[size]` for t
 
 &nbsp;
 
-### snap_difference_apply(struct/array)
+### snap_difference_apply(struct/array, differenceStruct)
