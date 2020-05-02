@@ -4,6 +4,19 @@
 /// 
 /// @jujuadams 2020-05-02
 
+/*
+    0x00  -  terminator
+    0x01  -  struct
+    0x02  -  array
+    0x03  -  string
+    0x04  -  f64
+    0x05  -  <false>
+    0x06  -  <true>
+    0x07  -  <undefined>
+    0x08  -  s32
+    0x09  -  u64
+*/
+
 function snap_to_binary(_ds)
 {
     return (new __snap_to_binary_parser(_ds)).buffer;
@@ -16,7 +29,7 @@ function __snap_to_binary_parser(_ds) constructor
     
     static parse_struct = function(_struct)
     {
-        buffer_write(buffer, buffer_u8, 0x01);
+        buffer_write(buffer, buffer_u8, 0x01); //Struct
         
         var _names = variable_struct_get_names(_struct);
         var _count = array_length(_names);
@@ -32,7 +45,7 @@ function __snap_to_binary_parser(_ds) constructor
                 _name = string(ptr(_name));
             }
             
-            buffer_write(buffer, buffer_u8, 0x03);
+            buffer_write(buffer, buffer_u8, 0x03); //String
             buffer_write(buffer, buffer_string, string(_name));
             
             write_value();
@@ -40,7 +53,7 @@ function __snap_to_binary_parser(_ds) constructor
             ++_i;
         }
         
-        buffer_write(buffer, buffer_u8, 0x00);
+        buffer_write(buffer, buffer_u8, 0x00); //Terminator
     }
     
     
@@ -51,7 +64,7 @@ function __snap_to_binary_parser(_ds) constructor
         var _count = array_length(_array);
         var _i = 0;
         
-        buffer_write(buffer, buffer_u8, 0x02);
+        buffer_write(buffer, buffer_u8, 0x02); ///Array
         
         repeat(_count)
         {
@@ -60,7 +73,7 @@ function __snap_to_binary_parser(_ds) constructor
             ++_i;
         }
         
-        buffer_write(buffer, buffer_u8, 0x00);
+        buffer_write(buffer, buffer_u8, 0x00); //Terminator
     }
     
     
@@ -77,41 +90,41 @@ function __snap_to_binary_parser(_ds) constructor
         }
         else if (is_string(value))
         {
-            buffer_write(buffer, buffer_u8, 0x03);
+            buffer_write(buffer, buffer_u8, 0x03); //String
             buffer_write(buffer, buffer_string, value);
         }
         else if (is_real(value))
         {
             if (value == 0)
             {
-                buffer_write(buffer, buffer_u8, 0x05);
+                buffer_write(buffer, buffer_u8, 0x05); //<false>
             }
             else if (value == 1)
             {
-                buffer_write(buffer, buffer_u8, 0x06);
+                buffer_write(buffer, buffer_u8, 0x06); //<true>
             }
             else
             {
-                buffer_write(buffer, buffer_u8, 0x04);
+                buffer_write(buffer, buffer_u8, 0x04); //f64
                 buffer_write(buffer, buffer_f64, value);
             }
         }
         else if (is_bool(value))
         {
-            buffer_write(buffer, buffer_u8, value? 0x06 : 0x05);
+            buffer_write(buffer, buffer_u8, value? 0x06 : 0x05); //<true> or <false>
         }
         else if (is_undefined(value))
         {
-            buffer_write(buffer, buffer_u8, 0x07);
+            buffer_write(buffer, buffer_u8, 0x07); //<undefined>
         }
         else if (is_int32(value))
         {
-            buffer_write(buffer, buffer_u8, 0x08);
+            buffer_write(buffer, buffer_u8, 0x08); //s32
             buffer_write(buffer, buffer_s32, value);
         }
         else if (is_int64(value))
         {
-            buffer_write(buffer, buffer_u8, 0x09);
+            buffer_write(buffer, buffer_u8, 0x09); //u64
             buffer_write(buffer, buffer_u64, value);
         }
         else

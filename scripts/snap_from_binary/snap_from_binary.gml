@@ -7,6 +7,19 @@
 /// 
 /// @jujuadams 2020-05-02
 
+/*
+    0x00  -  terminator
+    0x01  -  struct
+    0x02  -  array
+    0x03  -  string
+    0x04  -  f64
+    0x05  -  <false>
+    0x06  -  <true>
+    0x07  -  <undefined>
+    0x08  -  s32
+    0x09  -  u64
+*/
+
 function snap_from_binary()
 {
     var _buffer         = argument[0];
@@ -42,11 +55,11 @@ function __snap_from_binary_parser(_buffer, _buffer_size) constructor
         if (in_key)
         {
             value = buffer_read(buffer, buffer_u8);
-            if (value == 0x00)
+            if (value == 0x00) //Terminator
             {
                 exit;
             }
-            else if (value == 0x03)
+            else if (value == 0x03) //String
             {
                 key = buffer_read(buffer, buffer_string);
             }
@@ -64,12 +77,12 @@ function __snap_from_binary_parser(_buffer, _buffer_size) constructor
             
             if (root == undefined)
             {
-                if (value == 0x01)
+                if (value == 0x01) //Struct
                 {
                     root = {};
                     root_is_struct = true;
                 }
-                else if (value == 0x02)
+                else if (value == 0x02) //Array
                 {
                     root = [];
                 }
@@ -82,21 +95,21 @@ function __snap_from_binary_parser(_buffer, _buffer_size) constructor
             {
                 switch(value)
                 {
-                    case 0x00: //terminator
+                    case 0x00: //Terminator
                         exit;
                     break;
                     
-                    case 0x01: //struct
-                    case 0x02: //array
+                    case 0x01: //Struct
+                    case 0x02: //Array
                         buffer_seek(buffer, buffer_seek_relative, -1);
                         value = (new __snap_from_binary_parser(_buffer, _buffer_size)).root;
                     break;
                     
-                    case 0x03: //string
+                    case 0x03: //String
                         value = buffer_read(buffer, buffer_string);
                     break;
                     
-                    case 0x04: //real
+                    case 0x04: //f64
                         value = buffer_read(buffer, buffer_f64);
                     break;
                     
