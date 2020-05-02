@@ -19,7 +19,7 @@ function __snap_difference_apply(_source, _diff) constructor
 {
     static apply_to_struct = function(_source, _top_diff)
     {
-        var _top_diff_struct = _top_diff.value;
+        var _top_diff_struct = _top_diff[1];
         var _top_diff_names = variable_struct_get_names(_top_diff_struct);
         var _i = 0;
         repeat(array_length(_top_diff_names))
@@ -27,18 +27,18 @@ function __snap_difference_apply(_source, _diff) constructor
             var _name = _top_diff_names[_i];
             var _diff = variable_struct_get(_top_diff_struct, _name);
             
-            switch(_diff.state)
+            switch(_diff[0])
             {
-                case "remove":
+                case 0x02: //Remove
                     variable_struct_set(_source, _name, undefined); //TODO - Replace this with a proper deletion 
                 break;
                 
-                case "add":
-                    variable_struct_set(_source, _name, snap_deep_copy(_diff.value));
+                case 0x03: //Add
+                    variable_struct_set(_source, _name, snap_deep_copy(_diff[1]));
                 break;
                 
-                case "edit":
-                    var _value = _diff.value;
+                case 0x04: //Edit
+                    var _value = _diff[1];
                     if (is_struct(_value))
                     {
                         apply_to_struct(variable_struct_get(_source, _name), _diff);
@@ -53,8 +53,8 @@ function __snap_difference_apply(_source, _diff) constructor
                     }
                 break;
                 
-                case "replace":
-                    variable_struct_set(_source, _name, snap_deep_copy(_diff.value));
+                case 0x05: //Replace
+                    variable_struct_set(_source, _name, snap_deep_copy(_diff[1]));
                 break;
             }
             
@@ -66,7 +66,7 @@ function __snap_difference_apply(_source, _diff) constructor
     
     static apply_to_array = function(_source, _top_diff)
     {
-        var _top_diff_struct = _top_diff.value;
+        var _top_diff_struct = _top_diff[1];
         var _top_diff_names = variable_struct_get_names(_top_diff_struct);
         var _i = 0;
         repeat(array_length(_top_diff_names))
@@ -75,18 +75,18 @@ function __snap_difference_apply(_source, _diff) constructor
             var _diff = variable_struct_get(_top_diff_struct, _name);
             var _index = real(_name);
             
-            switch(_diff.state)
+            switch(_diff[0])
             {
-                case "remove":
+                case 0x02: //Remove
                     _source[@ _index] = undefined;
                 break;
                 
-                case "add":
-                    _source[@ _index] = snap_deep_copy(_diff.value);
+                case 0x03: //Add
+                    _source[@ _index] = snap_deep_copy(_diff[1]);
                 break;
                 
-                case "edit":
-                    var _value = _diff.value;
+                case 0x04: //Edit
+                    var _value = _diff[1];
                     if (is_struct(_value))
                     {
                         apply_to_struct(_source[_index], _diff);
@@ -101,8 +101,8 @@ function __snap_difference_apply(_source, _diff) constructor
                     }
                 break;
                 
-                case "replace":
-                    _source[@ _index] = snap_deep_copy(_diff.value);
+                case 0x05: //Replace
+                    _source[@ _index] = snap_deep_copy(_diff[1]);
                 break;
             }
             
@@ -112,7 +112,7 @@ function __snap_difference_apply(_source, _diff) constructor
     
     
     
-    if (_diff.state != "no change")
+    if (_diff[0] != 0x01) //If we have changes
     {
         if (is_struct(_source))
         {

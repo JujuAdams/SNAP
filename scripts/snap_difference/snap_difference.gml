@@ -21,18 +21,11 @@ function __snap_difference(_source, _target) constructor
     
     
     
-    static snap_diff = function(_state) constructor
-    {
-        state = _state; //No change
-    }
-    
-    
-    
     static diff_struct = function(_source, _target)
     {
         var _changed = false;
         var _total_diff_struct = {};
-        var _total_diff = new snap_diff("no change");
+        var _total_diff = [0x01]; //Default to no change
         
         var _source_names = variable_struct_get_names(_source);
         var _target_names = variable_struct_get_names(_target);
@@ -45,7 +38,7 @@ function __snap_difference(_source, _target) constructor
             if (!variable_struct_exists(_target, _name))
             {
                 _changed = true;
-                variable_struct_set(_total_diff_struct, _name, new snap_diff("remove"));
+                variable_struct_set(_total_diff_struct, _name, [0x02]); //Remove
             }
             
             ++_i;
@@ -59,7 +52,7 @@ function __snap_difference(_source, _target) constructor
             if (variable_struct_exists(_source, _name))
             {
                 var _diff = diff_value(variable_struct_get(_source, _name), variable_struct_get(_target, _name));
-                if (_diff.state != "no change") //Only record the diff if something was changed
+                if (_diff[0] != 0x01) //Only write this diff if there's been a change
                 {
                     _changed = true;
                     variable_struct_set(_total_diff_struct, _name, _diff);
@@ -69,8 +62,7 @@ function __snap_difference(_source, _target) constructor
             {
                 _changed = true;
                 
-                var _diff = new snap_diff("add");
-                _diff.value = snap_deep_copy(variable_struct_get(_target, _name));
+                var _diff = [0x03, snap_deep_copy(variable_struct_get(_target, _name))]; //Add
                 variable_struct_set(_total_diff_struct, _name, _diff);
             }
             
@@ -79,8 +71,7 @@ function __snap_difference(_source, _target) constructor
         
         if (_changed)
         {
-            _total_diff.state = "edit";
-            _total_diff.value = _total_diff_struct;
+            _total_diff = [0x04, _total_diff_struct]; //Edit
         }
         
         return _total_diff;
@@ -92,7 +83,7 @@ function __snap_difference(_source, _target) constructor
     {
         var _changed = false;
         var _total_diff_struct = {};
-        var _total_diff = new snap_diff("no change");
+        var _total_diff = [0x01]; //Default to no change
         
         var _source_length = array_length(_source);
         var _target_length = array_length(_target);
@@ -106,7 +97,7 @@ function __snap_difference(_source, _target) constructor
                 var _i = _target_length;
                 repeat(_source_length - _target_length)
                 {
-                    variable_struct_set(_total_diff_struct, _i, new snap_diff("remove"));
+                    variable_struct_set(_total_diff_struct, _i, [0x02]); //Remove
                     ++_i;
                 }
             }
@@ -115,8 +106,7 @@ function __snap_difference(_source, _target) constructor
                 var _i = _target_length;
                 repeat(_target_length - _source_length)
                 {
-                    var _diff = new snap_diff("add");
-                    _diff.value = snap_deep_copy(_target[_i]);
+                    var _diff = [0x03, snap_deep_copy(_target[_i])]; //Add
                     
                     variable_struct_set(_total_diff_struct, _i, _diff);
                     ++_i;
@@ -129,7 +119,7 @@ function __snap_difference(_source, _target) constructor
         repeat(min(_source_length, _target_length))
         {
             var _diff = diff_value(_source[_i], _target[_i]);
-            if (_diff.state != "no change") //Only record the diff if something was changed
+            if (_diff[0] != 0x01) //Only write this diff if there's been a change
             {
                 _changed = true;
                 variable_struct_set(_total_diff_struct, _i, _diff);
@@ -140,8 +130,7 @@ function __snap_difference(_source, _target) constructor
         
         if (_changed)
         {
-            _total_diff.state = "edit";
-            _total_diff.value = _total_diff_struct;
+            _total_diff = [0x04, _total_diff_struct]; //Edit
         }
         
         return _total_diff;
@@ -156,8 +145,7 @@ function __snap_difference(_source, _target) constructor
         {
             if (typeof(_source) != typeof(_target))
             {
-                var _diff = new snap_diff("replace");
-                _diff.value = snap_deep_copy(_target);
+                var _diff = [0x05, snap_deep_copy(_target)]; //Replace
             }
             else if (is_struct(_source))
             {
@@ -170,12 +158,11 @@ function __snap_difference(_source, _target) constructor
         }
         else if (_source != _target)
         {
-            var _diff = new snap_diff("edit");
-            _diff.value = _target;
+            var _diff = [0x04, _target]; //Edit
         }
         else
         {
-            var _diff = new snap_diff("no change");
+            var _diff = [0x01]; //No change
         }
         
         return _diff;
