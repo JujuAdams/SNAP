@@ -1,4 +1,4 @@
-<h1 align="center">SNAP: Struct N' Array Parser 2.0.0</h1>
+<h1 align="center">SNAP: Struct N' Array Parser 2.1.0</h1>
 
 <p align="center">Replacement for ds_map/ds_list-based JSON encoding/decoding</p>
 
@@ -36,10 +36,18 @@ Unpacks binary encoded struct/array data. An `[offset]` and total `[size]` for t
 
 ### snap_deep_copy(struct/array)
 
+Returns a copy of the given `struct/array`, including a copy of any nested structs and arrays.
+
 &nbsp;
 
 ### snap_difference(old, new)
 
+Returns a data structure (itself made from structs/arrays) that describes the difference between the specified `old` and `new` struct/arrays.
+
 &nbsp;
 
 ### snap_difference_apply(struct/array, differenceStruct)
+
+Applies a difference delta structure created by `snap_difference()` to a struct/array.
+
+**N.B.** Due to missing functionality in GMS2.3.0, array element and struct variable deletion is not fully functional. Instead, when an array element or struct variable is deleted, the value will be set to `undefined`.
