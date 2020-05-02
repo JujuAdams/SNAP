@@ -31,3 +31,15 @@ Returns a buffer that holds binary encoded struct and array nested data. The roo
 ### binary_to_sna(buffer, [offset], [size], [destroyBuffer]) ###
 
 Unpacks binary encoded struct/array data. An `[offset]` and total `[size]` for the data within the buffer can be specified which is helpful for working with composite buffers. Set `[size]` to `-1` to use the entire size of the buffer. If `[destroyBuffer]` is set to `true` then the input buffer will be destroyed once the function has finished executing. This function is a lot faster than `json_to_sna()`.
+
+&nbsp;
+
+### snap_deep_copy(struct/array)
+
+&nbsp;
+
+### snap_difference(old, new)
+
+&nbsp;
+
+### snap_difference_apply(struct/array)
