@@ -49,3 +49,5 @@ Returns a data structure (itself made from structs/arrays) that describes the di
 ### snap_difference_apply(struct/array, differenceStruct)
 
 Applies a difference delta structure created by `snap_difference()` to a struct/array.
+
+**N.B.** Due to missing functionality in GMS2.3.0, array element and struct variable deletion is not fully functional. Instead, when an array element or struct variable is deleted, the value will be set to `undefined`.
