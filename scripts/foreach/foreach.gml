@@ -14,7 +14,8 @@ function foreach()
         var _i = 0;
         repeat(array_length(_names))
         {
-            _function(variable_struct_get(_ds, _names[_i]), _i);
+            var _name = _names[_i];
+            _function(variable_struct_get(_ds, _name), _i, _name);
             ++_i;
         }
     }
@@ -39,11 +40,13 @@ function foreach()
         break;
         
         case ds_type_map:
+            var _i = 0;
             var _key = ds_map_find_first(_ds);
             repeat(ds_map_size(_ds))
             {
-                _function(_ds[? _key], _key);
+                _function(_ds[? _key], _i, _key);
                 _key = ds_map_find_next(_ds, _key);
+                ++_i;
             }
         break;
         
