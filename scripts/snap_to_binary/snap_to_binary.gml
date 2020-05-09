@@ -27,91 +27,121 @@ function __snap_to_binary_parser(_ds) constructor
     root = _ds;
     buffer = buffer_create(1024, buffer_grow, 1);
     
-    
-    
-    static write_value = function(_value)
+    static parse_struct = function(_struct)
     {
-        if (is_struct(_value))
+        buffer_write(buffer, buffer_u8, 0x01); //Struct
+        
+        var _names = variable_struct_get_names(_struct);
+        var _count = array_length(_names);
+        var _i = 0;
+        repeat(_count)
         {
-            buffer_write(buffer, buffer_u8, 0x01); //Struct
+            var _name = _names[_i];
+            value = variable_struct_get(_struct, _name);
             
-            foreach(_value, function(_value, _index, _name)
+            if (is_struct(_name) || is_array(_name))
             {
-                if (is_struct(_name) || is_array(_name))
-                {
-                    show_error("Key type \"" + typeof(_name) + "\" not supported\n ", false);
-                    _name = string(ptr(_name));
-                }
-                
-                buffer_write(buffer, buffer_u8, 0x03); //String
-                buffer_write(buffer, buffer_string, string(_name));
-                
-                write_value(_value);
-            });
+                show_error("Key type \"" + typeof(_name) + "\" not supported\n ", false);
+                _name = string(ptr(_name));
+            }
             
-            buffer_write(buffer, buffer_u8, 0x00); //Terminator
+            buffer_write(buffer, buffer_u8, 0x03); //String
+            buffer_write(buffer, buffer_string, string(_name));
+            
+            write_value();
+            
+            ++_i;
         }
-        else if (is_array(_value))
+        
+        buffer_write(buffer, buffer_u8, 0x00); //Terminator
+    }
+    
+    
+    
+    static parse_array = function(_array)
+    {
+    
+        var _count = array_length(_array);
+        var _i = 0;
+        
+        buffer_write(buffer, buffer_u8, 0x02); ///Array
+        
+        repeat(_count)
         {
-            buffer_write(buffer, buffer_u8, 0x02); ///Array
-            
-            foreach(_value, function(_value, _index)
-            {
-                write_value(_value);
-            });
-            
-            buffer_write(buffer, buffer_u8, 0x00); //Terminator
+            value = _array[_i];
+            write_value();
+            ++_i;
         }
-        else if (is_string(_value))
+        
+        buffer_write(buffer, buffer_u8, 0x00); //Terminator
+    }
+    
+    
+    
+    static write_value = function()
+    {
+        if (is_struct(value))
+        {
+            parse_struct(value);
+        }
+        else if (is_array(value))
+        {
+            parse_array(value);
+        }
+        else if (is_string(value))
         {
             buffer_write(buffer, buffer_u8, 0x03); //String
-            buffer_write(buffer, buffer_string, _value);
+            buffer_write(buffer, buffer_string, value);
         }
-        else if (is_real(_value))
+        else if (is_real(value))
         {
-            if (_value == 0)
+            if (value == 0)
             {
                 buffer_write(buffer, buffer_u8, 0x05); //<false>
             }
-            else if (_value == 1)
+            else if (value == 1)
             {
                 buffer_write(buffer, buffer_u8, 0x06); //<true>
             }
             else
             {
                 buffer_write(buffer, buffer_u8, 0x04); //f64
-                buffer_write(buffer, buffer_f64, _value);
+                buffer_write(buffer, buffer_f64, value);
             }
         }
-        else if (is_bool(_value))
+        else if (is_bool(value))
         {
-            buffer_write(buffer, buffer_u8, _value? 0x06 : 0x05); //<true> or <false>
+            buffer_write(buffer, buffer_u8, value? 0x06 : 0x05); //<true> or <false>
         }
-        else if (is_undefined(_value))
+        else if (is_undefined(value))
         {
             buffer_write(buffer, buffer_u8, 0x07); //<undefined>
         }
-        else if (is_int32(_value))
+        else if (is_int32(value))
         {
             buffer_write(buffer, buffer_u8, 0x08); //s32
-            buffer_write(buffer, buffer_s32, _value);
+            buffer_write(buffer, buffer_s32, value);
         }
-        else if (is_int64(_value))
+        else if (is_int64(value))
         {
             buffer_write(buffer, buffer_u8, 0x09); //u64
-            buffer_write(buffer, buffer_u64, _value);
+            buffer_write(buffer, buffer_u64, value);
         }
         else
         {
-            show_message("Datatype \"" + typeof(_value) + "\" not supported");
+            show_message("Datatype \"" + typeof(value) + "\" not supported");
         }
     }
     
     
     
-    if (is_struct(root) || is_array(root))
+    if (is_struct(root))
     {
-        write_value(root);
+        parse_struct(root);
+    }
+    else if (is_array(root))
+    {
+        parse_array(root);
     }
     else
     {
