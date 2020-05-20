@@ -40,20 +40,6 @@ Returns a copy of the given `struct/array`, including a copy of any nested struc
 
 &nbsp;
 
-### snap_difference(old, new)
-
-Returns a data structure (itself made from structs/arrays) that describes the difference between the specified `old` and `new` struct/arrays.
-
-&nbsp;
-
-### snap_difference_apply(struct/array, differenceStruct)
-
-Applies a difference delta structure created by `snap_difference()` to a struct/array.
-
-**N.B.** Due to missing functionality in GMS2.3.0, array element and struct variable deletion is not fully functional. Instead, when an array element or struct variable is deleted, the value will be set to `undefined`.
-
-&nbsp;
-
 ### foreach(struct/array, function) ###
 
 Executes a function call for each element of the given `struct/array`. This iterator is shallow and will not also iterate over nested structs/arrays (though you can of course call `foreach` inside the specified `function`). `function` is passed the following parameters:
@@ -65,3 +51,17 @@ Executes a function call for each element of the given `struct/array`. This iter
 ```
 
 The order that values are sent into `function` is guaranteed for arrays (starting at index 0 and ascending), but is not guaranteed for structs due to the behaviour of GameMaker's internal hashmap. `function` is called in the scope of the instance/struct that calls `foreach()`.
+
+&nbsp;
+
+### snap_difference(old, new)
+
+Returns a data structure (itself made from structs/arrays) that describes the difference between the specified `old` and `new` struct/arrays.
+
+&nbsp;
+
+### snap_difference_apply(struct/array, differenceStruct)
+
+Applies a difference delta structure created by `snap_difference()` to a struct/array.
+
+**N.B.** Due to missing functionality in GMS2.3.0, array element and struct variable deletion is not fully functional. Instead, when an array element or struct variable is deleted, the value will be set to `undefined`.
