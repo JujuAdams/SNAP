@@ -1,5 +1,5 @@
 /// @return JSON string that encodes the struct/array nested data
-///         WARNING! This script does not cover 100% of the JSON specification. Contact @jujuadams if you'd like to require additional features
+///         WARNING! This script does not cover 100% of the JSON specification. Contact @jujuadams if you'd like to request additional features
 /// 
 /// @param struct/array          The data to be encoded. Can contain structs, arrays, strings, and numbers.   N.B. Will not encode ds_list, ds_map etc.
 /// @param [pretty]              (bool) Whether to format the string to be human readable. Defaults to <false>
