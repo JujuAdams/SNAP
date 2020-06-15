@@ -48,7 +48,7 @@ Turns struct and array nested data into a JSON string. The root data type can be
 
 ### snap_from_xml_string(string) ###
 
-Decodes a XML string into nested struct/array data. Each XML element is  struct. Element attributes are stored inside a sub-struct called `attr__`. Child elements are stored using their name as the member variable name in the parent. If more than one element with the same name exists then they are put into an array. If an element's content is a string then it is stored under the member variable `text__`. If an element has neither attributes nor children nor content then it is stored as an empty struct.
+Decodes a XML string into nested struct/array data. Each XML element is  struct. Element attributes are stored inside a sub-struct called `_attr`. Child elements are stored using their name as the member variable name in the parent. If more than one element with the same name exists then they are put into an array. If an element's content is a string then it is stored under the member variable `_text`. If an element has neither attributes nor children nor content then it is stored as an empty struct. The XML prolog is stored in a struct in the root struct under the member variable `_prolog`.
 
 This is a bit wordy, so here's an example. The following XML and struct/array literal are interchangable:
 
@@ -64,25 +64,25 @@ This is a bit wordy, so here's an example. The following XML and struct/array li
 ```GML
 {
     root : {
-        attr__ : {
+        _attr : {
             halign : "left",
             valign : "top",
         },
         text : {
-            text__ : "Hello World!"
+            _text : "Hello World!"
         },
         button : [
             {
-                attr__ : {
+                _attr : {
                     url   : "http://www.jujuadams.com/
                 },
-                text__ : "Click me!"
+                _text : "Click me!"
             },
             {
-                attr__ : {
+                _attr : {
                     url   : "http://www.spiderlili.com/
                 },
-                text__ : "Or me!"
+                text : "Or me!"
             }
         ],
         empty_tag : {}
