@@ -1,6 +1,6 @@
 <h1 align="center">SNAP: Struct N' Array Parser 2.2.0</h1>
 
-<p align="center">Replacement for ds_map/ds_list-based JSON encoding/decoding</p>
+<p align="center">Replacement for ds_map/ds_list-based encoding/decoding</p>
 
 <p align="center"><a href="https://github.com/JujuAdams/SNAP/releases/tag/2.0.0">Download the .yymps here</a></p>
 
@@ -37,12 +37,6 @@ Unpacks binary encoded struct/array data. An `[offset]` and total `[size]` for t
 ### snap_deep_copy(struct/array)
 
 Returns a copy of the given `struct/array`, including a copy of any nested structs and arrays.
-
-&nbsp;
-
-### snap_to_xml_string(struct/array, [alphabetizeStructs]) ###
-
-Turns struct and array nested data into a JSON string. The root data type can be either a struct or an array. Setting `[pretty]` to `true` will format the JSON string in a more pleasing human-readable way, whereas setting `[alphabetizeStructs]` to `true` will output the struct variables in ascending alphabetical order. Using pretty and/or alphabetized output does incur a performance penalty.
 
 &nbsp;
 
@@ -89,6 +83,12 @@ This is a bit wordy, so here's an example. The following XML and struct/array li
      }
  }
 ```
+
+&nbsp;
+
+### snap_to_xml_string(struct/array, [alphabetizeStructs]) ###
+
+Turns struct and array nested data into a XML string. The data must be structured as above in GML example for `snap_from_xml_string()`. Setting `[alphabetizeStructs]` to `true` will output child element in ascending alphabetical order. Using an alphabetized output incurs a performance penalty.
 
 &nbsp;
 
