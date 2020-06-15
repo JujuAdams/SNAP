@@ -61,28 +61,30 @@ This is a bit wordy, so here's an example. The following XML and struct/array li
 ```
 
 ```GML
-root = {
-    attr__ : {
-        halign : "left",
-        valign : "top",
-    },
-    text : {
-        text__ : "Hello World!"
-    },
-    button : [
-        {
-            attr__ : {
-                url   : "http://www.jujuadams.com/
-            },
-            text__ : "Click me!"
+{
+    root : {
+        attr__ : {
+            halign : "left",
+            valign : "top",
         },
-        {
-            attr__ : {
-                url   : "http://www.spiderlili.com/
+        text : {
+            text__ : "Hello World!"
+        },
+        button : [
+            {
+                attr__ : {
+                    url   : "http://www.jujuadams.com/
+                },
+                text__ : "Click me!"
             },
-            text__ : "Or me!"
-        }
-    ]
+            {
+                attr__ : {
+                    url   : "http://www.spiderlili.com/
+                },
+                text__ : "Or me!"
+            }
+        ]
+     }
  }
 ```
 
