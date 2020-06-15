@@ -48,7 +48,7 @@ Turns struct and array nested data into a JSON string. The root data type can be
 
 ### snap_from_xml_string(string) ###
 
-Decodes a XML string into nested struct/array data. Each XML element is  struct. Element attributes are stored inside a sub-struct called `attr__`. Child elements are stored using their name as the member variable name in the parent. If more than one element with the same name exists then they are put into an array. If an element's content is a string then it is stored under the member variable `text__`
+Decodes a XML string into nested struct/array data. Each XML element is  struct. Element attributes are stored inside a sub-struct called `attr__`. Child elements are stored using their name as the member variable name in the parent. If more than one element with the same name exists then they are put into an array. If an element's content is a string then it is stored under the member variable `text__`. If an element has neither attributes nor children nor content then it is stored as an empty struct.
 
 This is a bit wordy, so here's an example. The following XML and struct/array literal are interchangable:
 
@@ -57,6 +57,7 @@ This is a bit wordy, so here's an example. The following XML and struct/array li
     <text>Hello World!</text>
     <button url="http://www.jujuadams.com/">Click me!</button>
     <button url="http://www.spiderlili.com/">Or me!</button>
+    <empty_tag></empty_tag>
 </root>
 ```
 
@@ -83,7 +84,8 @@ This is a bit wordy, so here's an example. The following XML and struct/array li
                 },
                 text__ : "Or me!"
             }
-        ]
+        ],
+        empty_tag : {}
      }
  }
 ```
