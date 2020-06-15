@@ -1,4 +1,4 @@
-<h1 align="center">SNAP: Struct N' Array Parser 2.1.0</h1>
+<h1 align="center">SNAP: Struct N' Array Parser 2.2.0</h1>
 
 <p align="center">Replacement for ds_map/ds_list-based JSON encoding/decoding</p>
 
@@ -37,6 +37,54 @@ Unpacks binary encoded struct/array data. An `[offset]` and total `[size]` for t
 ### snap_deep_copy(struct/array)
 
 Returns a copy of the given `struct/array`, including a copy of any nested structs and arrays.
+
+&nbsp;
+
+### snap_to_xml_string(struct/array, [alphabetizeStructs]) ###
+
+Turns struct and array nested data into a JSON string. The root data type can be either a struct or an array. Setting `[pretty]` to `true` will format the JSON string in a more pleasing human-readable way, whereas setting `[alphabetizeStructs]` to `true` will output the struct variables in ascending alphabetical order. Using pretty and/or alphabetized output does incur a performance penalty.
+
+&nbsp;
+
+### snap_from_xml_string(string) ###
+
+Decodes a XML string into nested struct/array data. Each XML element is  struct. Element attributes are stored as `@attribute` and element text/content is stored under the member variable `text__`. Child elements are stored using their name as the member variable name in the parent. If more than one element with the same name exists then they are put into an array.
+
+This is a bit wordy, so here's an example. The following XML and struct/array literal are interchangable:
+
+```XML
+<root halign="left" valign="top">
+    <text>Hello World!</text>
+    <button url="http://www.jujuadams.com/">Click me!</button>
+    <button url="http://www.spiderlili.com/">Or me!</button>
+</root>
+```
+
+```GML
+root = {
+    @halign : "left",
+    @valign : "top",
+    text : {
+        text__ : "Hello World!"
+    },
+    button : [
+        {
+            @url   : "http://www.jujuadams.com/,
+            text__ : "Click me!"
+        },
+        {
+            @url   : "http://www.jujuadams.com/,
+            text__ : "Or me!"
+        }
+    ]
+ }
+```
+
+&nbsp;
+
+### snap_to_binary(struct/array) ###
+
+Returns a buffer that holds binary encoded struct and array nested data. The root data type can be either a struct or an array. This is substantially faster than `sna_to_json()`.
 
 &nbsp;
 
