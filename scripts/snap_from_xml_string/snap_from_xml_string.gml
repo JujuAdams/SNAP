@@ -3,18 +3,12 @@
 /// @return Nested struct/array data that represents the contents of the XML string
 ///         WARNING! This script does not cover 100% of the XML specification. Contact @jujuadams if you'd like to require additional features
 /// 
-/// @param string             The XML string to be decoded
-/// @param [textKeyName]      
-/// @param [prologKeyName]    
+/// @param string   The XML string to be decoded
 /// 
 /// @jujuadams 2020-06-14
 
-function snap_from_xml()
+function snap_from_xml_string(_string)
 {
-    var _string          = argument[0];
-    var _text_key_name   = ((argument_count > 1) && (argument[1] != undefined))? argument[1] : "text_";
-    var _prolog_key_name = ((argument_count > 2) && (argument[2] != undefined))? argument[2] : "xml_prolog";
-    
     var _size = string_byte_length(_string);
     var _buffer = buffer_create(_size, buffer_fixed, 1);
     buffer_write(_buffer, buffer_text, _string);
@@ -57,7 +51,6 @@ function snap_from_xml()
     repeat(_size)
     {
         var _value = buffer_read(_buffer, buffer_u8);
-        show_debug_message(chr(_value));
         
         if (_skip_whitespace && (_value > 32)) _skip_whitespace = false;
     
@@ -108,7 +101,17 @@ function snap_from_xml()
                                 _value = string_replace_all(_value, "&quot;", "\"");
                             }
                         
-                            if (!_tag_is_comment) variable_struct_set(_stack_top, "@" + _key, _value);
+                            if (!_tag_is_comment)
+                            {
+                                var _attributes_struct = variable_struct_get(_stack_top, "_attr");
+                                if (_attributes_struct == undefined)
+                                {
+                                    _attributes_struct = {};
+                                    variable_struct_set(_stack_top, "_attr", _attributes_struct);
+                                }
+                                
+                                variable_struct_set(_attributes_struct, _key, _value);
+                            }
                         
                             _in_key          = true;
                             _key_start       = -1;
@@ -141,7 +144,7 @@ function snap_from_xml()
                         case ord(" "):
                             if (_tag_is_prolog)
                             {
-                                _tag = _prolog_key_name;
+                                _tag = "_prolog";
                             }
                             else
                             {
@@ -184,7 +187,7 @@ function snap_from_xml()
                     {
                         if (_tag_is_prolog)
                         {
-                            _tag = _prolog_key_name;
+                            _tag = "_prolog";
                         }
                         else
                         {
@@ -259,7 +262,7 @@ function snap_from_xml()
                     buffer_seek(_buffer, buffer_seek_start, _text_start);
                     _text = buffer_read(_buffer, buffer_string);
                     
-                    variable_struct_set(_stack_top, _text_key_name, _text);
+                    variable_struct_set(_stack_top, "_text", _text);
                 }
             
                 _stack_parent           = _stack_top;

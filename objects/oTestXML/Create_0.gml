@@ -48,7 +48,9 @@ var _string = @'
   </book>  
 </bookstore>';
 
-snap = snap_from_xml(_string);
+
+
+
+snap = snap_from_xml_string(_string);
 show_debug_message(snap_to_json_string(snap, true, true));
-show_message(snap.bookstore.book[2].author.text_);
-//show_debug_message(snap_to_json_string(snap_from_xml(_string), true, true));
+show_debug_message(snap_to_xml_string(snap));
