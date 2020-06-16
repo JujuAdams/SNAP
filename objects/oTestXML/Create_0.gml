@@ -21,7 +21,7 @@ var _string = @'
   </book>  
 </bookstore>';
 
-var _struct = snap_from_xml_string(_string);
-show_debug_message(snap_to_json_string(_struct, true, true));
-show_debug_message(snap_to_xml_string(_struct, false));
-show_debug_message(snap_to_xml_string(_struct, true ));
+var _struct = snap_from_xml(_string);
+show_debug_message(snap_to_json(_struct, true, true));
+show_debug_message(snap_to_xml(_struct, false));
+show_debug_message(snap_to_xml(_struct, true ));

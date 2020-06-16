@@ -1,13 +1,12 @@
 /// Decodes an XML string stored in a buffer and outputs a sorta-JSON equivalent
 ///
 /// @return Nested struct/array data that represents the contents of the XML string
-///         WARNING! This script does not cover 100% of the XML specification. Contact @jujuadams if you'd like to require additional features
 /// 
 /// @param string   The XML string to be decoded
 /// 
 /// @jujuadams 2020-06-14
 
-function snap_from_xml_string(_string)
+function snap_from_xml(_string)
 {
     var _size = string_byte_length(_string);
     var _buffer = buffer_create(_size, buffer_fixed, 1);

@@ -6,7 +6,7 @@
     "path": "folders/Struct N' Array Parser.yy",
   },
   "resourceVersion": "1.0",
-  "name": "snap_to_json_string",
+  "name": "snap_from_json",
   "tags": [],
   "resourceType": "GMScript",
 }

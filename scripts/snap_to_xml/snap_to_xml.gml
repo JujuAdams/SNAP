@@ -1,20 +1,19 @@
 /// @return XML string that encodes the struct/array nested data
-///         WARNING! This script does not cover 100% of the XML specification. Contact @jujuadams if you'd like to request additional features
 /// 
 /// @param struct/array           The data to be encoded
 /// @param [alphabetizeStructs]   (bool) Sorts struct variable names is ascending alphabetical order as per ds_list_sort(). Defaults to <false>
 /// 
 /// @jujuadams 2020-06-14
 
-function snap_to_xml_string()
+function snap_to_xml()
 {
     var _ds          = argument[0];
     var _alphabetise = ((argument_count > 1) && (argument[1] != undefined))? argument[1] : false;
     
-    return (new __snap_to_xml_string_parser(_ds, _alphabetise)).result;
+    return (new __snap_to_xml_parser(_ds, _alphabetise)).result;
 }
 
-function __snap_to_xml_string_parser(_ds, _alphabetise) constructor
+function __snap_to_xml_parser(_ds, _alphabetise) constructor
 {
     alphabetise = _alphabetise;
     
