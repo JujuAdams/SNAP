@@ -103,17 +103,3 @@ This is a bit wordy, so here's an example. The following XML and struct/array li
 ### snap_to_xml_string(struct/array, [alphabetizeStructs]) ###
 
 Turns struct and array nested data into a XML string. The data must be structured as above in GML example for `snap_from_xml_string()`. Setting `[alphabetizeStructs]` to `true` will output child element in ascending alphabetical order. Using an alphabetized output incurs a performance penalty.
-
-&nbsp;
-
-### snap_difference(old, new)
-
-Returns a data structure (itself made from structs/arrays) that describes the difference between the specified `old` and `new` struct/arrays.
-
-&nbsp;
-
-### snap_difference_apply(struct/array, differenceStruct)
-
-Applies a difference delta structure created by `snap_difference()` to a struct/array.
-
-**N.B.** Due to missing functionality in GMS2.3.0, array element and struct variable deletion is not fully functional. Instead, when an array element or struct variable is deleted, the value will be set to `undefined`.
