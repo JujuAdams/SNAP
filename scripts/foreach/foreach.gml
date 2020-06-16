@@ -1,6 +1,27 @@
-/// @param struct/array/ds
-/// @param function
-/// @param [dsType]
+/// @return N/A (0)
+/// 
+/// Executes a method call for each element of the given struct/array/data structure.
+/// This iterator is shallow and will not also iterate over nested structs/arrays (though
+/// you can of course call foreach() inside the specified method)
+/// 
+/// This function can also iterate over all members of a ds_map, ds_list, or ds_grid.
+/// You will need to specify a value for [dsType] to iterate over a data structure
+///
+/// The specified method is passed the following parameters:
+/// 
+/// arg0  -  Value found in the given struct/array
+/// arg1  -  0-indexed index of the value e.g. =0 for the first element, =1 for the second element etc.
+/// arg2  -  When iterating over structs, the name of the variable that contains the given value; otherwise <undefined>
+/// 
+/// The order that values are sent into <method> is guaranteed for arrays (starting at
+/// index 0 and ascending), but is not guaranteed for structs due to the behaviour of
+/// GameMaker's internal hashmap
+/// 
+/// @param struct/array/ds   Struct/array/data structure to be iterated over
+/// @param method            Method to call for each element of this given struct/array/ds
+/// @param [dsType]          Data structure type if iterating over a data structure
+/// 
+/// @jujuadams 2020-06-16
 
 function foreach()
 {
@@ -24,7 +45,7 @@ function foreach()
         var _i = 0;
         repeat(array_length(_ds))
         {
-            _function(_ds[_i], _i);
+            _function(_ds[_i], _i, undefined);
             ++_i;
         }
     }
@@ -34,7 +55,7 @@ function foreach()
             var _i = 0;
             repeat(ds_list_size(_ds))
             {
-                _function(_ds[| _i], _i);
+                _function(_ds[| _i], _i, undefined);
                 ++_i;
             }
         break;
@@ -44,7 +65,7 @@ function foreach()
             var _key = ds_map_find_first(_ds);
             repeat(ds_map_size(_ds))
             {
-                _function(_ds[? _key], _i, _key);
+                _function(_ds[? _key], _i, _key, undefined);
                 _key = ds_map_find_next(_ds, _key);
                 ++_i;
             }

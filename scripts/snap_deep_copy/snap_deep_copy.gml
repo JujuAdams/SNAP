@@ -1,4 +1,8 @@
-/// @param struct/array
+/// @returm Copy of the given struct/array, including a copy of any nested structs and arrays
+/// 
+/// @param struct/array   The struct/array to be copied
+/// 
+/// @jujuadams 2020-06-16
 
 function snap_deep_copy(_value)
 {
