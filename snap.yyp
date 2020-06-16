@@ -15,6 +15,7 @@
     {"id":{"name":"snap_to_binary","path":"scripts/snap_to_binary/snap_to_binary.yy",},"order":3,},
     {"id":{"name":"snap_from_binary","path":"scripts/snap_from_binary/snap_from_binary.yy",},"order":4,},
     {"id":{"name":"oTestBinary","path":"objects/oTestBinary/oTestBinary.yy",},"order":3,},
+    {"id":{"name":"snap_to_yaml","path":"scripts/snap_to_yaml/snap_to_yaml.yy",},"order":5,},
     {"id":{"name":"oTestXML","path":"objects/oTestXML/oTestXML.yy",},"order":5,},
     {"id":{"name":"oTestDiff","path":"objects/oTestDiff/oTestDiff.yy",},"order":6,},
     {"id":{"name":"rMain","path":"rooms/rMain/rMain.yy",},"order":1,},
