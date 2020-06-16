@@ -1,4 +1,4 @@
-<h1 align="center">SNAP: Struct N' Array Parser 3.0.0</h1>
+<h1 align="center">SNAP: Struct N' Array Parser 3.1.0</h1>
 
 <p align="center">Replacement for ds_map/ds_list-based encoding/decoding</p>
 
@@ -16,6 +16,8 @@ Functions included are:
 6. `snap_from_binary(buffer, [offset], [size], [destroyBuffer])`
 7. `snap_from_xml(string)`
 8. `snap_to_xml(struct/array, [alphabetizeStructs])`
+9. `snap_from_ini_string(string, [tryReal])`
+10. `snap_from_ini_file(filename, [tryReal])`
 
 -----
 
@@ -115,3 +117,18 @@ This is a bit wordy, so here's an example. The following XML and struct/array li
 ### snap_to_xml(struct/array, [alphabetizeStructs]) ###
 
 Turns struct and array nested data into a XML string. The data must be structured as above in GML example for `snap_from_xml()`. Setting `[alphabetizeStructs]` to `true` will output child element in ascending alphabetical order. Using an alphabetized output incurs a performance penalty.
+
+&nbsp;
+
+### snap_from_ini_string(string, [tryReal]) ###
+
+Parses a string representation of an .ini file into nested structs: sections are stored as nested structs inside the root struct. Setting `[tryReal]` to `true` (the default value) will instruct the function to attempt to turn any values into real numbers if possible.
+
+_**N.B.** This script is only intended to read the .ini files that GM generates using the native `ini_close()` function. This is not a full implementation of an .ini specification (not that an official one really exists)._
+
+&nbsp;
+
+### snap_from_ini_file(filename, [tryReal]) ###
+
+Convenience function that loads an .ini file from disk and passes it into `snap_from_ini_string()`.
+
