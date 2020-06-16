@@ -25,8 +25,8 @@ struct = {
     url : "https://www.jujuadams.com/"
 };
 
-show_debug_message(snap_to_json_string(struct, true));
-show_debug_message(snap_to_json_string(struct, false));
 show_debug_message(snap_to_json_string(snap_from_json_string(snap_to_json_string(struct))));
-
-show_debug_message(snap_to_json_string(snap_from_binary(snap_to_binary(struct))));
+show_debug_message(snap_to_json_string(struct, false, false));
+show_debug_message(snap_to_json_string(struct, false, true ));
+show_debug_message(snap_to_json_string(struct, true , false));
+show_debug_message(snap_to_json_string(struct, true , true ));

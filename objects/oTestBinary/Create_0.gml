@@ -25,4 +25,5 @@ struct = {
     url : "https://www.jujuadams.com/"
 };
 
-show_debug_message(snap_to_json_string(snap_from_binary(snap_to_binary(struct))));
+show_debug_message(snap_to_binary(snap_from_binary(snap_to_binary(struct))));
+show_debug_message(snap_to_binary(struct));
