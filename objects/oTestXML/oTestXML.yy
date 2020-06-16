@@ -18,7 +18,7 @@
   "physicsKinematic": false,
   "physicsShapePoints": [],
   "eventList": [
-    {"isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,"parent":{"name":"oDiffTest","path":"objects/oDiffTest/oDiffTest.yy",},"resourceVersion":"1.0","name":null,"tags":[],"resourceType":"GMEvent",},
+    {"isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,"parent":{"name":"oTestXML","path":"objects/oTestXML/oTestXML.yy",},"resourceVersion":"1.0","name":null,"tags":[],"resourceType":"GMEvent",},
   ],
   "properties": [],
   "overriddenProperties": [],
@@ -27,7 +27,7 @@
     "path": "snap.yyp",
   },
   "resourceVersion": "1.0",
-  "name": "oDiffTest",
+  "name": "oTestXML",
   "tags": [],
   "resourceType": "GMObject",
 }

@@ -1,11 +1,10 @@
 /// @return Nested struct/array data that represents the contents of the JSON string
-///         WARNING! This script does not cover 100% of the JSON specification. Contact @jujuadams if you'd like to require additional features
 /// 
 /// @param string  The JSON string to be decoded
 /// 
 /// @jujuadams 2020-05-02
 
-function snap_from_json_string(_string)
+function snap_from_json(_string)
 {
     var _buffer = buffer_create(string_byte_length(_string), buffer_fixed, 1);
     buffer_write(_buffer, buffer_text, _string);
@@ -13,7 +12,7 @@ function snap_from_json_string(_string)
     
     var _cache_buffer = buffer_create(256, buffer_grow, 1);
     
-    var _parser = new __snap_from_json_string_parser(_buffer, buffer_get_size(_buffer), _cache_buffer);
+    var _parser = new __snap_from_json_parser(_buffer, buffer_get_size(_buffer), _cache_buffer);
     
     buffer_delete(_buffer);
     buffer_delete(_cache_buffer);
@@ -21,7 +20,7 @@ function snap_from_json_string(_string)
     return _parser.root;
 }
 
-function __snap_from_json_string_parser(_buffer, _buffer_size, _cache_buffer) constructor
+function __snap_from_json_parser(_buffer, _buffer_size, _cache_buffer) constructor
 {
     buffer          = _buffer;
     buffer_size     = _buffer_size;
@@ -207,7 +206,7 @@ function __snap_from_json_string_parser(_buffer, _buffer_size, _cache_buffer) co
                     {
                         buffer_seek(buffer, buffer_seek_relative, -1);
                         cache_started = true;
-                        cache_value = (new __snap_from_json_string_parser(buffer, buffer_size, cache_buffer)).root;
+                        cache_value = (new __snap_from_json_parser(buffer, buffer_size, cache_buffer)).root;
                     }
                     else
                     {
@@ -226,7 +225,7 @@ function __snap_from_json_string_parser(_buffer, _buffer_size, _cache_buffer) co
                     {
                         buffer_seek(buffer, buffer_seek_relative, -1);
                         cache_started = true;
-                        cache_value = (new __snap_from_json_string_parser(buffer, buffer_size, cache_buffer)).root;
+                        cache_value = (new __snap_from_json_parser(buffer, buffer_size, cache_buffer)).root;
                     }
                     else
                     {

@@ -1,5 +1,4 @@
 /// @return JSON string that encodes the struct/array nested data
-///         WARNING! This script does not cover 100% of the JSON specification. Contact @jujuadams if you'd like to require additional features
 /// 
 /// @param struct/array          The data to be encoded. Can contain structs, arrays, strings, and numbers.   N.B. Will not encode ds_list, ds_map etc.
 /// @param [pretty]              (bool) Whether to format the string to be human readable. Defaults to <false>
@@ -7,16 +6,16 @@
 /// 
 /// @jujuadams 2020-05-02
 
-function snap_to_json_string()
+function snap_to_json()
 {
     var _ds          = argument[0];
     var _pretty      = ((argument_count > 1) && (argument[1] != undefined))? argument[1] : false;
     var _alphabetise = ((argument_count > 2) && (argument[2] != undefined))? argument[2] : false;
     
-    return (new __snap_to_json_string_parser(_ds, _pretty, _alphabetise)).result;
+    return (new __snap_to_json_parser(_ds, _pretty, _alphabetise)).result;
 }
 
-function __snap_to_json_string_parser(_ds, _pretty, _alphabetise) constructor
+function __snap_to_json_parser(_ds, _pretty, _alphabetise) constructor
 {
     root        = _ds;
     pretty      = _pretty;
