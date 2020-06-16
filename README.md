@@ -124,7 +124,7 @@ Turns struct and array nested data into a XML string. The data must be structure
 
 Parses a string representation of an .ini file into nested structs: sections are stored as nested structs inside the root struct. Setting `[tryReal]` to `true` (the default value) will instruct the function to attempt to turn any values into real numbers if possible.
 
-_**N.B.** This script is only intended to read the .ini files that GM generates using the native `ini_close()` function. This is not a full implementation of an .ini specification (not that an official one really exists)._
+_**N.B.** This script is only intended to read the .ini files and strings that GM generates using the native `ini_close()` function. This is not a full implementation of an .ini specification (not that an official one really exists)._
 
 &nbsp;
 
