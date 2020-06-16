@@ -14,6 +14,12 @@ function snap_from_ini_string()
     var _string   = argument[0];
     var _try_real = ((argument_count > 1) && (argument[1] != undefined))? argument[1] : true;
     
+    if (_try_real)
+    {
+        show_error("snap_from_ini_string():\nUnfortunately, the [tryReal] feature is currently broken due to beta bugs.\nHopefully they get fixed soon!\n \nIn the meantime, please set [tryReal] to <false>\n ", false);
+        _try_real = false;
+    }
+    
     var _size = string_byte_length(_string) + 1;
     var _buffer = buffer_create(_size, buffer_grow, 1);
     buffer_write(_buffer, buffer_string, _string);
