@@ -24,6 +24,12 @@ The order that values are sent into `function` is guaranteed for arrays (startin
 
 &nbsp;
 
+### snap_deep_copy(struct/array)
+
+Returns a copy of the given `struct/array`, including a copy of any nested structs and arrays.
+
+&nbsp;
+
 ### snap_to_json_string(struct/array, [pretty], [alphabetizeStructs]) ###
 
 Turns struct and array nested data into a JSON string. The root data type can be either a struct or an array. Setting `[pretty]` to `true` will format the JSON string in a more pleasing human-readable way, whereas setting `[alphabetizeStructs]` to `true` will output the struct variables in ascending alphabetical order. Using pretty and/or alphabetized output does incur a performance penalty.
@@ -45,12 +51,6 @@ Returns a buffer that holds binary encoded struct and array nested data. The roo
 ### snap_from_binary(buffer, [offset], [size], [destroyBuffer]) ###
 
 Unpacks binary encoded struct/array data. An `[offset]` and total `[size]` for the data within the buffer can be specified which is helpful for working with composite buffers. Set `[size]` to `-1` to use the entire size of the buffer. If `[destroyBuffer]` is set to `true` then the input buffer will be destroyed once the function has finished executing. This function is a lot faster than `json_to_sna()`.
-
-&nbsp;
-
-### snap_deep_copy(struct/array)
-
-Returns a copy of the given `struct/array`, including a copy of any nested structs and arrays.
 
 &nbsp;
 
@@ -103,12 +103,6 @@ This is a bit wordy, so here's an example. The following XML and struct/array li
 ### snap_to_xml_string(struct/array, [alphabetizeStructs]) ###
 
 Turns struct and array nested data into a XML string. The data must be structured as above in GML example for `snap_from_xml_string()`. Setting `[alphabetizeStructs]` to `true` will output child element in ascending alphabetical order. Using an alphabetized output incurs a performance penalty.
-
-&nbsp;
-
-### snap_to_binary(struct/array) ###
-
-Returns a buffer that holds binary encoded struct and array nested data. The root data type can be either a struct or an array. This is substantially faster than `sna_to_json()`.
 
 &nbsp;
 
