@@ -2,7 +2,7 @@
 
 <p align="center">Replacement for ds_map/ds_list-based encoding/decoding</p>
 
-<p align="center"><a href="https://github.com/JujuAdams/SNAP/releases/tag/2.0.0">Download the .yymps here</a></p>
+<p align="center"><a href="https://github.com/JujuAdams/SNAP/releases/tag/3.0.0">Download the .yymps here</a></p>
 
 &nbsp;
 
