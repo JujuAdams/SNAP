@@ -44,7 +44,7 @@ Decodes a JSON string into nested struct/array data. This function will happily 
 
 ### snap_to_binary(struct/array) ###
 
-Returns a buffer that holds binary encoded struct and array nested data. The root data type can be either a struct or an array. This is substantially faster than `sna_to_json()`.
+Returns a buffer that holds binary encoded struct and array nested data. The root data type can be either a struct or an array. This is substantially faster than `snap_to_json_string()`.
 
 &nbsp;
 
