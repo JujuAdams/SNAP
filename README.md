@@ -10,6 +10,20 @@
 
 &nbsp;
 
+### foreach(struct/array, function) ###
+
+Executes a function call for each element of the given `struct/array`. This iterator is shallow and will not also iterate over nested structs/arrays (though you can of course call `foreach` inside the specified `function`). `function` is passed the following parameters:
+
+```GML
+ arg0   -  Value found in the given struct/array
+ arg1   -  0-indexed index of the value e.g. =0 for the first element, =1 for the second element etc.
+[arg2]  -  When iterating over structs, this is the name of the variable that contains the given value
+```
+
+The order that values are sent into `function` is guaranteed for arrays (starting at index 0 and ascending), but is not guaranteed for structs due to the behaviour of GameMaker's internal hashmap. `function` is called in the scope of the instance/struct that calls `foreach()`.
+
+&nbsp;
+
 ### snap_to_json_string(struct/array, [pretty], [alphabetizeStructs]) ###
 
 Turns struct and array nested data into a JSON string. The root data type can be either a struct or an array. Setting `[pretty]` to `true` will format the JSON string in a more pleasing human-readable way, whereas setting `[alphabetizeStructs]` to `true` will output the struct variables in ascending alphabetical order. Using pretty and/or alphabetized output does incur a performance penalty.
@@ -109,17 +123,3 @@ Returns a data structure (itself made from structs/arrays) that describes the di
 Applies a difference delta structure created by `snap_difference()` to a struct/array.
 
 **N.B.** Due to missing functionality in GMS2.3.0, array element and struct variable deletion is not fully functional. Instead, when an array element or struct variable is deleted, the value will be set to `undefined`.
-
-&nbsp;
-
-### foreach(struct/array, function) ###
-
-Executes a function call for each element of the given `struct/array`. This iterator is shallow and will not also iterate over nested structs/arrays (though you can of course call `foreach` inside the specified `function`). `function` is passed the following parameters:
-
-```GML
- arg0   -  Value found in the given struct/array
- arg1   -  0-indexed index of the value e.g. =0 for the first element, =1 for the second element etc.
-[arg2]  -  When iterating over structs, this is the name of the variable that contains the given value
-```
-
-The order that values are sent into `function` is guaranteed for arrays (starting at index 0 and ascending), but is not guaranteed for structs due to the behaviour of GameMaker's internal hashmap. `function` is called in the scope of the instance/struct that calls `foreach()`.
