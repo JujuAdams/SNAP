@@ -17,12 +17,12 @@
     0x09  -  u64
 */
 
-function snap_to_binary(_ds)
+function snap_to_binary_legacy(_ds)
 {
     return (new __snap_to_binary_parser(_ds)).buffer;
 }
 
-function __snap_to_binary_parser(_ds) constructor
+function __snap_to_binary_legacy_parser(_ds) constructor
 {
     root = _ds;
     buffer = buffer_create(1024, buffer_grow, 1);
@@ -90,6 +90,46 @@ function __snap_to_binary_parser(_ds) constructor
         }
         else if (is_string(value))
         {
+            buffer_write(buffer, buffer_u8, 0x03); //String
+            buffer_write(buffer, buffer_string, value);
+        }
+        else if (is_real(value))
+        {
+            if (value == 0)
+            {
+                buffer_write(buffer, buffer_u8, 0x05); //<false>
+            }
+            else if (value == 1)
+            {
+                buffer_write(buffer, buffer_u8, 0x06); //<true>
+            }
+            else
+            {
+                buffer_write(buffer, buffer_u8, 0x04); //f64
+                buffer_write(buffer, buffer_f64, value);
+            }
+        }
+        else if (is_bool(value))
+        {
+            buffer_write(buffer, buffer_u8, value? 0x06 : 0x05); //<true> or <false>
+        }
+        else if (is_undefined(value))
+        {
+            buffer_write(buffer, buffer_u8, 0x07); //<undefined>
+        }
+        else if (is_int32(value))
+        {
+            buffer_write(buffer, buffer_u8, 0x08); //s32
+            buffer_write(buffer, buffer_s32, value);
+        }
+        else if (is_int64(value))
+        {
+            buffer_write(buffer, buffer_u8, 0x09); //u64
+            buffer_write(buffer, buffer_u64, value);
+        }
+        else
+        {
+            show_message("Datatype \"" + typeof(value) + "\" not supported");
         }
     }
     
