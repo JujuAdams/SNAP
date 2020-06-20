@@ -13,11 +13,13 @@ Functions included are:
 3. `snap_to_json(struct/array, [pretty], [alphabetizeStructs])`
 4. `snap_from_json(string)`
 5. `snap_to_binary(struct/array)`
-6. `snap_from_binary(buffer, [offset], [size], [destroyBuffer])`
-7. `snap_from_xml(string)`
-8. `snap_to_xml(struct/array, [alphabetizeStructs])`
-9. `snap_from_ini_string(string, [tryReal])`
-10. `snap_from_ini_file(filename, [tryReal])`
+6. `snap_from_binary(buffer, [offset], [destroyBuffer])`
+7. `snap_to_messagepack(struct/array)`
+8. `snap_from_messagepack(buffer, [offset], [destroyBuffer])`
+9. `snap_from_xml(string)`
+10. `snap_to_xml(struct/array, [alphabetizeStructs])`
+11. `snap_from_ini_string(string, [tryReal])`
+12. `snap_from_ini_file(filename, [tryReal])`
 
 -----
 
@@ -46,7 +48,7 @@ Returns a copy of the given `struct/array`, including a copy of any nested struc
 
 ### snap_to_json(struct/array, [pretty], [alphabetizeStructs]) ###
 
-Turns struct and array nested data into a JSON string. The root data type can be either a struct or an array. Setting `[pretty]` to `true` will format the JSON string in a more pleasing human-readable way, whereas setting `[alphabetizeStructs]` to `true` will output the struct variables in ascending alphabetical order. Using pretty and/or alphabetized output does incur a performance penalty.
+Turns struct and array nested data into a JSON string. The root datatype can be either a struct or an array. Setting `[pretty]` to `true` will format the JSON string in a more pleasing human-readable way, whereas setting `[alphabetizeStructs]` to `true` will output the struct variables in ascending alphabetical order. Using pretty and/or alphabetized output does incur a performance penalty.
 
 &nbsp;
 
@@ -58,13 +60,25 @@ Decodes a JSON string into nested struct/array data. This function will happily 
 
 ### snap_to_binary(struct/array) ###
 
-Returns a buffer that holds binary encoded struct and array nested data. The root data type can be either a struct or an array. This is substantially faster than `snap_to_json()`.
+Returns a buffer that holds binary encoded struct and array nested data. The root datatype can be either a struct or an array. This is substantially faster than `snap_to_json()`.
 
 &nbsp;
 
-### snap_from_binary(buffer, [offset], [size], [destroyBuffer]) ###
+### snap_from_binary(buffer, [offset], [destroyBuffer]) ###
 
-Unpacks binary encoded struct/array data. An `[offset]` and total `[size]` for the data within the buffer can be specified which is helpful for working with composite buffers. Set `[size]` to `-1` to use the entire size of the buffer. If `[destroyBuffer]` is set to `true` then the input buffer will be destroyed once the function has finished executing. This function is a lot faster than `snap_from_json_string()`.
+Unpacks binary encoded struct/array data. An `[offset]` for the data within the buffer can be specified which is helpful for working with composite buffers. If `[destroyBuffer]` is set to `true` then the input buffer will be destroyed once the function has finished executing. This function is a lot faster than `snap_from_json_string()`.
+
+&nbsp;
+
+### snap_to_messagepack(struct/array) ###
+
+Returns a buffer that holds a binary representation of struct and array nested data according to the [messagepack](https://msgpack.org/index.html) specification. The root datatype can any datatype. This function is slower then the proprietary `snap_to_binary()`, but the [messagepack](https://msgpack.org/index.html) format is widely used and tends to output slightly smaller buffers.
+
+&nbsp;
+
+### snap_from_messagepack(buffer, [offset], [destroyBuffer]) ###
+
+Unpacks [messagepack](https://msgpack.org/index.html) binary data into a struct/array data. An `[offset]` for the data within the buffer can be specified which is helpful for working with composite buffers. If `[destroyBuffer]` is set to `true` then the input buffer will be destroyed once the function has finished executing. `snap_from_messagepack()` is a little slower than `snap_from_binary()`.
 
 &nbsp;
 
