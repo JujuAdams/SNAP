@@ -1,4 +1,6 @@
 /// @return Buffer that represents the struct/array nested data, using the messagepack standard
+///
+/// More information on messagepack can be found here: https://msgpack.org/index.html
 /// 
 /// @param struct/array   The data to be encoded. Can contain structs, arrays, strings, and numbers.   N.B. Will not encode ds_list, ds_map etc.
 /// 

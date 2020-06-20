@@ -4,7 +4,7 @@
 /// @param [offset]         Start position for binary decoding in the buffer. Defaults to 0, the start of the buffer
 /// @param [destroyBuffer]  Set to <true> to destroy the input buffer. Defaults to <false>
 /// 
-/// @jujuadams 2020-05-02
+/// @jujuadams 2020-06-20
 
 /*
     0x00  -  terminator

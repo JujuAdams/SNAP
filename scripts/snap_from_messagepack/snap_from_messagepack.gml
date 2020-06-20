@@ -1,4 +1,6 @@
 /// @return Nested struct/array data decoded from the buffer, using the messagepack standard
+///
+/// More information on messagepack can be found here: https://msgpack.org/index.html
 /// 
 /// @param buffer           Binary data to be decoded, created by snap_to_binary()
 /// @param [offset]         Start position for binary decoding in the buffer. Defaults to 0, the start of the buffer
