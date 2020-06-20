@@ -6,7 +6,7 @@
     "path": "folders/Struct N' Array Parser.yy",
   },
   "resourceVersion": "1.0",
-  "name": "snap_from_binary_legacy",
+  "name": "snap_from_messagepack",
   "tags": [],
   "resourceType": "GMScript",
 }
