@@ -1,21 +1,16 @@
 /// @return Nested struct/array data decoded from the buffer
 /// 
-/// @param buffer           Binary data to be decoded, created by sna_to_binary()
+/// @param buffer           Binary data to be decoded, created by snap_to_binary()
 /// @param [offset]         Start position for binary decoding in the buffer. Defaults to 0, the start of the buffer
-/// @param [size]           Number of bytes of data to be decoded. Set to -1 to use the entire size of the buffer. Defaults to -1
 /// @param [destroyBuffer]  Set to <true> to destroy the input buffer. Defaults to <false>
 /// 
-/// @jujuadams 2020-05-02
+/// @jujuadams 2020-06-20
 
 function snap_from_binary()
 {
     var _buffer         = argument[0];
     var _offset         = ((argument_count > 1) && (argument[1] != undefined))? argument[1] : 0;
-    var _size           = ((argument_count > 2) && (argument[2] != undefined))? argument[2] : -1;
     var _destroy_buffer = ((argument_count > 3) && (argument[3] != undefined))? argument[3] : false;
-    
-    if (_size < 0) _size = buffer_get_size(_buffer) - _offset;
-    var _buffer_limit = _size + _offset;
     
     var _old_tell = buffer_tell(_buffer);
     buffer_seek(_buffer, buffer_seek_start, _offset);
@@ -89,7 +84,10 @@ function __snap_from_binary_parser(_buffer) constructor
             ++_i;
         }
         
-        return _array;
+        return {
+            messagepack_datatype__ : "bin",
+            data : _array
+        };
     }
     
     static read_ext = function(_size)
@@ -107,11 +105,11 @@ function __snap_from_binary_parser(_buffer) constructor
         return {
             messagepack_datatype__ : "ext",
             type : _type,
-            array : _array
+            data : _array
         };
     }
     
-    static buffer_read_litte = function(_datatype)
+    static buffer_read_little = function(_datatype)
     {
         switch(buffer_sizeof(_datatype))
         {
@@ -148,85 +146,82 @@ function __snap_from_binary_parser(_buffer) constructor
     
     static read_value = function()
     {
-        //while(buffer_tell(buffer) < buffer_limit)
+        var _byte = buffer_read(buffer, buffer_u8);
+        if (_byte <= 0x7f) //positive fixint 0x00 -> 0x7f
         {
-            var _byte = buffer_read(buffer, buffer_u8);
-            if (_byte <= 0x7f) //positive fixint 0x00 -> 0x7f
-            {
-                //First 7 bits are the integer
-                return int64(_byte & 0x7f);
-            }
-            else if (_byte <= 0x8f) //fixmap 0x80 -> 0x8f
-            {
-                //Size is determined by the first 4 bits
-                return read_struct(_byte & 0x0f);
-            }
-            else if (_byte <= 0x9f) //fixarray 0x90 -> 0x9f
-            {
-                //Size is determined by the first 4 bits
-                return read_array(_byte & 0x0f);
-            }
-            else if (_byte <= 0xbf) //fixstr 0xa0 -> 0xbf
-            {
-                //Size is determined by the first 5 bits
-                return read_string(_byte & 0x1f);
-            }
-            else if ((_byte >= 0xe0) && (_byte <= 0xff)) //negative fixint 0xe0 -> 0xff
-            {
-                //First 5 bites are the integer
-                return -(_byte & 0x1f);
-            }
-            else switch(_byte)
-            {
-                case 0xc0: /*191*/ return undefined; break; //nil
-                case 0xc1: /*192*/ show_debug_message("snap_from_binary(): WARNING! Datatype 0xc1 found, but this value should never be used"); break; //Baby shoes for sale, never worn
-                case 0xc2: /*193*/ return bool(false); break; //false
-                case 0xc3: /*194*/ return bool(true ); break; //true
-                
-                case 0xc4: /*195*/ return read_bin(buffer_read(buffer, buffer_u8 )); break; //bin  8
-                case 0xc5: /*196*/ return read_bin(buffer_read_litte(  buffer_u16)); break; //bin 16
-                case 0xc6: /*197*/ return read_bin(buffer_read_litte(  buffer_u32)); break; //bin 32
-                
-                case 0xc7: /*198*/ return read_ext(buffer_read(buffer, buffer_u8 )); break; //ext  8
-                case 0xc8: /*199*/ return read_ext(buffer_read_litte(  buffer_u16)); break; //ext 16
-                case 0xc9: /*201*/ return read_ext(buffer_read_litte(  buffer_u32)); break; //ext 32
-                
-                case 0xca: /*202*/ return buffer_read_litte(   buffer_f32); break; //float 32
-                case 0xcb: /*203*/ return buffer_read_litte(   buffer_f64); break; //float 64
-                
-                case 0xcc: /*204*/ return buffer_read(buffer,  buffer_u8 ); break; // uint  8
-                case 0xcd: /*205*/ return buffer_read_litte(   buffer_u16); break; // uint 16
-                case 0xce: /*206*/ return buffer_read_litte(   buffer_u32); break; // uint 32
-                case 0xcf: /*207*/ return buffer_read_litte(   buffer_u64); break; // uint 64
-                
-                case 0xd0: /*208*/ return  buffer_read(buffer, buffer_s8 ); break; //  int  8
-                case 0xd1: /*209*/ return buffer_read_litte(   buffer_s16); break; //  int 16
-                case 0xd2: /*210*/ return buffer_read_litte(   buffer_s32); break; //  int 32
-                case 0xd3: /*211*/ return buffer_read_litte(   buffer_u64); break; //  int 64 !!! No signed 64-bit integer read in GameMaker
-                
-                case 0xd4: /*212*/ return read_ext( 1); break; //fixext  1
-                case 0xd5: /*213*/ return read_ext( 2); break; //fixext  2
-                case 0xd6: /*214*/ return read_ext( 4); break; //fixext  4
-                case 0xd7: /*215*/ return read_ext( 8); break; //fixext  8
-                case 0xd8: /*216*/ return read_ext(16); break; //fixext 16
-                
-                case 0xd9: /*217*/ return read_string(buffer_read(buffer, buffer_u8 )); break; //str  8
-                case 0xda: /*218*/ return read_string(buffer_read_litte(  buffer_u16)); break; //str 16
-                case 0xdb: /*219*/ return read_string(buffer_read_litte(  buffer_u32)); break; //str 32
-                
-                case 0xdc: /*220*/ return read_array( buffer_read_litte(buffer_u16)); break; //array 16
-                case 0xdd: /*221*/ return read_array( buffer_read_litte(buffer_u32)); break; //array 32
-                
-                case 0xde: /*222*/ return read_struct(buffer_read_litte(buffer_u16)); break; //map 16
-                case 0xdf: /*223*/ return read_struct(buffer_read_litte(buffer_u32)); break; //map 32
-                
-                default:
-                    show_debug_message("snap_from_binary(): WARNING! Unsupported datatype " + string(_byte) + " found");
-                break;
-            }
-            
-            return undefined;
+            //First 7 bits are the integer
+            return int64(_byte & 0x7f);
         }
+        else if (_byte <= 0x8f) //fixmap 0x80 -> 0x8f
+        {
+            //Size is determined by the first 4 bits
+            return read_struct(_byte & 0x0f);
+        }
+        else if (_byte <= 0x9f) //fixarray 0x90 -> 0x9f
+        {
+            //Size is determined by the first 4 bits
+            return read_array(_byte & 0x0f);
+        }
+        else if (_byte <= 0xbf) //fixstr 0xa0 -> 0xbf
+        {
+            //Size is determined by the first 5 bits
+            return read_string(_byte & 0x1f);
+        }
+        else if ((_byte >= 0xe0) && (_byte <= 0xff)) //negative fixint 0xe0 -> 0xff
+        {
+            //First 5 bites are the integer
+            return -(_byte & 0x1f);
+        }
+        else switch(_byte)
+        {
+            case 0xc0: /*191*/ return undefined; break; //nil
+            case 0xc1: /*192*/ show_debug_message("snap_from_binary(): WARNING! Datatype 0xc1 found, but this value should never be used"); break; //Baby shoes for sale, never worn
+            case 0xc2: /*193*/ return bool(false); break; //false
+            case 0xc3: /*194*/ return bool(true ); break; //true
+            
+            case 0xc4: /*195*/ return read_bin(buffer_read(buffer, buffer_u8 )); break; //bin  8
+            case 0xc5: /*196*/ return read_bin(buffer_read_little( buffer_u16)); break; //bin 16
+            case 0xc6: /*197*/ return read_bin(buffer_read_little( buffer_u32)); break; //bin 32
+            
+            case 0xc7: /*198*/ return read_ext(buffer_read(buffer, buffer_u8 )); break; //ext  8
+            case 0xc8: /*199*/ return read_ext(buffer_read_little( buffer_u16)); break; //ext 16
+            case 0xc9: /*201*/ return read_ext(buffer_read_little( buffer_u32)); break; //ext 32
+            
+            case 0xca: /*202*/ return buffer_read_little(buffer_f32); break; //float 32
+            case 0xcb: /*203*/ return buffer_read_little(buffer_f64); break; //float 64
+            
+            case 0xcc: /*204*/ return buffer_read(buffer,  buffer_u8 ); break; // uint  8
+            case 0xcd: /*205*/ return buffer_read_little(  buffer_u16); break; // uint 16
+            case 0xce: /*206*/ return buffer_read_little(  buffer_u32); break; // uint 32
+            case 0xcf: /*207*/ return buffer_read_little(  buffer_u64); break; // uint 64
+            
+            case 0xd0: /*208*/ return  buffer_read(buffer, buffer_s8 ); break; //  int  8
+            case 0xd1: /*209*/ return buffer_read_little(  buffer_s16); break; //  int 16
+            case 0xd2: /*210*/ return buffer_read_little(  buffer_s32); break; //  int 32
+            case 0xd3: /*211*/ return buffer_read_little(  buffer_u64); break; //  int 64 !!! No signed 64-bit integer read in GameMaker
+            
+            case 0xd4: /*212*/ return read_ext( 1); break; //fixext  1
+            case 0xd5: /*213*/ return read_ext( 2); break; //fixext  2
+            case 0xd6: /*214*/ return read_ext( 4); break; //fixext  4
+            case 0xd7: /*215*/ return read_ext( 8); break; //fixext  8
+            case 0xd8: /*216*/ return read_ext(16); break; //fixext 16
+            
+            case 0xd9: /*217*/ return read_string(buffer_read(buffer, buffer_u8 )); break; //str  8
+            case 0xda: /*218*/ return read_string(buffer_read_little( buffer_u16)); break; //str 16
+            case 0xdb: /*219*/ return read_string(buffer_read_little( buffer_u32)); break; //str 32
+            
+            case 0xdc: /*220*/ return read_array( buffer_read_little(buffer_u16)); break; //array 16
+            case 0xdd: /*221*/ return read_array( buffer_read_little(buffer_u32)); break; //array 32
+            
+            case 0xde: /*222*/ return read_struct(buffer_read_little(buffer_u16)); break; //map 16
+            case 0xdf: /*223*/ return read_struct(buffer_read_little(buffer_u32)); break; //map 32
+            
+            default:
+                show_debug_message("snap_from_binary(): WARNING! Unsupported datatype " + string(_byte) + " found");
+            break;
+        }
+        
+        return undefined;
     }
     
     //messagepack is big-endian because the creator hates normalcy

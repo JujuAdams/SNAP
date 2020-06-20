@@ -1,6 +1,6 @@
-/// @return Nested struct/array data decoded from the buffer
+/// @return Nested struct/array data encoded from the buffer
 /// 
-/// @param buffer           Binary data to be decoded, created by sna_to_binary()
+/// @param buffer           Binary data to be decoded, created by snap_to_binary()
 /// @param [offset]         Start position for binary decoding in the buffer. Defaults to 0, the start of the buffer
 /// @param [size]           Number of bytes of data to be decoded. Set to -1 to use the entire size of the buffer. Defaults to -1
 /// @param [destroyBuffer]  Set to <true> to destroy the input buffer. Defaults to <false>
