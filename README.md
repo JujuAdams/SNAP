@@ -1,4 +1,4 @@
-<h1 align="center">SNAP: Struct N' Array Parser 3.1.0</h1>
+<h1 align="center">SNAP: Struct N' Array Parser 3.2.0</h1>
 
 <p align="center">Replacement for ds_map/ds_list-based encoding/decoding</p>
 
