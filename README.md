@@ -1,4 +1,4 @@
-<h1 align="center">SNAP: Struct N' Array Parser 3.2.0</h1>
+<h1 align="center">SNAP: <i>S</i>truct <i>N'</i> <i>A</i>rray <i>P</i>arsing 3.2.0</h1>
 
 <p align="center">Easy struct/array saving and loading</p>
 
@@ -6,20 +6,15 @@
 
 &nbsp;
 
-Functions included are:
+Functions included can:
 
-1. `foreach(struct/array, method, [dsType])`
-2. `snap_deep_copy(struct/array)`
-3. `snap_to_json(struct/array, [pretty], [alphabetizeStructs])`
-4. `snap_from_json(string)`
-5. `snap_to_binary(struct/array)`
-6. `snap_from_binary(buffer, [offset], [destroyBuffer])`
-7. `snap_to_messagepack(struct/array)`
-8. `snap_from_messagepack(buffer, [offset], [destroyBuffer])`
-9. `snap_from_xml(string)`
-10. `snap_to_xml(struct/array, [alphabetizeStructs])`
-11. `snap_from_ini_string(string, [tryReal])`
-12. `snap_from_ini_file(filename, [tryReal])`
+1. Iterate over all elements of a struct/array and execute a function: `foreach()`
+2. Make a deep copy of a struct/array: `snap_deep_copy(struct/array)`
+3. Encode/decode JSON
+4. Encode/decode binary
+5. Encode/decode [messagepack](https://msgpack.org/index.html)
+6. Encode/decode XML
+7. Decode INI
 
 -----
 
