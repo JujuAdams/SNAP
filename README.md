@@ -1,4 +1,4 @@
-<h1 align="center">SNAP: <i>S</i>truct <i>N'</i> <i>A</i>rray <i>P</i>arsing 3.2.0</h1>
+<h1 align="center">SNAP: Struct N' Array Parsing 3.2.0</h1>
 
 <p align="center">Easy struct/array saving and loading</p>
 
