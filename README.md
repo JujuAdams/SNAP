@@ -2,7 +2,7 @@
 
 <p align="center">Easy struct/array saving and loading</p>
 
-<p align="center"><a href="https://github.com/JujuAdams/SNAP/releases/tag/3.0.0">Download the .yymps here</a></p>
+<p align="center"><a href="https://github.com/JujuAdams/SNAP/releases/tag/3.2.0">Download the .yymps here</a></p>
 
 &nbsp;
 
