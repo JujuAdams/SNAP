@@ -25,6 +25,6 @@ struct = {
     url : "https://www.jujuadams.com/"
 };
 
-buffer = snap_to_binary(struct);
+buffer = snap_to_messagepack(struct);
 show_debug_message(buffer_base64_encode(buffer, 0, -1));
-show_debug_message(snap_to_json(snap_from_binary(buffer), true, true));
+show_debug_message(snap_to_json(snap_from_messagepack(buffer), true, true));

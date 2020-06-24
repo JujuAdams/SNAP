@@ -1,4 +1,4 @@
-/// @return Buffer that contains binary encoded struct/array nested data
+/// @return Buffer that contains binary encoded struct/array nested data, using a proprietary format
 /// 
 /// @param struct/array   The data to be encoded. Can contain structs, arrays, strings, and numbers.   N.B. Will not encode ds_list, ds_map etc.
 /// 

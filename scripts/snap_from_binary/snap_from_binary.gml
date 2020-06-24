@@ -1,11 +1,10 @@
-/// @return Nested struct/array data decoded from the buffer
+/// @return Nested struct/array data encoded from the buffer, using a proprietary format
 /// 
-/// @param buffer           Binary data to be decoded, created by sna_to_binary()
+/// @param buffer           Binary data to be decoded, created by snap_to_binary()
 /// @param [offset]         Start position for binary decoding in the buffer. Defaults to 0, the start of the buffer
-/// @param [size]           Number of bytes of data to be decoded. Set to -1 to use the entire size of the buffer. Defaults to -1
 /// @param [destroyBuffer]  Set to <true> to destroy the input buffer. Defaults to <false>
 /// 
-/// @jujuadams 2020-05-02
+/// @jujuadams 2020-06-20
 
 /*
     0x00  -  terminator
@@ -24,14 +23,11 @@ function snap_from_binary()
 {
     var _buffer         = argument[0];
     var _offset         = ((argument_count > 1) && (argument[1] != undefined))? argument[1] : 0;
-    var _size           = ((argument_count > 2) && (argument[2] != undefined))? argument[2] : -1;
-    var _destroy_buffer = ((argument_count > 3) && (argument[3] != undefined))? argument[3] : false;
-    
-    if (_size < 0) _size = buffer_get_size(_buffer) - _offset;
+    var _destroy_buffer = ((argument_count > 2) && (argument[2] != undefined))? argument[2] : false;
     
     var _old_tell = buffer_tell(_buffer);
     buffer_seek(_buffer, buffer_seek_start, _offset);
-    var _result = (new __snap_from_binary_parser(_buffer, _size)).root;
+    var _result = (new __snap_from_binary_parser(_buffer)).root;
     buffer_seek(_buffer, buffer_seek_start, _old_tell);
     
     if (_destroy_buffer) buffer_delete(_buffer);
@@ -39,18 +35,16 @@ function snap_from_binary()
     return _result;
 }
 
-function __snap_from_binary_parser(_buffer, _buffer_size) constructor
+function __snap_from_binary_parser(_buffer) constructor
 {
     buffer          = _buffer;
-    buffer_size     = _buffer_size;
-    
     root            = undefined;
     root_is_struct  = false;
     root_array_size = 0;
     in_key          = false;
     key             = undefined;
     
-    while(buffer_tell(buffer) < buffer_size)
+    while(true)
     {
         if (in_key)
         {
@@ -102,7 +96,7 @@ function __snap_from_binary_parser(_buffer, _buffer_size) constructor
                     case 0x01: //Struct
                     case 0x02: //Array
                         buffer_seek(buffer, buffer_seek_relative, -1);
-                        value = (new __snap_from_binary_parser(_buffer, _buffer_size)).root;
+                        value = (new __snap_from_binary_parser(_buffer)).root;
                     break;
                     
                     case 0x03: //String
