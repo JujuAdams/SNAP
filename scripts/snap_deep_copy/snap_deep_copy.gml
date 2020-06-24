@@ -2,7 +2,7 @@
 /// 
 /// @param struct/array   The struct/array to be copied
 /// 
-/// @jujuadams 2020-06-16
+/// @jujuadams 2020-06-24
 
 function snap_deep_copy(_value)
 {
@@ -28,11 +28,11 @@ function __snap_deep_copy(_value) constructor
             
             if (is_struct(_value))
             {
-                _value = copy_struct(_source);
+                _value = copy_struct(_value);
             }
             else if (is_array(_value))
             {
-                _value = copy_array(_source);
+                _value = copy_array(_value);
             }
             
             variable_struct_set(_copy, _name, _value);
@@ -57,11 +57,11 @@ function __snap_deep_copy(_value) constructor
             
             if (is_struct(_value))
             {
-                _value = copy_struct(_source);
+                _value = copy_struct(_value);
             }
             else if (is_array(_value))
             {
-                _value = copy_array(_source);
+                _value = copy_array(_value);
             }
             
             _copy[@ _i] = _value;
