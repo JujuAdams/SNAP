@@ -23,8 +23,8 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "snap",
-    "path": "snap.yyp",
+    "name": "SNAP",
+    "path": "SNAP.yyp",
   },
   "resourceVersion": "1.0",
   "name": "oTestJSON",
