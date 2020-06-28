@@ -58,7 +58,7 @@ Decodes a JSON string into nested struct/array data. This function will happily 
 
 Turns a 2D array into a CSV string. The 2D array must not contain further nested structs or arrays. The cell and string delimiters can be specified for compatibility with various different languages.
 
-**N.B.** The arrays that this function expects should be column-major i.e. `array[column][row]` / `array[y][x]`
+**N.B.** This function expects the input array to be column-major i.e. `array[column][row]` / `array[y][x]`
 
 &nbsp;
 
@@ -66,7 +66,7 @@ Turns a 2D array into a CSV string. The 2D array must not contain further nested
 
 Decodes a CSV string into a 2D array. All values unpacked from the CSV string will be stored as strings - unfortunately, issues with `try...catch` in GMS2.3.0 runtime 23.1.1.146 prevent automatic detection of numeric values. As above, the cell and string delimiters can be defined, though they are limited to the first 127 ASCII characters.
 
-**N.B.** The arrays that this function creates are column-major i.e. `array[column][row]` / `array[y][x]`
+**N.B.** The 2D array that this function creates is column-major i.e. `array[column][row]` / `array[y][x]`
 
 &nbsp;
 
