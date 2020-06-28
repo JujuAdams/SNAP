@@ -2,7 +2,7 @@
 
 <p align="center">Easy struct/array saving and loading</p>
 
-<p align="center"><a href="https://github.com/JujuAdams/SNAP/releases/tag/3.2.0">Download the .yymps here</a></p>
+<p align="center"><a href="https://github.com/JujuAdams/SNAP/releases/tag/3.3.0">Download the .yymps here</a></p>
 
 &nbsp;
 
@@ -58,11 +58,15 @@ Decodes a JSON string into nested struct/array data. This function will happily 
 
 Turns a 2D array into a CSV string. The 2D array must not contain further nested structs or arrays. The cell and string delimiters can be specified for compatibility with various different languages.
 
+**N.B.** The arrays that this function expects should be column-major i.e. `array[column][row]` / `array[y][x]`
+
 &nbsp;
 
 ### snap_from_csv(string, [cellDelimiter], [stringDelimiter]) ###
 
 Decodes a CSV string into a 2D array. All values unpacked from the CSV string will be stored as strings - unfortunately, issues with `try...catch` in GMS2.3.0 runtime 23.1.1.146 prevent automatic detection of numeric values. As above, the cell and string delimiters can be defined, though they are limited to the first 127 ASCII characters.
+
+**N.B.** The arrays that this function creates are column-major i.e. `array[column][row]` / `array[y][x]`
 
 &nbsp;
 
