@@ -1,4 +1,4 @@
-<h1 align="center">SNAP: Struct N' Array Parsing 3.2.0</h1>
+<h1 align="center">SNAP: Struct N' Array Parsing 3.3.0</h1>
 
 <p align="center">Easy struct/array saving and loading</p>
 
@@ -11,10 +11,11 @@ Functions included can:
 1. Iterate over all elements of a struct/array and execute a function: `foreach()`
 2. Make a deep copy of a struct/array: `snap_deep_copy(struct/array)`
 3. Encode/decode JSON
-4. Encode/decode binary
-5. Encode/decode [messagepack](https://msgpack.org/index.html)
-6. Encode/decode XML
-7. Decode INI
+4. Encode/decode CSV
+5. Encode/decode binary
+6. Encode/decode [messagepack](https://msgpack.org/index.html)
+7. Encode/decode XML
+8. Decode INI
 
 -----
 
@@ -50,6 +51,18 @@ Turns struct and array nested data into a JSON string. The root datatype can be 
 ### snap_from_json(string) ###
 
 Decodes a JSON string into nested struct/array data. This function will happily ignore formatting whitespace and handles `\\`, `\"`, `\n`, `\r`, and `\t` escaped characters. Also supports `true`, `false`, and `null` values.
+
+&nbsp;
+
+### snap_to_csv(array2D, [cellDelimiter], [stringDelimiter]) ###
+
+Turns a 2D array into a CSV string. The 2D array must not contain further nested structs or arrays. The cell and string delimiters can be specified for compatibility with various different languages.
+
+&nbsp;
+
+### snap_from_csv(string, [cellDelimiter], [stringDelimiter]) ###
+
+Decodes a CSV string into a 2D array. All values unpacked from the CSV string will be stored as strings - unfortunately, issues with `try...catch` in GMS2.3.0 runtime 23.1.1.146 prevent automatic detection of numeric values. As above, the cell and string delimiters can be defined, though they are limited to the first 127 ASCII characters.
 
 &nbsp;
 

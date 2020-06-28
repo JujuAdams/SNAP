@@ -3,8 +3,8 @@
 /// @return 2D array that represents the contents of the CSV string
 /// 
 /// @param string              The CSV string to be decoded
-/// @param [cellDelimiter]     Character to use to indicate where cells start and end. Defaults to a comma
-/// @param [stringDelimiter]   Character to use to indicate where cells start and end. Defaults to a double quote
+/// @param [cellDelimiter]     Character to use to indicate where cells start and end. First 127 ASCII chars only. Defaults to a comma
+/// @param [stringDelimiter]   Character to use to indicate where strings start and end. First 127 ASCII chars only. Defaults to a double quote
 /// 
 /// @jujuadams 2020-06-28
 

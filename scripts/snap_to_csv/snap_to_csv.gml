@@ -1,8 +1,8 @@
 /// @return CSV string that encodes the provided 2D array
 /// 
 /// @param array2D             The 2D array to encode
-/// @param [cellDelimiter]     Character to use to indicate where cells start and end. Defaults to a comma
-/// @param [stringDelimiter]   Character to use to indicate where cells start and end. Defaults to a double quote
+/// @param [cellDelimiter]     Character to use to indicate where cells start and end. First 127 ASCII chars only. Defaults to a comma
+/// @param [stringDelimiter]   Character to use to indicate where strings start and end. First 127 ASCII chars only. Defaults to a double quote
 /// 
 /// @jujuadams 2020-06-28
 
