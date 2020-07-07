@@ -4,6 +4,8 @@
 
 <p align="center"><a href="https://github.com/JujuAdams/SNAP/releases/tag/3.3.0">Download the .yymps here</a></p>
 
+<p align="center">Chat about SNAP on the <a href="https://discord.gg/8krYCqr">Discord server</a></p>
+
 &nbsp;
 
 Functions included can:
