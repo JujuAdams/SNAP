@@ -1,4 +1,4 @@
-<h1 align="center">SNAP: Struct N' Array Parsing 3.3.0</h1>
+<h1 align="center">SNAP: Struct N' Array Parsing 3.3.1</h1>
 
 <p align="center">Easy struct/array saving and loading</p>
 
@@ -160,3 +160,8 @@ _**N.B.** This script is only intended to read the .ini files and strings that G
 
 Convenience function that loads an .ini file from disk and passes it into `snap_from_ini_string()`.
 
+&nbsp;
+
+### string_from_file(filename) ###
+
+Convenience function that returns a string that contains all the data in the given file.
