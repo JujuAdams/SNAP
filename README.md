@@ -38,6 +38,12 @@ The order that values are sent into `method` is guaranteed for arrays (starting 
 
 &nbsp;
 
+### string_from_file(filename) ###
+
+Convenience function that returns a string that contains all the data in the given file.
+
+&nbsp;
+
 ### snap_deep_copy(struct/array)
 
 Returns a copy of the given `struct/array`, including a copy of any nested structs and arrays.
@@ -159,9 +165,3 @@ _**N.B.** This script is only intended to read the .ini files and strings that G
 ### snap_from_ini_file(filename, [tryReal]) ###
 
 Convenience function that loads an .ini file from disk and passes it into `snap_from_ini_string()`.
-
-&nbsp;
-
-### string_from_file(filename) ###
-
-Convenience function that returns a string that contains all the data in the given file.
