@@ -22,7 +22,8 @@ struct = {
     ],
     test : "text!",
     test2 : "\"Hello world!\"",
-    url : "https://www.jujuadams.com/"
+    url : "https://www.jujuadams.com/",
+    func : function() {},
 };
 
 buffer = snap_to_binary(struct);

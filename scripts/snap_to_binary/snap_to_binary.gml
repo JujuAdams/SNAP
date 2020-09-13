@@ -2,7 +2,13 @@
 /// 
 /// @param struct/array   The data to be encoded. Can contain structs, arrays, strings, and numbers.   N.B. Will not encode ds_list, ds_map etc.
 /// 
-/// @jujuadams 2020-05-02
+/// @jujuadams 2020-09-13
+
+//In the general case, functions/methods cannot be deserialised so we default to preventing their serialisation to begin with
+//If you'd like to throw an error whenever this function tries to serialise a function/method, set SNAP_BINARY_SERIALISE_FUNCTION_NAMES to -1
+//If you'd like to simply ignore functions/methods when serialising structs/arrays, set SNAP_BINARY_SERIALISE_FUNCTION_NAMES to 0
+//If you'd like to use some clever tricks to deserialise functions/methods in a manner specific to your game, set SNAP_BINARY_SERIALISE_FUNCTION_NAMES to 1
+#macro SNAP_BINARY_SERIALISE_FUNCTION_NAMES  -1
 
 /*
     0x00  -  terminator
@@ -39,16 +45,19 @@ function __snap_to_binary_parser(_ds) constructor
             var _name = _names[_i];
             value = variable_struct_get(_struct, _name);
             
-            if (is_struct(_name) || is_array(_name))
+            if (!is_method(value) || (SNAP_BINARY_SERIALISE_FUNCTION_NAMES != 0))
             {
-                show_error("Key type \"" + typeof(_name) + "\" not supported\n ", false);
-                _name = string(ptr(_name));
+                if (is_struct(_name) || is_array(_name))
+                {
+                    show_error("Key type \"" + typeof(_name) + "\" not supported\n ", false);
+                    _name = string(ptr(_name));
+                }
+                
+                buffer_write(buffer, buffer_u8, 0x03); //String
+                buffer_write(buffer, buffer_string, string(_name));
+                
+                write_value();
             }
-            
-            buffer_write(buffer, buffer_u8, 0x03); //String
-            buffer_write(buffer, buffer_string, string(_name));
-            
-            write_value();
             
             ++_i;
         }
@@ -126,6 +135,19 @@ function __snap_to_binary_parser(_ds) constructor
         {
             buffer_write(buffer, buffer_u8, 0x09); //u64
             buffer_write(buffer, buffer_u64, value);
+        }
+        else if (is_method(value))
+        {
+            if (SNAP_BINARY_SERIALISE_FUNCTION_NAMES <= 0)
+            {
+                if (SNAP_BINARY_SERIALISE_FUNCTION_NAMES < 0) show_error("Functions/methods cannot be serialised\n(Please edit macro SNAP_BINARY_SERIALISE_FUNCTION_NAMES to change this behaviour)\n ", true);
+                buffer_write(buffer, buffer_u8, 0x07); //<undefined>
+            }
+            else
+            {
+                buffer_write(buffer, buffer_u8, 0x03); //String
+                buffer_write(buffer, buffer_string, value);
+            }
         }
         else
         {
