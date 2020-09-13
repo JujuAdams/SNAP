@@ -4,7 +4,13 @@
 /// @param [cellDelimiter]     Character to use to indicate where cells start and end. First 127 ASCII chars only. Defaults to a comma
 /// @param [stringDelimiter]   Character to use to indicate where strings start and end. First 127 ASCII chars only. Defaults to a double quote
 /// 
-/// @jujuadams 2020-06-28
+/// @jujuadams 2020-09-13
+
+//In the general case, functions/methods cannot be deserialised so we default to preventing their serialisation to begin with
+//If you'd like to throw an error whenever this function tries to serialise a function/method, set SNAP_JSON_SERIALISE_FUNCTION_NAMES to -1
+//If you'd like to simply ignore functions/methods when serialising structs/arrays, set SNAP_JSON_SERIALISE_FUNCTION_NAMES to 0
+//If you'd like to use some clever tricks to deserialise functions/methods in a manner specific to your game, set SNAP_JSON_SERIALISE_FUNCTION_NAMES to 1
+#macro SNAP_CSV_SERIALISE_FUNCTION_NAMES  1
 
 function snap_to_csv()
 {
@@ -45,7 +51,18 @@ function snap_to_csv()
             }
             else if (is_struct(_value) || is_array(_value))
             {
-                show_error("snap_to_csv:\nArray contains a nested struct or array. This is incompatible with CSV\n ", false);
+                show_error("Array contains a nested struct or array. This is incompatible with CSV\n ", true);
+            }
+            else if (is_method(_value))
+            {
+                if (SNAP_CSV_SERIALISE_FUNCTION_NAMES <= 0)
+                {
+                    if (SNAP_CSV_SERIALISE_FUNCTION_NAMES < 0) show_error("Functions/methods cannot be serialised\n(Please edit macro SNAP_CSV_SERIALISE_FUNCTION_NAMES to change this behaviour)\n ", true);
+                }
+                else
+                {
+                    buffer_write(_buffer, buffer_text, string(_value));
+                }
             }
             else
             {
