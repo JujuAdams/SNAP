@@ -6,6 +6,12 @@
 /// 
 /// @jujuadams 2020-05-02
 
+//In the general case, functions/methods cannot be deserialised so we default to preventing their serialisation to begin with
+//If you'd like to throw an error whenever this function tries to serialise a function/method, set SNAP_JSON_SERIALISE_FUNCTION_NAMES to -1
+//If you'd like to simply ignore functions/methods when serialising structs/arrays, set SNAP_JSON_SERIALISE_FUNCTION_NAMES to 0
+//If you'd like to use some clever tricks to deserialise functions/methods in a manner specific to your game, set SNAP_JSON_SERIALISE_FUNCTION_NAMES to 1
+#macro SNAP_JSON_SERIALISE_FUNCTION_NAMES  -1
+
 function snap_to_json()
 {
     var _ds          = argument[0];
@@ -61,29 +67,35 @@ function __snap_to_json_parser(_ds, _pretty, _alphabetise) constructor
                 buffer_write(buffer, buffer_text, "{\n");
                 indent += "    ";
                 
+                var _written = false;
                 repeat(_count)
                 {
                     var _name = _names[_i];
                     value = variable_struct_get(_struct, _name);
                     
-                    if (is_struct(_name) || is_array(_name))
+                    if (!is_method(value) || (SNAP_JSON_SERIALISE_FUNCTION_NAMES != 0))
                     {
-                        show_error("Key type \"" + typeof(_name) + "\" not supported\n ", false);
-                        _name = string(ptr(_name));
+                        if (is_struct(_name) || is_array(_name))
+                        {
+                            show_error("Key type \"" + typeof(_name) + "\" not supported\n ", false);
+                            _name = string(ptr(_name));
+                        }
+                        
+                        buffer_write(buffer, buffer_text, indent + "\"");
+                        buffer_write(buffer, buffer_text, string(_name));
+                        buffer_write(buffer, buffer_text, "\" : ");
+                        
+                        write_value();
+                        
+                        buffer_write(buffer, buffer_text, ",\n");
+                        _written = true;
                     }
                     
-                    buffer_write(buffer, buffer_text, indent + "\"");
-                    buffer_write(buffer, buffer_text, string(_name));
-                    buffer_write(buffer, buffer_text, "\" : ");
-                    
-                    write_value();
-                    
-                    buffer_write(buffer, buffer_text, ",\n");
                     ++_i;
                 }
                 
                 indent = string_copy(indent, 1, string_length(indent) - 4);
-                buffer_seek(buffer, buffer_seek_relative, -2);
+                if (_written) buffer_seek(buffer, buffer_seek_relative, -2);
                 buffer_write(buffer, buffer_text, "\n" + indent + "}");
             }
             else
@@ -95,28 +107,34 @@ function __snap_to_json_parser(_ds, _pretty, _alphabetise) constructor
         {
             buffer_write(buffer, buffer_text, "{");
             
+            var _written = false;
             repeat(_count)
             {
                 var _name = _names[_i];
                 value = variable_struct_get(_struct, _name);
                 
-                if (is_struct(_name) || is_array(_name))
+                if (!is_method(value) || (SNAP_JSON_SERIALISE_FUNCTION_NAMES != 0))
                 {
-                    show_error("Key type \"" + typeof(_name) + "\" not supported\n ", false);
-                    _name = string(ptr(_name));
+                    if (is_struct(_name) || is_array(_name))
+                    {
+                        show_error("Key type \"" + typeof(_name) + "\" not supported\n ", false);
+                        _name = string(ptr(_name));
+                    }
+                    
+                    buffer_write(buffer, buffer_text, "\"");
+                    buffer_write(buffer, buffer_text, string(_name));
+                    buffer_write(buffer, buffer_text, "\":");
+                    
+                    write_value();
+                    
+                    buffer_write(buffer, buffer_text, ",");
+                    _written = true;
                 }
                 
-                buffer_write(buffer, buffer_text, "\"");
-                buffer_write(buffer, buffer_text, string(_name));
-                buffer_write(buffer, buffer_text, "\":");
-                
-                write_value();
-                
-                buffer_write(buffer, buffer_text, ",");
                 ++_i;
             }
             
-            if (_count > 0) buffer_seek(buffer, buffer_seek_relative, -1);
+            if (_written) buffer_seek(buffer, buffer_seek_relative, -1);
             buffer_write(buffer, buffer_text, "}");
         }
     }
@@ -226,6 +244,20 @@ function __snap_to_json_parser(_ds, _pretty, _alphabetise) constructor
             value = string_delete(value, _i + 1, _length - _i);
             
             buffer_write(buffer, buffer_text, value);
+        }
+        else if (is_method(value))
+        {
+            if (SNAP_JSON_SERIALISE_FUNCTION_NAMES <= 0)
+            {
+                if (SNAP_JSON_SERIALISE_FUNCTION_NAMES < 0) show_error("Functions/methods cannot be serialised\n(Please edit macro SNAP_JSON_SERIALISE_FUNCTION_NAMES to change this behaviour)\n ", true);
+                buffer_write(buffer, buffer_text, "null");
+            }
+            else
+            {
+                buffer_write(buffer, buffer_text, "\"");
+                buffer_write(buffer, buffer_text, string(value));
+                buffer_write(buffer, buffer_text, "\"");
+            }
         }
         else
         {

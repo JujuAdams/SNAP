@@ -22,7 +22,8 @@ struct = {
     ],
     test : "text!",
     test2 : "\"Hello world!\"",
-    url : "https://www.jujuadams.com/"
+    url : "https://www.jujuadams.com/",
+    func : function() {},
 };
 
 show_debug_message(snap_to_json(snap_from_json(snap_to_json(struct))));
