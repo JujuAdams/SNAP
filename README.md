@@ -1,4 +1,4 @@
-<h1 align="center">SNAP: Struct N' Array Parsing 3.3.0</h1>
+<h1 align="center">SNAP: Struct N' Array Parsing 3.3.1</h1>
 
 <p align="center">Easy struct/array saving and loading</p>
 
@@ -35,6 +35,12 @@ Executes a function call for each element of the given `struct/array`. This iter
 ```
 
 The order that values are sent into `method` is guaranteed for arrays (starting at index 0 and ascending), but is not guaranteed for structs due to the behaviour of GameMaker's internal hashmap.
+
+&nbsp;
+
+### string_from_file(filename) ###
+
+Convenience function that returns a string that contains all the data in the given file.
 
 &nbsp;
 
@@ -159,4 +165,3 @@ _**N.B.** This script is only intended to read the .ini files and strings that G
 ### snap_from_ini_file(filename, [tryReal]) ###
 
 Convenience function that loads an .ini file from disk and passes it into `snap_from_ini_string()`.
-
