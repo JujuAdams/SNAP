@@ -7,11 +7,11 @@ var _string = @'
     <year>2005</year>  
     <price>30.00</price>  
   </book>  
-  <book category="CHILDREN">  
+  <book category="TOILET PAPER">  
     <title lang="en">Harry Potter</title>  
     <author>J K. Rowling</author>  
     <year>2005</year>  
-    <price>29.99</price>  
+    <price>0.49</price>  
   </book>  
   <book category="WEB">  
     <title lang="en">Learning XML</title>  
