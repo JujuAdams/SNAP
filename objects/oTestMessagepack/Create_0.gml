@@ -15,14 +15,16 @@ struct = {
                 array : [
                     "more",
                     "MORE",
-                    "M O R E"
+                    "M O R E",
+                    function() {},
                 ]
             }
         }
     ],
     test : "text!",
     test2 : "\"Hello world!\"",
-    url : "https://www.jujuadams.com/"
+    url : "https://www.jujuadams.com/",
+    func : function() {},
 };
 
 buffer = snap_to_messagepack(struct);

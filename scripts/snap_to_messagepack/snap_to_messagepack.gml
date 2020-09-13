@@ -4,7 +4,13 @@
 /// 
 /// @param struct/array   The data to be encoded. Can contain structs, arrays, strings, and numbers.   N.B. Will not encode ds_list, ds_map etc.
 /// 
-/// @jujuadams 2020-06-20
+/// @jujuadams 2020-09-13
+
+//In the general case, functions/methods cannot be deserialised so we default to preventing their serialisation to begin with
+//If you'd like to throw an error whenever this function tries to serialise a function/method, set SNAP_BINARY_SERIALISE_FUNCTION_NAMES to -1
+//If you'd like to simply ignore functions/methods when serialising structs/arrays, set SNAP_BINARY_SERIALISE_FUNCTION_NAMES to 0
+//If you'd like to use some clever tricks to deserialise functions/methods in a manner specific to your game, set SNAP_BINARY_SERIALISE_FUNCTION_NAMES to 1
+#macro SNAP_MESSAGEPACK_SERIALISE_FUNCTION_NAMES  -1
 
 function snap_to_messagepack(_ds)
 {
@@ -18,32 +24,62 @@ function __snap_to_messagepack_parser(_ds) constructor
         var _names = variable_struct_get_names(_struct);
         var _count = array_length(_names);
         
-        if (_count <= 0x0f)
+        var _write_count = _count;
+        if (SNAP_MESSAGEPACK_SERIALISE_FUNCTION_NAMES < 0)
+        {
+            var _i = 0;
+            repeat(_count)
+            {
+                var _name = _names[_i];
+                if (is_method(variable_struct_get(_struct, _name)))
+                {
+                    show_error("Functions/methods cannot be serialised\n(Please edit macro SNAP_MESSAGEPACK_SERIALISE_FUNCTION_NAMES to change this behaviour)\n ", true);
+                }
+                ++_i;
+            }
+        }
+        else if (SNAP_MESSAGEPACK_SERIALISE_FUNCTION_NAMES == 0)
+        {
+            var _i = 0;
+            repeat(_count)
+            {
+                var _name = _names[_i];
+                if (is_method(variable_struct_get(_struct, _name))) _write_count--;
+                ++_i;
+            }
+        }
+        
+        if (_write_count <= 0x0f)
         {
             //Size is determined by the first 4 bits
-            buffer_write(buffer, buffer_u8, 0x80 | _count);
+            buffer_write(buffer, buffer_u8, 0x80 | _write_count);
         }
-        else if (_count <= 0xffff)
+        else if (_write_count <= 0xffff)
         {
             buffer_write(buffer, buffer_u8, 0xde);
-            buffer_write_little(buffer_u16, _count);
+            buffer_write_little(buffer_u16, _write_count);
         }
-        else if (_count <= 0xffffffff)
+        else if (_write_count <= 0xffffffff)
         {
             buffer_write(buffer, buffer_u8, 0xdf);
-            buffer_write_little(buffer_u32, _count);
+            buffer_write_little(buffer_u32, _write_count);
         }
         else
         {
-            show_error("snap_to_binary():\nTrying to write a struct longer than 4294967295 elements\n(How did you make a struct this big?!)\n ", true);
+            show_error("Trying to write a struct longer than 4294967295 elements\n(How did you make a struct this big?!)\n ", true);
         }
         
         var _i = 0;
         repeat(_count)
         {
             var _name = _names[_i];
-            write_value(_name);
-            write_value(variable_struct_get(_struct, _name));
+            var _value = variable_struct_get(_struct, _name);
+            
+            if (!is_method(_value) || (SNAP_MESSAGEPACK_SERIALISE_FUNCTION_NAMES > 0))
+            {
+                write_value(_name);
+                write_value(_value);
+            }
             
             ++_i;
         }
@@ -52,31 +88,60 @@ function __snap_to_messagepack_parser(_ds) constructor
     static write_array = function(_array)
     {
         var _count = array_length(_array);
+        var _write_count = _count;
         
-        if (_count <= 0x0f)
+        if (SNAP_MESSAGEPACK_SERIALISE_FUNCTION_NAMES < 0)
+        {
+            var _i = 0;
+            repeat(_count)
+            {
+                if (is_method(_array[_i]))
+                {
+                    show_error("Functions/methods cannot be serialised\n(Please edit macro SNAP_MESSAGEPACK_SERIALISE_FUNCTION_NAMES to change this behaviour)\n ", true);
+                }
+                ++_i;
+            }
+        }
+        else if (SNAP_MESSAGEPACK_SERIALISE_FUNCTION_NAMES == 0)
+        {
+            var _i = 0;
+            repeat(_count)
+            {
+                if (is_method(_array[_i])) _write_count--;
+                ++_i;
+            }
+        }
+        
+        if (_write_count <= 0x0f)
         {
             //Size is determined by the first 4 bits
-            buffer_write(buffer, buffer_u8, 0x90 | _count);
+            buffer_write(buffer, buffer_u8, 0x90 | _write_count);
         }
-        else if (_count <= 0xffff)
+        else if (_write_count <= 0xffff)
         {
             buffer_write(buffer, buffer_u8, 0xdc);
-            buffer_write_little(buffer_u16, _count);
+            buffer_write_little(buffer_u16, _write_count);
         }
-        else if (_count <= 0xffffffff)
+        else if (_write_count <= 0xffffffff)
         {
             buffer_write(buffer, buffer_u8, 0xdd);
-            buffer_write_little(buffer_u32, _count);
+            buffer_write_little(buffer_u32, _write_count);
         }
         else
         {
-            show_error("snap_to_binary():\nTrying to write an array longer than 4294967295 elements\n(How did you make an array this big?!)\n ", true);
+            show_error("Trying to write an array longer than 4294967295 elements\n(How did you make an array this big?!)\n ", true);
         }
         
         var _i = 0;
         repeat(_count)
         {
-            write_value(_array[_i]);
+            var _value = _array[_i];
+            
+            if (!is_method(_value) || (SNAP_MESSAGEPACK_SERIALISE_FUNCTION_NAMES > 0))
+            {
+                write_value(_value);
+            }
+            
             ++_i;
         }
     }
@@ -107,7 +172,7 @@ function __snap_to_messagepack_parser(_ds) constructor
         }
         else
         {
-            show_error("snap_to_binary():\nTrying to write a string longer than 4294967295 bytes\n(How did you make a string this big?!)\n ", true);
+            show_error("Trying to write a string longer than 4294967295 bytes\n(How did you make a string this big?!)\n ", true);
         }
         
         buffer_write(buffer, buffer_text, _string);
@@ -215,7 +280,7 @@ function __snap_to_messagepack_parser(_ds) constructor
         }
         else
         {
-            show_error("snap_to_binary():\nTrying to write a binary array longer than 4294967295 elements\n(How did you make an array this big?!)\n ", true);
+            show_error("Trying to write a binary array longer than 4294967295 elements\n(How did you make an array this big?!)\n ", true);
         }
         
         var _i = 0;
@@ -268,7 +333,7 @@ function __snap_to_messagepack_parser(_ds) constructor
         }
         else
         {
-            show_error("snap_to_binary():\nTrying to write an extended binary array longer than 4294967295 elements\n(How did you make an array this big?!)\n ", true);
+            show_error("Trying to write an extended binary array longer than 4294967295 elements\n(How did you make an array this big?!)\n ", true);
         }
         
         buffer_write(buffer, buffer_s8, _struct.type);
@@ -356,9 +421,20 @@ function __snap_to_messagepack_parser(_ds) constructor
         {
             buffer_write(buffer, buffer_u8, 0xc0);
         }
+        else if (is_method(_value))
+        {
+            if (SNAP_MESSAGEPACK_SERIALISE_FUNCTION_NAMES > 0)
+            {
+                write_string(_value);
+            }
+            else
+            {
+                buffer_write(buffer, buffer_u8, 0xc0);
+            }
+        }
         else
         {
-            show_error("snap_to_binary():\nUnsupported datatype \"" + typeof(_value) + "\"\n ", false);
+            show_error("Unsupported datatype \"" + typeof(_value) + "\"\n ", false);
             buffer_write(buffer, buffer_u8, 0xc0);
         }
     }
