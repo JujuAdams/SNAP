@@ -3,7 +3,9 @@
 /// @param struct/array          The data to be encoded. Can contain structs, arrays, strings, and numbers.   N.B. Will not encode ds_list, ds_map etc.
 /// @param [alphabetizeStructs]  (bool) Sorts struct variable names is ascending alphabetical order as per ds_list_sort(). Defaults to <false>
 /// 
-/// @jujuadams 2020-09-13
+/// @jujuadams 2020-09-16
+
+//TODO - Provide extra formatting options
 
 //In the general case, functions/methods cannot be deserialised so we default to preventing their serialisation to begin with
 //If you'd like to throw an error whenever this function tries to serialise a function/method, set SNAP_YAML_SERIALISE_FUNCTION_NAMES to -1
@@ -152,6 +154,7 @@ function __snap_to_yaml_parser(_ds, _alphabetise) constructor
             value = string_replace_all(value, "\n", "\\n");
             value = string_replace_all(value, "\r", "\\r");
             value = string_replace_all(value, "\t", "\\t");
+            value = string_replace_all(value, "\"", "\\\"");
             
             if (_length != string_length(value)) //If our length changed then we have escaped characters
             {
@@ -166,7 +169,7 @@ function __snap_to_yaml_parser(_ds, _alphabetise) constructor
         }
         else if (is_undefined(value))
         {
-            buffer_write(buffer, buffer_text, "null");
+            //Empty!
         }
         else if (is_bool(value))
         {
