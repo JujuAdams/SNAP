@@ -8,7 +8,7 @@
 ///      4. Block scalars using | and > prefixes
 /// 
 /// @param string              The YAML string to be decoded
-/// @param [replaceKeywords]   Whether to replace keywords (yes, no, true etc.) with boolean equivalents
+/// @param [replaceKeywords]   Whether to replace keywords (true, false, null) with boolean/undefined equivalents
 /// 
 /// @jujuadams 2020-09-20
 
@@ -279,10 +279,9 @@ function __snap_from_yaml_builder(_tokens_array, _replace_keywords) constructor
                         {
                             switch(string_lower(_result))
                             {
-                                case "yes":   _result = true;  break;
-                                case "no":    _result = false; break;
-                                case "true":  _result = true;  break;
-                                case "false": _result = false; break;
+                                case "true":  _result = true;      break;
+                                case "false": _result = false;     break;
+                                case "null":  _result = undefined; break;
                             }
                         }
                     }
