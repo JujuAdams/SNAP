@@ -24,23 +24,9 @@ struct = {
     test : "text!",
     test2 : "\"Hello world!\"",
     url : "https://www.jujuadams.com/",
-    //func : function() {},
+    func : function() {},
 };
 
-var _string = @"-  martin:
-    name: Martin D'vloper
-    job: Developer
-    skills:
-      - python
-      - perl
-      - pascal
--  tabitha:
-    name: Tabitha Bitumen
-    job: Developer
-    skills:
-      - lisp
-      - fortran
-      - erlang";
-
 show_debug_message(snap_to_yaml(struct, true));
-show_debug_message(snap_from_yaml(_string));
+show_debug_message(snap_to_yaml(snap_from_yaml(snap_to_yaml(struct, true)), true));
+show_debug_message(snap_to_json(snap_from_yaml(snap_to_yaml(struct, true)), true, true));

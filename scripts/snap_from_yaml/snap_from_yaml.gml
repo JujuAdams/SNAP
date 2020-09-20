@@ -1,6 +1,7 @@
 /// @return Nested struct/array data that represents the contents of the YAML string
 /// 
-/// @param string  The YAML string to be decoded
+/// @param string              The YAML string to be decoded
+/// @param [replaceKeywords]   Whether to replace keywords (yes, no, true etc.) with boolean equivalents
 /// 
 /// @jujuadams 2020-09-16
 
@@ -11,10 +12,14 @@ enum __SNAP_YAML
     ARRAY,
     STRUCT,
     SCALAR,
+    STRING,
 }
 
-function snap_from_yaml(_string)
+function snap_from_yaml()
 {
+    var _string = argument[0];
+    var _replace_keywords = ((argument_count > 1) && (argument[1] != undefined))? argument[1] : false;
+    
     var _buffer_size = string_byte_length(_string)+1;
     var _buffer = buffer_create(_buffer_size, buffer_fixed, 1);
     buffer_write(_buffer, buffer_text, _string);
@@ -24,9 +29,13 @@ function snap_from_yaml(_string)
     
     #region Break the string down into tokens
     
-    var _chunk_start = 0;
-    var _indent_search = true;
+    var _chunk_start            = 0;
+    var _indent_search          = true;
+    
     var _scalar_first_character = false;
+    var _scalar_has_content     = false;
+    var _in_string              = false;
+    var _string_start           = undefined;
     
     while(buffer_tell(_buffer) < _buffer_size)
     {
@@ -59,6 +68,7 @@ function snap_from_yaml(_string)
                 _chunk_start = buffer_tell(_buffer);
                 _indent_search = false;
                 _scalar_first_character = true;
+                _scalar_has_content = false;
             }
         }
         else
@@ -83,49 +93,75 @@ function snap_from_yaml(_string)
             {
                 _scalar_first_character = false;
                 
-                if (_value == 58)
+                if (_in_string)
                 {
-                    if (buffer_tell(_buffer) - 1 > _chunk_start)
+                    if ((_value == 34) && (buffer_peek(_buffer, buffer_tell(_buffer)-2, buffer_u8) != 92)) //Quote "  and  backslash \
                     {
                         buffer_poke(_buffer, buffer_tell(_buffer)-1, buffer_u8, 0);
-                        buffer_seek(_buffer, buffer_seek_start, _chunk_start);
+                        buffer_seek(_buffer, buffer_seek_start, _string_start);
                         var _chunk = buffer_read(_buffer, buffer_string);
                         buffer_poke(_buffer, buffer_tell(_buffer)-1, buffer_u8, _value);
-                    
-                        _tokens_array[@ array_length(_tokens_array)] = [__SNAP_YAML.SCALAR, _chunk];
-                    }
-                    
-                    _tokens_array[@ array_length(_tokens_array)] = [__SNAP_YAML.STRUCT];
-                    
-                    var _next_value = buffer_peek(_buffer, buffer_tell(_buffer), buffer_u8);
-                    if ((_next_value == 10) || (_next_value == 13))
-                    {
+                            
+                        _tokens_array[@ array_length(_tokens_array)] = [__SNAP_YAML.STRING, _chunk];
+                        
                         _chunk_start = buffer_tell(_buffer);
-                        _indent_search = false;
-                    }
-                    else if (_next_value == 32)
-                    {
-                        buffer_seek(_buffer, buffer_seek_relative, 1);
-                        _chunk_start = buffer_tell(_buffer);
-                        _scalar_first_character = true;
+                        _in_string = false;
+                        _scalar_has_content = false;
                     }
                 }
-                else if ((_value == 0) || (_value == 10) || (_value == 13))
+                else
                 {
-                    if (buffer_tell(_buffer) - 1 > _chunk_start)
+                    if (_value > 32) _scalar_has_content = true;
+                    
+                    if (_value == 34) //Quote "
                     {
-                        buffer_poke(_buffer, buffer_tell(_buffer)-1, buffer_u8, 0);
-                        buffer_seek(_buffer, buffer_seek_start, _chunk_start);
-                        var _chunk = buffer_read(_buffer, buffer_string);
-                        buffer_poke(_buffer, buffer_tell(_buffer)-1, buffer_u8, _value);
-                    
-                        _tokens_array[@ array_length(_tokens_array)] = [__SNAP_YAML.SCALAR, _chunk];
+                        _in_string = true;
+                        _string_start = buffer_tell(_buffer);
                     }
+                    else if (_value == 58) //colon :
+                    {
+                        if (buffer_tell(_buffer) - 1 > _chunk_start)
+                        {
+                            buffer_poke(_buffer, buffer_tell(_buffer)-1, buffer_u8, 0);
+                            buffer_seek(_buffer, buffer_seek_start, _chunk_start);
+                            var _chunk = buffer_read(_buffer, buffer_string);
+                            buffer_poke(_buffer, buffer_tell(_buffer)-1, buffer_u8, _value);
+                            
+                            _tokens_array[@ array_length(_tokens_array)] = [__SNAP_YAML.SCALAR, _chunk];
+                        }
+                        
+                        _tokens_array[@ array_length(_tokens_array)] = [__SNAP_YAML.STRUCT];
+                        
+                        var _next_value = buffer_peek(_buffer, buffer_tell(_buffer), buffer_u8);
+                        if ((_next_value == 10) || (_next_value == 13))
+                        {
+                            _chunk_start = buffer_tell(_buffer);
+                            _indent_search = false;
+                        }
+                        else if (_next_value == 32)
+                        {
+                            buffer_seek(_buffer, buffer_seek_relative, 1);
+                            _chunk_start = buffer_tell(_buffer);
+                            _scalar_first_character = true;
+                        }
+                    }
+                    else if ((_value == 0) || (_value == 10) || (_value == 13))
+                    {
+                        if (_scalar_has_content && (buffer_tell(_buffer) - 1 > _chunk_start))
+                        {
+                            buffer_poke(_buffer, buffer_tell(_buffer)-1, buffer_u8, 0);
+                            buffer_seek(_buffer, buffer_seek_start, _chunk_start);
+                            var _chunk = buffer_read(_buffer, buffer_string);
+                            buffer_poke(_buffer, buffer_tell(_buffer)-1, buffer_u8, _value);
                     
-                    _tokens_array[@ array_length(_tokens_array)] = [__SNAP_YAML.NEWLINE];
-                    
-                    _chunk_start = buffer_tell(_buffer);
-                    _indent_search = true;
+                            _tokens_array[@ array_length(_tokens_array)] = [__SNAP_YAML.SCALAR, _chunk];
+                        }
+                        
+                        _tokens_array[@ array_length(_tokens_array)] = [__SNAP_YAML.NEWLINE];
+                        
+                        _chunk_start = buffer_tell(_buffer);
+                        _indent_search = true;
+                    }
                 }
             }
         }
@@ -135,12 +171,14 @@ function snap_from_yaml(_string)
     
     buffer_delete(_buffer);
     
-    return (new __snap_from_yaml_builder(_tokens_array)).result;
+    return (new __snap_from_yaml_builder(_tokens_array, _replace_keywords)).result;
 }
 
-function __snap_from_yaml_builder(_tokens_array) constructor
+function __snap_from_yaml_builder(_tokens_array, _replace_keywords) constructor
 {
     tokens_array = _tokens_array;
+    replace_keywords = _replace_keywords;
+    
     token_count  = array_length(tokens_array);
     token_index  = 0;
     
@@ -177,7 +215,7 @@ function __snap_from_yaml_builder(_tokens_array) constructor
         token_index++;
         
         var _type = _token[0];
-        if (_type == __SNAP_YAML.SCALAR)
+        if ((_type == __SNAP_YAML.SCALAR) || (_type == __SNAP_YAML.STRING))
         {
             if (tokens_array[token_index][0] == __SNAP_YAML.STRUCT)
             {
@@ -209,7 +247,41 @@ function __snap_from_yaml_builder(_tokens_array) constructor
             }
             else
             {
-                return _token[1];
+                var _result = _token[1];
+                if (_type == __SNAP_YAML.STRING)
+                {
+                    //Unescape characters
+                    //TODO - Do this when building tokens
+                    _result = string_replace_all(_result, "\\\"", "\"");
+                    _result = string_replace_all(_result, "\\\t", "\t");
+                    _result = string_replace_all(_result, "\\\r", "\r");
+                    _result = string_replace_all(_result, "\\\n", "\n");
+                    _result = string_replace_all(_result, "\\\\", "\\");
+                }
+                else
+                {
+                    try
+                    {
+                        _result = real(_result);
+                        //It's a number
+                    }
+                    catch(_error)
+                    {
+                        //It's a string
+                        if (replace_keywords)
+                        {
+                            switch(string_lower(_result))
+                            {
+                                case "yes":   _result = true;  break;
+                                case "no":    _result = false; break;
+                                case "true":  _result = true;  break;
+                                case "false": _result = false; break;
+                            }
+                        }
+                    }
+                }
+                
+                return _result;
             }
         }
         else if (_type == __SNAP_YAML.ARRAY)
