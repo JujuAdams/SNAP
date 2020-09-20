@@ -1,6 +1,6 @@
 /// @return Nested struct/array data that represents the contents of the YAML string
 /// 
-/// N.B. This is not a full implementation of the YAML and doesn't try to be
+/// N.B. This is not a full implementation of the YAML spec and doesn't try to be
 ///      Apart from the advanced features (anchors, documents, directives and so on), this YAML parser doesn't support:
 ///      1. Comments using "--- #" or just " #"
 ///      2. In-line JSON syntax e.g. [1, 2, 3] or {"a" : "b", "c" : "d"}
