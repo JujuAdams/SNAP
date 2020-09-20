@@ -79,10 +79,21 @@ function __snap_to_yaml_parser(_ds, _alphabetise) constructor
                     buffer_write(buffer, buffer_text, string(_name));
                     buffer_write(buffer, buffer_text, ": ");
                     
-                    if (is_struct(value) || is_array(value))
+                    if (is_struct(value))
                     {
-                        buffer_write(buffer, buffer_text, "\n");
-                        repeat(indent) buffer_write(buffer, buffer_u16, 0x2020);
+                        if (variable_struct_names_count(value) > 0)
+                        {
+                            buffer_write(buffer, buffer_text, "\n");
+                            repeat(indent+1) buffer_write(buffer, buffer_u16, 0x2020);
+                        }
+                    }
+                    else if (is_array(value))
+                    {
+                        if (array_length(value) > 0)
+                        {
+                            buffer_write(buffer, buffer_text, "\n");
+                            repeat(indent+1) buffer_write(buffer, buffer_u16, 0x2020);
+                        }
                     }
                     
                     indent++;
@@ -116,7 +127,7 @@ function __snap_to_yaml_parser(_ds, _alphabetise) constructor
             {
                 value = _array[_i];
                 
-                if (_i > 0) repeat(indent-1) buffer_write(buffer, buffer_u16, 0x2020);
+                if (_i > 0) repeat(indent) buffer_write(buffer, buffer_u16, 0x2020);
                 buffer_write(buffer, buffer_u16, 0x202d);
                 indent++;
                 write_value();
@@ -149,14 +160,16 @@ function __snap_to_yaml_parser(_ds, _alphabetise) constructor
         else if (is_string(value))
         {
             var _length = string_length(value);
+            
             //Sanitise strings
+            var _has_colon = (string_pos(":", value) > 0);
             value = string_replace_all(value, "\\", "\\\\");
+            value = string_replace_all(value, "\"", "\\\"");
             value = string_replace_all(value, "\n", "\\n");
             value = string_replace_all(value, "\r", "\\r");
             value = string_replace_all(value, "\t", "\\t");
-            value = string_replace_all(value, "\"", "\\\"");
             
-            if (_length != string_length(value)) //If our length changed then we have escaped characters
+            if ((_length != string_length(value)) || _has_colon) //If our length changed then we have escaped characters
             {
                 buffer_write(buffer, buffer_text, "\"");
                 buffer_write(buffer, buffer_text, value);
