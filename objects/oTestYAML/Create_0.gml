@@ -27,14 +27,14 @@ struct = {
     func : function() {},
 };
 
-var _string = "-\n- - a\n  - b\n-\n-\n- b";
+//var _string = "-\n- - a\n  - b\n-\n-\n- b";
 
-//var _string = @"- 
-//- - a
-//  - 
-//- 
-//- 
-//- b";
+var _string = @"- 
+- - a
+  - 
+- 
+- 
+- b";
 
 //show_debug_message(snap_to_yaml(struct, true));
 show_debug_message(snap_from_yaml(_string));
