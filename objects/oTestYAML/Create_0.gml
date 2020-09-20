@@ -28,5 +28,6 @@ struct = {
 };
 
 show_debug_message(snap_to_yaml(struct, true));
-show_debug_message(snap_to_yaml(snap_from_yaml(snap_to_yaml(struct, true)), true));
-show_debug_message(snap_to_json(snap_from_yaml(snap_to_yaml(struct, true)), true, true));
+yaml = snap_from_yaml(snap_to_yaml(struct, true));
+show_debug_message(snap_to_yaml(yaml, true));
+show_debug_message(snap_to_json(yaml, true, true));

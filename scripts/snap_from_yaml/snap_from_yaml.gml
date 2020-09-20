@@ -1,9 +1,16 @@
 /// @return Nested struct/array data that represents the contents of the YAML string
 /// 
+/// N.B. This is not a full implementation of the YAML and doesn't try to be
+///      Apart from the advanced features (anchors, documents, directives and so on), this YAML parser doesn't support:
+///      1. Comments using "--- #" or just " #"
+///      2. In-line JSON syntax e.g. [1, 2, 3] or {"a" : "b", "c" : "d"}
+///      3. Single quote delimited strings (you must use double quotes)
+///      4. Block scalars using | and > prefixes
+/// 
 /// @param string              The YAML string to be decoded
 /// @param [replaceKeywords]   Whether to replace keywords (yes, no, true etc.) with boolean equivalents
 /// 
-/// @jujuadams 2020-09-16
+/// @jujuadams 2020-09-20
 
 enum __SNAP_YAML
 {
