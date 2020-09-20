@@ -24,17 +24,23 @@ struct = {
     test : "text!",
     test2 : "\"Hello world!\"",
     url : "https://www.jujuadams.com/",
-    func : function() {},
+    //func : function() {},
 };
 
-//var _string = "-\n- - a\n  - b\n-\n-\n- b";
+var _string = @"-  martin:
+    name: Martin D'vloper
+    job: Developer
+    skills:
+      - python
+      - perl
+      - pascal
+-  tabitha:
+    name: Tabitha Bitumen
+    job: Developer
+    skills:
+      - lisp
+      - fortran
+      - erlang";
 
-var _string = @"- 
-- - a
-  - 
-- 
-- 
-- b";
-
-//show_debug_message(snap_to_yaml(struct, true));
+show_debug_message(snap_to_yaml(struct, true));
 show_debug_message(snap_from_yaml(_string));

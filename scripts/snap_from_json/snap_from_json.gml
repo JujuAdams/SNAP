@@ -244,7 +244,8 @@ function __snap_from_json_parser(_buffer, _buffer_size, _cache_buffer) construct
                     {
                         if (root == undefined)
                         {
-                            show_error("\"" + chr(value) + "\" found outside of an object or array (position " + string(buffer_tell(buffer) - 1) + ")\n ", false);
+                            //show_error("\"" + chr(value) + "\" found outside of an object or array (position " + string(buffer_tell(buffer) - 1) + ")\n ", false);
+                            return undefined;
                         }
                         else
                         {
