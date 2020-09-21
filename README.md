@@ -14,10 +14,11 @@ Functions included can:
 2. Make a deep copy of a struct/array: `snap_deep_copy(struct/array)`
 3. Encode/decode JSON
 4. Encode/decode CSV
-5. Encode/decode binary
-6. Encode/decode [messagepack](https://msgpack.org/index.html)
-7. Encode/decode XML
-8. Decode INI
+5. Encode/decode YAML
+6. Encode/decode binary
+7. Encode/decode [messagepack](https://msgpack.org/index.html)
+8. Encode/decode XML
+9. Decode INI
 
 -----
 
@@ -75,6 +76,21 @@ Turns a 2D array into a CSV string. The 2D array must not contain further nested
 Decodes a CSV string into a 2D array. All values unpacked from the CSV string will be stored as strings - unfortunately, issues with `try...catch` in GMS2.3.0 runtime 23.1.1.146 prevent automatic detection of numeric values. As above, the cell and string delimiters can be defined, though they are limited to the first 127 ASCII characters.
 
 **N.B.** The 2D array that this function creates is column-major i.e. `array[column][row]` / `array[y][x]`
+
+&nbsp;
+
+### snap_to_yaml(struct/array, [alphabetizeStructs]) ###
+
+Turns struct and array nested data into a YAML string. The root datatype can be either a struct or an array. Setting `[alphabetizeStructs]` to `true` will output the struct variables in ascending alphabetical order. Using alphabetized output does incur a performance penalty.
+
+&nbsp;
+
+### snap_from_json(string, [replaceKeywords]) ###
+
+Decodes a [YAML](https://en.wikipedia.org/wiki/YAML) string into nested struct/array data. If `[replaceKeywords]` is set to `true` (the default) then the following keywords will be turned into their associated numeric values: `true`, `false`, `undefined`. `snap_from_json()` is not a full implementation of the [YAML](https://en.wikipedia.org/wiki/YAML) spec and doesn't try to be. This parser doesn't support:
+1. Single quote `'` delimited strings (you must use double quotes `"`)
+2. Block scalars using `|` and `>` prefixes
+3. Anchors, documents, directives, nodes... all the weird extra stuff.
 
 &nbsp;
 
