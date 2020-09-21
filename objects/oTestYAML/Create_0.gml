@@ -25,9 +25,14 @@ struct = {
     test2 : "\"Hello world!\"",
     url : "https://www.jujuadams.com/",
     func : function() {},
+    //func : function() {},
 };
 
-show_debug_message(snap_to_yaml(struct, true));
+var _string = "{\"hello\" : \"world\", \"more\" : \"data\"}";
+
+show_debug_message(snap_from_yaml(_string));
+
+//show_debug_message(snap_to_yaml(struct, true));
 yaml = snap_from_yaml(snap_to_yaml(struct, true));
 show_debug_message(snap_to_yaml(yaml, true));
-show_debug_message(snap_to_json(yaml, true, true));
+//show_debug_message(snap_to_json(yaml, true, true));

@@ -20,6 +20,12 @@ enum __SNAP_YAML
     STRUCT,
     SCALAR,
     STRING,
+    JSON_ARRAY_START,
+    JSON_ARRAY_END,
+    JSON_STRUCT_START,
+    JSON_STRUCT_END,
+    JSON_COMMA,
+    JSON_COLON,
 }
 
 function snap_from_yaml()
@@ -43,6 +49,8 @@ function snap_from_yaml()
     var _scalar_has_content     = false;
     var _in_string              = false;
     var _string_start           = undefined;
+    
+    var _json_depth = 0;
     
     while(buffer_tell(_buffer) < _buffer_size)
     {
@@ -118,14 +126,21 @@ function snap_from_yaml()
                 }
                 else
                 {
-                    if (_value > 32) _scalar_has_content = true;
+                    if (_value <= 32)
+                    {
+                        if (!_scalar_has_content) _chunk_start = buffer_tell(_buffer);
+                    }
+                    else
+                    {
+                        _scalar_has_content = true;
+                    }
                     
                     if (_value == 34) //Quote "
                     {
                         _in_string = true;
                         _string_start = buffer_tell(_buffer);
                     }
-                    else if (_value == 58) //colon :
+                    else if ((_value == 91) || (_value == 93) || (_value == 123) || (_value == 125)) //[]{}
                     {
                         if (buffer_tell(_buffer) - 1 > _chunk_start)
                         {
@@ -137,19 +152,82 @@ function snap_from_yaml()
                             _tokens_array[@ array_length(_tokens_array)] = [__SNAP_YAML.SCALAR, _chunk];
                         }
                         
-                        _tokens_array[@ array_length(_tokens_array)] = [__SNAP_YAML.STRUCT];
-                        
-                        var _next_value = buffer_peek(_buffer, buffer_tell(_buffer), buffer_u8);
-                        if ((_next_value == 10) || (_next_value == 13))
+                        if ((_value == 91) || (_value == 123))
                         {
-                            _chunk_start = buffer_tell(_buffer);
-                            _indent_search = false;
+                            ++_json_depth;
+                            _tokens_array[@ array_length(_tokens_array)] = [(_value == 91)? __SNAP_YAML.JSON_ARRAY_START : __SNAP_YAML.JSON_STRUCT_START];
                         }
-                        else if (_next_value == 32)
+                        else if ((_value == 93) || (_value == 125))
                         {
-                            buffer_seek(_buffer, buffer_seek_relative, 1);
+                            --_json_depth;
+                            _tokens_array[@ array_length(_tokens_array)] = [(_value == 93)? __SNAP_YAML.JSON_ARRAY_END : __SNAP_YAML.JSON_STRUCT_END];
+                        }
+                        
+                        _chunk_start = buffer_tell(_buffer);
+                        _scalar_has_content = false;
+                    }
+                    else if ((_json_depth > 0) && (_value == 44)) //Comma ,
+                    {
+                        if (buffer_tell(_buffer) - 1 > _chunk_start)
+                        {
+                            buffer_poke(_buffer, buffer_tell(_buffer)-1, buffer_u8, 0);
+                            buffer_seek(_buffer, buffer_seek_start, _chunk_start);
+                            var _chunk = buffer_read(_buffer, buffer_string);
+                            buffer_poke(_buffer, buffer_tell(_buffer)-1, buffer_u8, _value);
+                            
+                            _tokens_array[@ array_length(_tokens_array)] = [__SNAP_YAML.SCALAR, _chunk];
+                        }
+                        
+                        _tokens_array[@ array_length(_tokens_array)] = [__SNAP_YAML.JSON_COMMA];
+                        
+                        _chunk_start = buffer_tell(_buffer);
+                        _scalar_has_content = false;
+                    }
+                    else if (_value == 58) //Colon :
+                    {
+                        if (_json_depth > 0)
+                        {
+                            if (buffer_tell(_buffer) - 1 > _chunk_start)
+                            {
+                                buffer_poke(_buffer, buffer_tell(_buffer)-1, buffer_u8, 0);
+                                buffer_seek(_buffer, buffer_seek_start, _chunk_start);
+                                var _chunk = buffer_read(_buffer, buffer_string);
+                                buffer_poke(_buffer, buffer_tell(_buffer)-1, buffer_u8, _value);
+                            
+                                _tokens_array[@ array_length(_tokens_array)] = [__SNAP_YAML.SCALAR, _chunk];
+                            }
+                            
+                            _tokens_array[@ array_length(_tokens_array)] = [__SNAP_YAML.JSON_COLON];
+                            
                             _chunk_start = buffer_tell(_buffer);
-                            _scalar_first_character = true;
+                            _scalar_has_content = false;
+                        }
+                        else
+                        {
+                            if (buffer_tell(_buffer) - 1 > _chunk_start)
+                            {
+                                buffer_poke(_buffer, buffer_tell(_buffer)-1, buffer_u8, 0);
+                                buffer_seek(_buffer, buffer_seek_start, _chunk_start);
+                                var _chunk = buffer_read(_buffer, buffer_string);
+                                buffer_poke(_buffer, buffer_tell(_buffer)-1, buffer_u8, _value);
+                            
+                                _tokens_array[@ array_length(_tokens_array)] = [__SNAP_YAML.SCALAR, _chunk];
+                            }
+                            
+                            _tokens_array[@ array_length(_tokens_array)] = [__SNAP_YAML.STRUCT];
+                            
+                            var _next_value = buffer_peek(_buffer, buffer_tell(_buffer), buffer_u8);
+                            if ((_next_value == 10) || (_next_value == 13))
+                            {
+                                _chunk_start = buffer_tell(_buffer);
+                                _indent_search = false;
+                            }
+                            else if (_next_value == 32)
+                            {
+                                buffer_seek(_buffer, buffer_seek_relative, 1);
+                                _chunk_start = buffer_tell(_buffer);
+                                _scalar_first_character = true;
+                            }
                         }
                     }
                     else if ((_value == 0) || (_value == 10) || (_value == 13))
@@ -175,6 +253,8 @@ function snap_from_yaml()
     }
     
     #endregion
+    
+    show_debug_message(_tokens_array);
     
     buffer_delete(_buffer);
     
@@ -318,6 +398,57 @@ function __snap_from_yaml_builder(_tokens_array, _replace_keywords) constructor
             }
             
             return _array;
+        }
+        else if (_type == __SNAP_YAML.JSON_ARRAY_START)
+        {
+            var _array = [];
+            
+            read_to_next();
+            while((token_index < token_count) && (tokens_array[token_index][0] != __SNAP_YAML.JSON_ARRAY_END))
+            {
+                _array[@ array_length(_array)] = read();
+                
+                read_to_next();
+                if (tokens_array[token_index][0] == __SNAP_YAML.JSON_COMMA)
+                {
+                    token_index++;
+                    read_to_next();
+                }
+            }
+            
+            token_index++;
+            
+            return _array;
+        }
+        else if (_type == __SNAP_YAML.JSON_STRUCT_START)
+        {
+            var _struct = {};
+            
+            read_to_next();
+            while((token_index < token_count) && (tokens_array[token_index][0] != __SNAP_YAML.JSON_STRUCT_END))
+            {
+                var _key = read();
+                
+                read_to_next();
+                if (tokens_array[token_index][0] == __SNAP_YAML.JSON_COLON)
+                {
+                    token_index++;
+                    read_to_next();
+                }
+                
+                variable_struct_set(_struct, _key, read());
+                
+                read_to_next();
+                if (tokens_array[token_index][0] == __SNAP_YAML.JSON_COMMA)
+                {
+                    token_index++;
+                    read_to_next();
+                }
+            }
+            
+            token_index++;
+            
+            return _struct;
         }
         else
         {
