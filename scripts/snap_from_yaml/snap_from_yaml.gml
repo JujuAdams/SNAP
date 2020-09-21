@@ -145,7 +145,7 @@ function __snap_from_yaml_tokenizer(_buffer) constructor
                 }
                 else if (_next_value == 45) //Two hyphens in a row
                 {
-                    if (buffer_peek(_buffer, buffer_tell(_buffer), buffer_u32) == ((35 << 24) | (32 << 16) | (45 << 8) | 45))
+                    if ((buffer_tell(_buffer) <= _buffer_size - 4) && (buffer_peek(_buffer, buffer_tell(_buffer), buffer_u32) == ((35 << 24) | (32 << 16) | (45 << 8) | 45)))
                     {
                         _in_comment = true;
                     }
