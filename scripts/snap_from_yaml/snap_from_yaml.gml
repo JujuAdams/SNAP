@@ -6,7 +6,7 @@
 ///      3. Anchors, documents, directives, nodes... all the weird extra stuff
 /// 
 /// @param string              The YAML string to be decoded
-/// @param [replaceKeywords]   Whether to replace keywords (true, false, null) with boolean/undefined equivalents
+/// @param [replaceKeywords]   Whether to replace keywords (true, false, null) with boolean/undefined equivalents. Default to <true>
 /// 
 /// @jujuadams 2020-09-20
 
@@ -29,7 +29,7 @@ enum __SNAP_YAML
 function snap_from_yaml()
 {
     var _string = argument[0];
-    var _replace_keywords = ((argument_count > 1) && (argument[1] != undefined))? argument[1] : false;
+    var _replace_keywords = ((argument_count > 1) && (argument[1] != undefined))? argument[1] : true;
     
     var _buffer = buffer_create(string_byte_length(_string)+1, buffer_fixed, 1);
     buffer_write(_buffer, buffer_text, _string);
