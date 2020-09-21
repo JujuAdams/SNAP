@@ -15,7 +15,7 @@ Functions included can:
 3. Encode/decode JSON
 4. Encode/decode CSV
 5. Encode/decode [YAML](https://en.wikipedia.org/wiki/YAML)
-6. Encode/decode binary
+6. Encode/decode a custom binary format
 7. Encode/decode [messagepack](https://msgpack.org/index.html)
 8. Encode/decode XML
 9. Decode INI
