@@ -1,11 +1,9 @@
 /// @return Nested struct/array data that represents the contents of the YAML string
 /// 
-/// N.B. This is not a full implementation of the YAML spec and doesn't try to be
-///      Apart from the advanced features (anchors, documents, directives and so on), this YAML parser doesn't support:
-///      1. Comments using "--- #" or just " #"
-///      2. In-line JSON syntax e.g. [1, 2, 3] or {"a" : "b", "c" : "d"}
-///      3. Single quote delimited strings (you must use double quotes)
-///      4. Block scalars using | and > prefixes
+/// N.B. This is not a full implementation of the YAML spec and doesn't try to be. This YAML parser doesn't support:
+///      1. Single quote delimited strings (you must use double quotes)
+///      2. Block scalars using | and > prefixes
+///      3. Anchors, documents, directives, nodes... all the weird extra stuff
 /// 
 /// @param string              The YAML string to be decoded
 /// @param [replaceKeywords]   Whether to replace keywords (true, false, null) with boolean/undefined equivalents
@@ -61,6 +59,7 @@ function __snap_from_yaml_tokenizer(_buffer) constructor
     var _scalar_has_content     = false;
     var _in_string              = false;
     var _string_start           = undefined;
+    var _in_comment             = false;
     
     static read_chunk = function(_start, _end, _tell)
     {
@@ -88,7 +87,18 @@ function __snap_from_yaml_tokenizer(_buffer) constructor
     {
         var _value = buffer_read(_buffer, buffer_u8);
         
-        if (_indent_search)
+        if (_in_comment)
+        {
+            if ((_value == 0) || (_value == 10) || (_value == 13))
+            {
+                _tokens_array[@ array_length(_tokens_array)] = [__SNAP_YAML.NEWLINE];
+                _chunk_start = buffer_tell(_buffer);
+                _chunk_end   = buffer_tell(_buffer);
+                
+                _in_comment = false;
+            }
+        }
+        else if (_indent_search)
         {
             if (_value == 0)
             {
@@ -114,22 +124,31 @@ function __snap_from_yaml_tokenizer(_buffer) constructor
         }
         else
         {
-            if (_scalar_first_character && (_value == 45))
+            if (_scalar_first_character && (_value == 45)) //First character on the line is a hyphen
             {
-                _tokens_array[@ array_length(_tokens_array)] = [__SNAP_YAML.ARRAY];
-                
                 var _next_value = buffer_peek(_buffer, buffer_tell(_buffer), buffer_u8);
                 if ((_next_value == 10) || (_next_value == 13))
                 {
+                    _tokens_array[@ array_length(_tokens_array)] = [__SNAP_YAML.ARRAY];
+                    
                     _chunk_start   = buffer_tell(_buffer);
                     _chunk_end     = buffer_tell(_buffer);
                     _indent_search = false;
                 }
                 else if (_next_value == 32)
                 {
+                    _tokens_array[@ array_length(_tokens_array)] = [__SNAP_YAML.ARRAY];
+                    
                     buffer_seek(_buffer, buffer_seek_relative, 1);
                     _chunk_start = buffer_tell(_buffer);
                     _chunk_end   = buffer_tell(_buffer);
+                }
+                else if (_next_value == 45) //Two hyphens in a row
+                {
+                    if (buffer_peek(_buffer, buffer_tell(_buffer), buffer_u32) == ((35 << 24) | (32 << 16) | (45 << 8) | 45))
+                    {
+                        _in_comment = true;
+                    }
                 }
             }
             else
@@ -163,6 +182,14 @@ function __snap_from_yaml_tokenizer(_buffer) constructor
                     {
                         _in_string = true;
                         _string_start = buffer_tell(_buffer);
+                    }
+                    else if ((_value == 35) && (buffer_tell(_buffer) >= 1) && (buffer_peek(_buffer, buffer_tell(_buffer)-2, buffer_u8) <= 32))
+                    {
+                        read_chunk_and_add(_chunk_start, _chunk_end, buffer_tell(_buffer), __SNAP_YAML.SCALAR);
+                        
+                        _chunk_start = buffer_tell(_buffer);
+                        _chunk_end   = buffer_tell(_buffer);
+                        _in_comment  = true;
                     }
                     else if ((_value == 91) || (_value == 93) || (_value == 123) || (_value == 125)) // [ ] { }
                     {
