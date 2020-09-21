@@ -14,7 +14,7 @@ Functions included can:
 2. Make a deep copy of a struct/array: `snap_deep_copy(struct/array)`
 3. Encode/decode JSON
 4. Encode/decode CSV
-5. Encode/decode YAML
+5. Encode/decode [YAML](https://en.wikipedia.org/wiki/YAML)
 6. Encode/decode binary
 7. Encode/decode [messagepack](https://msgpack.org/index.html)
 8. Encode/decode XML
