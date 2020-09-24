@@ -40,6 +40,9 @@ function __snap_from_json_parser(_buffer, _buffer_size, _cache_buffer) construct
     in_key          = false;
     key             = undefined;
     
+    in_comment       = false;
+    one_line_comment = false;
+    
     
     
     static push_cache = function()
@@ -108,7 +111,24 @@ function __snap_from_json_parser(_buffer, _buffer_size, _cache_buffer) construct
     {
         value = buffer_read(buffer, buffer_u8);
         
-        if (value == ord("\""))
+        if (in_comment)
+        {
+            if (one_line_comment)
+            {
+                if ((value == 10) || (value == 13))
+                {
+                    in_comment = false;
+                }
+            }
+            else
+            {
+                if ((value == ord("/")) && (buffer_peek(buffer, buffer_tell(buffer)-2, buffer_u8) == ord("*")))
+                {
+                    in_comment = false;
+                }
+            }
+        }
+        else if (value == ord("\""))
         {
             if (root != undefined)
             {
@@ -239,12 +259,43 @@ function __snap_from_json_parser(_buffer, _buffer_size, _cache_buffer) construct
                     exit;
                 break;
                 
+                case ord("/"):
+                    if (value == 47)
+                    {
+                        var _next_value = buffer_peek(buffer, buffer_tell(buffer), buffer_u8);
+                            
+                        if (_next_value == ord("/"))
+                        {
+                            in_comment = true;
+                            one_line_comment = true;
+                        }
+                        else if (_next_value == ord("*"))
+                        {
+                            in_comment = true;
+                            one_line_comment = false;
+                        }
+                        else
+                        {
+                            if (root == undefined)
+                            {
+                                show_error("\"" + chr(value) + "\" found outside of an object or array (position " + string(buffer_tell(buffer) - 1) + ")\n ", false);
+                                return undefined;
+                            }
+                            else
+                            {
+                                buffer_write(cache_buffer, buffer_u8, value);
+                                cache_started = true;
+                            }
+                        }
+                    }
+                break;
+                
                 default:
                     if (value > 32) //Not a whitespace character
                     {
                         if (root == undefined)
                         {
-                            //show_error("\"" + chr(value) + "\" found outside of an object or array (position " + string(buffer_tell(buffer) - 1) + ")\n ", false);
+                            show_error("\"" + chr(value) + "\" found outside of an object or array (position " + string(buffer_tell(buffer) - 1) + ")\n ", false);
                             return undefined;
                         }
                         else
