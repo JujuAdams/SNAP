@@ -2,7 +2,7 @@
 /// 
 /// @param string  The JSON string to be decoded
 /// 
-/// @jujuadams 2020-05-02
+/// @jujuadams 2020-09-24
 
 function snap_from_json(_string)
 {
