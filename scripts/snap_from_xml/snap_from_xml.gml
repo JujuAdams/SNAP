@@ -30,7 +30,7 @@ function snap_from_xml(_string)
     var _text_start         = 0;
     
     var _in_tag                 = false;
-    var _tag                    = "";
+    var _tag                    = undefined;
     var _tag_terminating        = false;
     var _tag_self_terminating   = false;
     var _tag_is_prolog          = false;
@@ -62,6 +62,7 @@ function snap_from_xml(_string)
                     if ((_value == ord("/")) || (_value == ord("?")))
                     {
                         _in_key = false;
+                        if (_value == ord("/")) _tag_terminating = true;
                     }
                     else if ((_value == ord(" ")) || (_value == ord("=")))
                     {
@@ -137,7 +138,44 @@ function snap_from_xml(_string)
                         break;
                         
                         case ord("/"): //Close tag indicator
-                            if (buffer_tell(_buffer) == _tag_start + 1) _tag_terminating = true;
+                            if (buffer_tell(_buffer) == _tag_start + 1)
+                            {
+                                _tag_terminating = true;
+                            }
+                            else
+                            {
+                                if ((_tag == undefined) && (buffer_tell(_buffer) > _tag_start))
+                                {
+                                    _tag_terminating = true;
+                                    
+                                    buffer_poke(_buffer, buffer_tell(_buffer)-1, buffer_u8, 0x0);
+                                    buffer_seek(_buffer, buffer_seek_start, _tag_start);
+                                    _tag = buffer_read(_buffer, buffer_string);
+                                    buffer_poke(_buffer, buffer_tell(_buffer)-1, buffer_u8, _value);
+                                    
+                                    _stack_top = {};
+                                    ds_list_insert(_stack, 0, _stack_top);
+                                    
+                                    var _parent_tag_value = variable_struct_get(_stack_parent, _tag);
+                                    if (_parent_tag_value == undefined)
+                                    {
+                                        variable_struct_set(_stack_parent, _tag, _stack_top);
+                                    }
+                                    else if (is_array(_parent_tag_value))
+                                    {
+                                        _parent_tag_value[@ array_length(_parent_tag_value)] = _stack_top;
+                                    }
+                                    else
+                                    {
+                                        variable_struct_set(_stack_parent, _tag, [_parent_tag_value, _stack_top]);
+                                    }
+                                    
+                                    _in_key                 = true;
+                                    _key_start              = -1;
+                                    _tag_reading_attributes = true;
+                                    _skip_whitespace        = true;
+                                }
+                            }
                         break;
                         
                         case ord(" "):
@@ -152,7 +190,7 @@ function snap_from_xml(_string)
                                 _tag = buffer_read(_buffer, buffer_string);
                             }
                             
-                            if ((!_tag_is_comment) && (!_tag_terminating))
+                            if (!_tag_is_comment && !_tag_terminating)
                             {
                                 _stack_top = {};
                                 ds_list_insert(_stack, 0, _stack_top);
@@ -188,7 +226,7 @@ function snap_from_xml(_string)
                         {
                             _tag = "_prolog";
                         }
-                        else
+                        else if (_tag == undefined)
                         {
                             buffer_poke(_buffer, buffer_tell(_buffer)-1, buffer_u8, 0x0);
                             buffer_seek(_buffer, buffer_seek_start, _tag_start);
@@ -227,7 +265,7 @@ function snap_from_xml(_string)
                         _tag_self_terminating = true;
                     }
                     
-                    if (!_tag_is_comment && !_tag_self_terminating)
+                    if (!_tag_is_comment && (!_tag_self_terminating || _tag_reading_attributes))
                     {
                         if (_tag_terminating || _tag_is_prolog)
                         {
@@ -242,6 +280,7 @@ function snap_from_xml(_string)
                         }
                     }
                     
+                    _tag      = undefined;
                     _in_tag   = false;
                     _in_key   = false;
                     _in_value = false;
