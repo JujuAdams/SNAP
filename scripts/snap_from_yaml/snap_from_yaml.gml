@@ -8,7 +8,7 @@
 /// @param string              The YAML string to be decoded
 /// @param [replaceKeywords]   Whether to replace keywords (true, false, null) with boolean/undefined equivalents. Default to <true>
 /// 
-/// @jujuadams 2020-09-20
+/// @jujuadams 2020-11-01
 
 enum __SNAP_YAML
 {

@@ -4,7 +4,7 @@
 /// 
 /// @param string   The XML string to be decoded
 /// 
-/// @jujuadams 2020-06-14
+/// @jujuadams 2020-10-14
 
 function snap_from_xml(_string)
 {
