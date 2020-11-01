@@ -25,7 +25,6 @@ struct = {
     test2 : "\"Hello world!\"",
     url : "https://www.jujuadams.com/",
     func : function() {},
-    //func : function() {},
 };
 
 var _string = "{\"hello\" : \"world\", \"more\" : \"data\"}";

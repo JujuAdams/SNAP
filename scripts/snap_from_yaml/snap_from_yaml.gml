@@ -145,11 +145,16 @@ function __snap_from_yaml_tokenizer(_buffer) constructor
                 }
                 else if (_next_value == 45) //Two hyphens in a row
                 {
-                    if ((buffer_tell(_buffer) <= _buffer_size - 4) && (buffer_peek(_buffer, buffer_tell(_buffer), buffer_u32) == ((35 << 24) | (32 << 16) | (45 << 8) | 45)))
+                    if ((buffer_tell(_buffer) <= _buffer_size - 4) && (buffer_peek(_buffer, buffer_tell(_buffer), buffer_u32) == ((35 << 24) | (32 << 16) | (45 << 8) | 45))) //Detect "--- # comment"
                     {
                         _in_comment = true;
                     }
                 }
+            }
+            else if (_scalar_first_character && (_value == 35)) //First character on the line is a hash
+            {
+                var _next_value = buffer_peek(_buffer, buffer_tell(_buffer), buffer_u8);
+                if (_next_value == 32) _in_comment = true; //Detect "# comment" which is different to "--- # comment" because the YAML spec is shit
             }
             else
             {
