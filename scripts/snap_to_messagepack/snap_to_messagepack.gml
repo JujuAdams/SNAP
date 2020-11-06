@@ -199,17 +199,17 @@ function __snap_to_messagepack_parser(_ds) constructor
                 else if (_value <= 0xffff)
                 {
                     buffer_write(buffer, buffer_u8, 0xcd);
-                    buffer_write_little(buffer_u8, _value);
+                    buffer_write_little(buffer_u16, _value);
                 }
                 else if (_value <= 0xffffffff)
                 {
                     buffer_write(buffer, buffer_u8, 0xce);
-                    buffer_write_little(buffer_u8, _value);
+                    buffer_write_little(buffer_u32, _value);
                 }
                 else
                 {
                     buffer_write(buffer, buffer_u8, 0xcf);
-                    buffer_write_little(buffer_u8, _value);
+                    buffer_write_little(buffer_u64, _value);
                 }
             }
             else if (_value == 0)
@@ -235,18 +235,18 @@ function __snap_to_messagepack_parser(_ds) constructor
                 else if (_value <= 0xffff)
                 {
                     buffer_write(buffer, buffer_u8, 0xd1);
-                    buffer_write_little(buffer_u8, _value);
+                    buffer_write_little(buffer_u16, _value);
                 }
                 else if (_value <= 0xffffffff)
                 {
                     buffer_write(buffer, buffer_u8, 0xd2);
-                    buffer_write_little(buffer_u8, _value);
+                    buffer_write_little(buffer_u32, _value);
                 }
                 else
                 {
                     //!!! No signed 64-bit integer read in GameMaker so this might be redundant
                     buffer_write(buffer, buffer_u8, 0xd3);
-                    buffer_write_little(buffer_u8, _value);
+                    buffer_write_little(buffer_u64, _value);
                 }
             }
         }
