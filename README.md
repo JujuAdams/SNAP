@@ -1,8 +1,8 @@
-<h1 align="center">SNAP: Struct N' Array Parser 3.4.1</h1>
+<h1 align="center">SNAP: Struct N' Array Parser 3.4.2</h1>
 
 <p align="center">Easy struct/array saving and loading</p>
 
-<p align="center"><a href="https://github.com/JujuAdams/SNAP/releases/tag/3.4.1">Download the .yymps here</a></p>
+<p align="center"><a href="https://github.com/JujuAdams/SNAP/releases/tag/3.4.2">Download the .yymps here</a></p>
 
 <p align="center">Chat about SNAP on the <a href="https://discord.gg/8krYCqr">Discord server</a></p>
 
