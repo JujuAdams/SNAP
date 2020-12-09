@@ -6,7 +6,7 @@
 /// @param [offset]         Start position for binary decoding in the buffer. Defaults to 0, the start of the buffer
 /// @param [destroyBuffer]  Set to <true> to destroy the input buffer. Defaults to <false>
 /// 
-/// @jujuadams 2020-06-20
+/// @jujuadams 2020-12-09
 
 function snap_from_messagepack()
 {
