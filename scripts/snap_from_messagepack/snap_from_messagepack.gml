@@ -12,7 +12,7 @@ function snap_from_messagepack()
 {
     var _buffer         = argument[0];
     var _offset         = ((argument_count > 1) && (argument[1] != undefined))? argument[1] : 0;
-    var _destroy_buffer = ((argument_count > 3) && (argument[3] != undefined))? argument[3] : false;
+    var _destroy_buffer = ((argument_count > 2) && (argument[2] != undefined))? argument[2] : false;
     
     var _old_tell = buffer_tell(_buffer);
     buffer_seek(_buffer, buffer_seek_start, _offset);
