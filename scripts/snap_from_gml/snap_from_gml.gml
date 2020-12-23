@@ -22,6 +22,7 @@ function __snap_from_gml_parser(_buffer, _buffer_size) constructor
     buffer = _buffer;
     buffer_size = _buffer_size;
     depth = 0;
+    line = 1;
     
     static read_root = function()
     {
@@ -39,14 +40,17 @@ function __snap_from_gml_parser(_buffer, _buffer_size) constructor
             
             if (is_string(token))
             {
-                try
+                if (!token_is_string && !token_is_symbol)
                 {
-                    token = real(token);
-                    token_is_real = true;
-                }
-                catch(_)
-                {
-                    token_is_real = false;
+                    try
+                    {
+                        token = real(token);
+                        token_is_real = true;
+                    }
+                    catch(_)
+                    {
+                        token_is_real = false;
+                    }
                 }
                 
                 if (_state == 0)
@@ -62,7 +66,8 @@ function __snap_from_gml_parser(_buffer, _buffer_size) constructor
                     }
                     else
                     {
-                        //Error
+                        show_error("SNAP:\n\nLine " + string(line) + ", unexpected token " + string(token) + "\nis_string = " + string(token_is_string) + "\nis_real = " + string(token_is_real) + "\nis_symbol = " + string(token_is_symbol) + "\n ", true);
+                        
                     }
                 }
                 else if (_state == 1)
@@ -73,7 +78,7 @@ function __snap_from_gml_parser(_buffer, _buffer_size) constructor
                     }
                     else
                     {
-                        //Error
+                        show_error("SNAP:\n\nLine " + string(line) + ", unexpected token " + string(token) + "\nis_string = " + string(token_is_string) + "\nis_real = " + string(token_is_real) + "\nis_symbol = " + string(token_is_symbol) + "\n ", true);
                     }
                 }
                 else if (_state == 2)
@@ -92,7 +97,7 @@ function __snap_from_gml_parser(_buffer, _buffer_size) constructor
                         }
                         else
                         {
-                            //Error
+                            show_error("SNAP:\n\nLine " + string(line) + ", unexpected token " + string(token) + "\nis_string = " + string(token_is_string) + "\nis_real = " + string(token_is_real) + "\nis_symbol = " + string(token_is_symbol) + "\n ", true);
                         }
                     }
                     else
@@ -121,7 +126,7 @@ function __snap_from_gml_parser(_buffer, _buffer_size) constructor
                             }
                             else
                             {
-                                //Error
+                                show_error("SNAP:\n\nLine " + string(line) + ", unexpected token " + string(token) + "\nis_string = " + string(token_is_string) + "\nis_real = " + string(token_is_real) + "\nis_symbol = " + string(token_is_symbol) + "\n ", true);
                             }
                         }
                         
@@ -149,14 +154,17 @@ function __snap_from_gml_parser(_buffer, _buffer_size) constructor
             
             if (is_string(token))
             {
-                try
+                if (!token_is_string && !token_is_symbol)
                 {
-                    token = real(token);
-                    token_is_real = true;
-                }
-                catch(_)
-                {
-                    token_is_real = false;
+                    try
+                    {
+                        token = real(token);
+                        token_is_real = true;
+                    }
+                    catch(_)
+                    {
+                        token_is_real = false;
+                    }
                 }
                 
                 if (_state == 0)
@@ -179,7 +187,7 @@ function __snap_from_gml_parser(_buffer, _buffer_size) constructor
                         }
                         else
                         {
-                            //Error
+                            show_error("SNAP:\n\nLine " + string(line) + ", unexpected token " + string(token) + "\nis_string = " + string(token_is_string) + "\nis_real = " + string(token_is_real) + "\nis_symbol = " + string(token_is_symbol) + "\n ", true);
                         }
                     }
                     else
@@ -208,7 +216,7 @@ function __snap_from_gml_parser(_buffer, _buffer_size) constructor
                             }
                             else
                             {
-                                //Error
+                                show_error("SNAP:\n\nLine " + string(line) + ", unexpected token " + string(token) + "\nis_string = " + string(token_is_string) + "\nis_real = " + string(token_is_real) + "\nis_symbol = " + string(token_is_symbol) + "\n ", true);
                             }
                         }
                         
@@ -228,7 +236,7 @@ function __snap_from_gml_parser(_buffer, _buffer_size) constructor
                     }
                     else
                     {
-                        //Error
+                        show_error("SNAP:\n\nLine " + string(line) + ", unexpected token " + string(token) + "\nis_string = " + string(token_is_string) + "\nis_real = " + string(token_is_real) + "\nis_symbol = " + string(token_is_symbol) + "\n ", true);
                     }
                 }
             }
@@ -254,14 +262,17 @@ function __snap_from_gml_parser(_buffer, _buffer_size) constructor
             
             if (is_string(token))
             {
-                try
+                if (!token_is_string && !token_is_symbol)
                 {
-                    token = real(token);
-                    token_is_real = true;
-                }
-                catch(_)
-                {
-                    token_is_real = false;
+                    try
+                    {
+                        token = real(token);
+                        token_is_real = true;
+                    }
+                    catch(_)
+                    {
+                        token_is_real = false;
+                    }
                 }
                 
                 if (_state == 0)
@@ -271,7 +282,7 @@ function __snap_from_gml_parser(_buffer, _buffer_size) constructor
                         _key = token;
                         _state = 1;
                     }
-                    else if (token_is_symbol && (token == ";"))
+                    else if (token_is_symbol && (token == ","))
                     {
                         //Expected ; terminator
                     }
@@ -281,7 +292,7 @@ function __snap_from_gml_parser(_buffer, _buffer_size) constructor
                     }
                     else
                     {
-                        //Error
+                        show_error("SNAP:\n\nLine " + string(line) + ", unexpected token " + string(token) + "\nis_string = " + string(token_is_string) + "\nis_real = " + string(token_is_real) + "\nis_symbol = " + string(token_is_symbol) + "\n ", true);
                     }
                 }
                 else if (_state == 1)
@@ -292,7 +303,7 @@ function __snap_from_gml_parser(_buffer, _buffer_size) constructor
                     }
                     else
                     {
-                        //Error
+                        show_error("SNAP:\n\nLine " + string(line) + ", unexpected token " + string(token) + "\nis_string = " + string(token_is_string) + "\nis_real = " + string(token_is_real) + "\nis_symbol = " + string(token_is_symbol) + "\n ", true);
                     }
                 }
                 else if (_state == 2)
@@ -315,7 +326,7 @@ function __snap_from_gml_parser(_buffer, _buffer_size) constructor
                         }
                         else
                         {
-                            //Error
+                            show_error("SNAP:\n\nLine " + string(line) + ", unexpected token " + string(token) + "\nis_string = " + string(token_is_string) + "\nis_real = " + string(token_is_real) + "\nis_symbol = " + string(token_is_symbol) + "\n ", true);
                         }
                     }
                     else
@@ -344,7 +355,7 @@ function __snap_from_gml_parser(_buffer, _buffer_size) constructor
                             }
                             else
                             {
-                                //Error
+                                show_error("SNAP:\n\nLine " + string(line) + ", unexpected token " + string(token) + "\nis_string = " + string(token_is_string) + "\nis_real = " + string(token_is_real) + "\nis_symbol = " + string(token_is_symbol) + "\n ", true);
                             }
                         }
                         
@@ -368,6 +379,8 @@ function __snap_from_gml_parser(_buffer, _buffer_size) constructor
         while(buffer_tell(buffer) < buffer_size)
         {
             var _value = buffer_read(buffer, buffer_u8);
+            
+            if (_value == 10) line++;
             
             if (_in_string)
             {
