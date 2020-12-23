@@ -34,7 +34,7 @@ var _string = @"
 //Here's a comment
 a = {b:10};
 
-/*Block comment out stuff
+/*Block comment
 c = -999;
 */
 
