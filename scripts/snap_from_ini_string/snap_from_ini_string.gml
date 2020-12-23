@@ -94,7 +94,6 @@ function snap_from_ini_string()
                         
                         if (!_in_string && _try_real)
                         {
-                            //TODO - Broken in runtime 23.1.1.123
                             try { _value = real(_value); } catch(_) {}
                         }
                         
