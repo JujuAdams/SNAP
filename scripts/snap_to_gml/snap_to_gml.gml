@@ -3,7 +3,7 @@
 /// @param struct                The struct to be encoded. Can contain structs, arrays, strings, and numbers (but the root must be a struct).   N.B. Will not encode ds_list, ds_map etc.
 /// @param [alphabetizeStructs]  (bool) Sorts struct variable names is ascending alphabetical order as per ds_list_sort(). Defaults to <false>
 /// 
-/// @jujuadams 2020-09-13
+/// @jujuadams 2020-12-23
 
 //In the general case, functions/methods cannot be deserialised so we default to preventing their serialisation to begin with
 //If you'd like to throw an error whenever this function tries to serialise a function/method, set SNAP_GML_SERIALISE_FUNCTION_NAMES to -1

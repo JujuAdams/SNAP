@@ -1,7 +1,7 @@
 {
   "option_windows_display_name": "SNAP",
   "option_windows_executable_name": "${project_name}.exe",
-  "option_windows_version": "3.5.0.0",
+  "option_windows_version": "3.5.1.0",
   "option_windows_company_info": "@jujuadams",
   "option_windows_product_info": "SNAP",
   "option_windows_copyright_info": "@jujuadams 2020",

@@ -2,7 +2,7 @@
 /// 
 /// @param string  The GML string to be decoded
 /// 
-/// @jujuadams 2020-12-22
+/// @jujuadams 2020-12-23
 
 function snap_from_gml(_string)
 {
