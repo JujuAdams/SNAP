@@ -27,11 +27,5 @@ struct = {
     func : function() {},
 };
 
-var _string = "{\"hello\" : \"world\", \"more\" : \"data\"}";
-
-show_debug_message(snap_from_yaml(_string));
-
-//show_debug_message(snap_to_yaml(struct, true));
-yaml = snap_from_yaml(snap_to_yaml(struct, true));
-show_debug_message(snap_to_yaml(yaml, true));
-//show_debug_message(snap_to_json(yaml, true, true));
+show_debug_message(snap_to_gml(struct, true));
+show_debug_message(snap_to_json(snap_from_gml(snap_to_gml(struct, true)), true, true));
