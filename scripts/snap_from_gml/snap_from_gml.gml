@@ -360,8 +360,10 @@ function __snap_from_gml_parser(_buffer, _buffer_size) constructor
     
     static read_token = function()
     {
-        var _token_start = undefined;
-        var _in_string   = false;
+        var _token_start      = undefined;
+        var _in_string        = false;
+        var _in_line_comment  = false;
+        var _in_block_comment = false;
         
         while(buffer_tell(buffer) < buffer_size)
         {
@@ -381,28 +383,52 @@ function __snap_from_gml_parser(_buffer, _buffer_size) constructor
                     break;
                 }
             }
+            else if (_in_line_comment)
+            {
+                if (_value == 10) _in_line_comment = false;
+            }
+            else if (_in_block_comment)
+            {
+                if ((_value == 47) && (buffer_peek(buffer, buffer_tell(buffer) - 2, buffer_u8) == 42))
+                {
+                    _in_block_comment = false;
+                }
+            }
             else
             {
                 if (_token_start == undefined)
                 {
                     if (_value > 32)
                     {
-                        _token_start = buffer_tell(buffer) - 1;
-                        if (_value == 34) _in_string = true;
-                        
-                        if ((_value ==  44)  // ,
-                        ||  (_value ==  58)  // :
-                        ||  (_value ==  59)  // ;
-                        ||  (_value ==  61)  // =
-                        ||  (_value ==  91)  // [
-                        ||  (_value ==  93)  // ]
-                        ||  (_value == 123)  // {
-                        ||  (_value == 125)) // }
+                        if ((_value == 47) && (buffer_peek(buffer, buffer_tell(buffer), buffer_u8) == 47))
                         {
-                            token = chr(_value);
-                            token_is_string = false;
-                            token_is_symbol = true;
-                            break;
+                            //Line comment
+                            _in_line_comment = true;
+                        }
+                        else if ((_value == 47) && (buffer_peek(buffer, buffer_tell(buffer), buffer_u8) == 42))
+                        {
+                            //Block comment
+                            _in_block_comment = true;
+                        }
+                        else
+                        {
+                            _token_start = buffer_tell(buffer) - 1;
+                            if (_value == 34) _in_string = true;
+                            
+                            if ((_value ==  44)  // ,
+                            ||  (_value ==  58)  // :
+                            ||  (_value ==  59)  // ;
+                            ||  (_value ==  61)  // =
+                            ||  (_value ==  91)  // [
+                            ||  (_value ==  93)  // ]
+                            ||  (_value == 123)  // {
+                            ||  (_value == 125)) // }
+                            {
+                                token = chr(_value);
+                                token_is_string = false;
+                                token_is_symbol = true;
+                                break;
+                            }
                         }
                     }
                 }
