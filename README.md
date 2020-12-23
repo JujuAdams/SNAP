@@ -1,4 +1,4 @@
-<h1 align="center">SNAP: Struct N' Array Parser 3.4.3</h1>
+<h1 align="center">SNAP: Struct N' Array Parser 3.5.0</h1>
 
 <p align="center">Easy struct/array saving and loading</p>
 
@@ -18,7 +18,8 @@ Functions included can:
 6. Encode/decode a custom binary format
 7. Encode/decode [messagepack](https://msgpack.org/index.html)
 8. Encode/decode XML
-9. Decode INI
+9. Encode/decode GML
+10. Decode INI
 
 -----
 
@@ -167,6 +168,18 @@ This is a bit wordy, so here's an example. The following XML and struct/array li
 ### snap_to_xml(struct/array, [alphabetizeStructs]) ###
 
 Turns struct and array nested data into a XML string. The data must be structured as above in GML example for `snap_from_xml()`. Setting `[alphabetizeStructs]` to `true` will output child element in ascending alphabetical order. Using an alphabetized output incurs a performance penalty.
+
+&nbsp;
+
+### snap_to_gml(struct/array, [alphabetizeStructs]) ###
+
+Turns a struct into a GML struct defintion, exported as a string. The root element must be a struct (not an array), but otherwise structs and arrays can be nested inside each other. Setting `[alphabetizeStructs]` to `true` will output variables in ascending alphabetical order, albeit at a performance penalty.
+
+&nbsp;
+
+### snap_from_gml(string) ###
+
+Decodes a GML struct defintion (stored as a string) into nested struct/array data. This function will always return a struct as the root element. `snap_from_gml()` will happily ignore formatting whitespace and handles `\\`, `\"`, `\n`, `\r`, and `\t` escaped characters. Also supports `true`, `false`, and `undefined` values.
 
 &nbsp;
 
