@@ -2,8 +2,8 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Struct N' Array Parser",
-    "path": "folders/Struct N' Array Parser.yy",
+    "name": "Binary",
+    "path": "folders/Struct N' Array Parser/Binary.yy",
   },
   "resourceVersion": "1.0",
   "name": "snap_from_binary",

@@ -2,8 +2,8 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Struct N' Array Parser",
-    "path": "folders/Struct N' Array Parser.yy",
+    "name": "INI",
+    "path": "folders/Struct N' Array Parser/INI.yy",
   },
   "resourceVersion": "1.0",
   "name": "snap_from_ini_file",
