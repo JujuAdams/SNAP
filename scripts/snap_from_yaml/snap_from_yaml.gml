@@ -29,8 +29,8 @@ enum __SNAP_YAML
 
 function snap_from_yaml()
 {
-    var _string = argument[0];
-    var _replace_keywords = ((argument_count > 1) && (argument[1] != undefined))? argument[1] : true;
+    var _string            = argument[0];
+    var _replace_keywords  = ((argument_count > 1) && (argument[1] != undefined))? argument[1] : true;
     var _track_field_order = ((argument_count > 2) && (argument[2] != undefined))? argument[2] : false;
     
     var _buffer = buffer_create(string_byte_length(_string)+1, buffer_fixed, 1);
@@ -279,7 +279,7 @@ function __snap_from_yaml_builder(_tokens_array, _replace_keywords, _track_field
 {
     tokens_array = _tokens_array;
     replace_keywords = _replace_keywords;
-	track_field_order = _track_field_order;
+    track_field_order = _track_field_order;
     
     token_count  = array_length(tokens_array);
     token_index  = 0;
@@ -323,21 +323,21 @@ function __snap_from_yaml_builder(_tokens_array, _replace_keywords, _track_field
             {
                 var _indent_limit = indent;
                 var _struct = {};
-				if (track_field_order) {
-					var field_index = 0;
-					_struct.__snap_field_order = [];
-				}
+                if (track_field_order)
+                {
+                    var _field_index = 0;
+                    var _field_order_array = [];
+                    _struct.__snap_field_order = _field_order_array;
+                }
                 
                 --token_index;
                 while(token_index < token_count)
                 {
                     var _key = tokens_array[token_index][1];
-										
-					if (track_field_order) {
-						// add the key to the __snap_field_order array
-						_struct.__snap_field_order[field_index++] = _key;
-					}
-					
+                          
+                    //Add the key to the __snap_field_order array              
+                    if (track_field_order) _field_order_array[@ _field_index++] = _key;
+                    
                     token_index += 2; //Skip over the struct symbol
                     
                     var _last_line = line;
@@ -448,20 +448,20 @@ function __snap_from_yaml_builder(_tokens_array, _replace_keywords, _track_field
         else if (_type == __SNAP_YAML.JSON_STRUCT_START)
         {
             var _struct = {};
-			if (track_field_order) {
-				var field_index = 0;
-				_struct.__snap_field_order = [];
-			}
+            if (track_field_order)
+            {
+                var _field_index = 0;
+                var _field_order_array = [];
+                _struct.__snap_field_order = _field_order_array;
+            }
             
             read_to_next();
             while((token_index < token_count) && (tokens_array[token_index][0] != __SNAP_YAML.JSON_STRUCT_END))
             {
                 var _key = read();
-				
-				if (track_field_order) {
-					// add the key to the __snap_field_order array
-					_struct.__snap_field_order[field_index++] = _key;
-				}
+                
+                //Add the key to the __snap_field_order array
+                if (track_field_order) _field_order_array[@ _field_index++] = _key;
                 
                 read_to_next();
                 if (tokens_array[token_index][0] == __SNAP_YAML.JSON_COLON)
