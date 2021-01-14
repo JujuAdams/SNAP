@@ -86,7 +86,7 @@ Turns struct and array nested data into a YAML string. The root datatype can be 
 
 &nbsp;
 
-### snap_from_json(string, [replaceKeywords]) ###
+### snap_from_yaml(string, [replaceKeywords]) ###
 
 Decodes a [YAML](https://en.wikipedia.org/wiki/YAML) string into nested struct/array data. If `[replaceKeywords]` is set to `true` (the default) then the following keywords will be turned into their associated numeric values: `true`, `false`, `undefined`. `snap_from_json()` is not a full implementation of the [YAML](https://en.wikipedia.org/wiki/YAML) spec and doesn't try to be. This parser doesn't support:
 1. Single quote `'` delimited strings (you must use double quotes `"`)
