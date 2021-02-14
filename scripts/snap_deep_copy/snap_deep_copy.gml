@@ -1,8 +1,10 @@
 /// @returm Copy of the given struct/array, including a copy of any nested structs and arrays
 /// 
+/// This function is designed to copy simple tree-like structures that have been imported from 
+/// 
 /// @param struct/array   The struct/array to be copied
 /// 
-/// @jujuadams 2020-06-24
+/// @jujuadams 2021-02-14
 
 function snap_deep_copy(_value)
 {
@@ -33,6 +35,20 @@ function __snap_deep_copy(_value) constructor
             else if (is_array(_value))
             {
                 _value = copy_array(_value);
+            }
+            else if (is_method(_value))
+            {
+                var _self = method_get_self(_value);
+                if (_self == _source)
+                {
+                    //If this method is bound to the source struct, create a new method bound to the new struct
+                    _value = method(_copy, method_get_index(_value));
+                }
+                else if (_self != undefined)
+                {
+                    //If the scope of the method isn't <undefined> (global) then spit out a warning
+                    show_debug_message("snap_deep_copy(): Warning! Deep copy found a method reference that could not be appropriately handled");
+                }
             }
             
             variable_struct_set(_copy, _name, _value);
