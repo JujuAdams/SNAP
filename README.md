@@ -1,6 +1,6 @@
 <h1 align="center">SNAP: Struct N' Array Parser 3.5.2</h1>
 
-<p align="center">Easy struct/array saving and loading</p>
+<p align="center">Easy data format saving and loading</p>
 
 <p align="center"><a href="https://github.com/JujuAdams/SNAP/releases/">Download the .yymps here</a></p>
 
