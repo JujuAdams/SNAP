@@ -27,7 +27,7 @@
     "path": "SNAP.yyp",
   },
   "resourceVersion": "1.0",
-  "name": "oTestDeepCopy",
+  "name": "oTestGrid",
   "tags": [],
   "resourceType": "GMObject",
 }
