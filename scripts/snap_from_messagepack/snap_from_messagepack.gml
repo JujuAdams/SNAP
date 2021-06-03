@@ -54,6 +54,9 @@ function __snap_from_messagepack_parser(_buffer) constructor
     
     static read_string = function(_size)
     {
+        //Return an empty string if we don't expect any data whatsoever
+        if (_size == 0) return "";
+        
         var _null_position = buffer_tell(buffer) + _size;
         if (_null_position >= buffer_get_size(buffer))
         {
@@ -67,6 +70,7 @@ function __snap_from_messagepack_parser(_buffer) constructor
         
         //Get GM to read from the start of the string to the null byte
         var _string = buffer_read(buffer, buffer_string);
+        show_debug_message("string = \"" + string(_string) + "\"");
         
         //Take a step back and replace the original byte with what we found before
         buffer_seek(buffer, buffer_seek_relative, -1);
@@ -149,6 +153,7 @@ function __snap_from_messagepack_parser(_buffer) constructor
     static read_value = function()
     {
         var _byte = buffer_read(buffer, buffer_u8);
+        
         if (_byte <= 0x7f) //positive fixint 0x00 -> 0x7f
         {
             //First 7 bits are the integer
@@ -166,6 +171,7 @@ function __snap_from_messagepack_parser(_buffer) constructor
         }
         else if (_byte <= 0xbf) //fixstr 0xa0 -> 0xbf
         {
+            show_debug_message("fixstr, size = " + string(_byte & 0x1f));
             //Size is determined by the first 5 bits
             return read_string(_byte & 0x1f);
         }
@@ -211,6 +217,7 @@ function __snap_from_messagepack_parser(_buffer) constructor
             case 0xd9: /*217*/ return read_string(buffer_read(buffer, buffer_u8 )); break; //str  8
             case 0xda: /*218*/ return read_string(buffer_read_little( buffer_u16)); break; //str 16
             case 0xdb: /*219*/ return read_string(buffer_read_little( buffer_u32)); break; //str 32
+            case 0xdb: /*219*/ show_debug_message("str32"); return read_string(buffer_read_little( buffer_u32)); break; //str 32
             
             case 0xdc: /*220*/ return read_array( buffer_read_little(buffer_u16)); break; //array 16
             case 0xdd: /*221*/ return read_array( buffer_read_little(buffer_u32)); break; //array 32
