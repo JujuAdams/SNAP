@@ -1,4 +1,4 @@
-<h1 align="center">SNAP: Struct N' Array Parser 3.5.2</h1>
+<h1 align="center">SNAP: Struct N' Array Parser 3.5.3</h1>
 
 <p align="center">Easy data format saving and loading</p>
 
