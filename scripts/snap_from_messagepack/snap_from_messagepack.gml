@@ -201,7 +201,7 @@ function __snap_from_messagepack_parser(_buffer) constructor
             case 0xce: /*206*/ return buffer_read_little(  buffer_u32); break; // uint 32
             case 0xcf: /*207*/ return buffer_read_little(  buffer_u64); break; // uint 64
             
-            case 0xd0: /*208*/ return  buffer_read(buffer, buffer_s8 ); break; //  int  8
+            case 0xd0: /*208*/ return buffer_read(buffer, buffer_s8 ); break; //  int  8
             case 0xd1: /*209*/ return buffer_read_little(  buffer_s16); break; //  int 16
             case 0xd2: /*210*/ return buffer_read_little(  buffer_s32); break; //  int 32
             case 0xd3: /*211*/ return buffer_read_little(  buffer_u64); break; //  int 64 !!! No signed 64-bit integer read in GameMaker
@@ -214,7 +214,6 @@ function __snap_from_messagepack_parser(_buffer) constructor
             
             case 0xd9: /*217*/ return read_string(buffer_read(buffer, buffer_u8 )); break; //str  8
             case 0xda: /*218*/ return read_string(buffer_read_little( buffer_u16)); break; //str 16
-            case 0xdb: /*219*/ return read_string(buffer_read_little( buffer_u32)); break; //str 32
             case 0xdb: /*219*/ return read_string(buffer_read_little( buffer_u32)); break; //str 32
             
             case 0xdc: /*220*/ return read_array( buffer_read_little(buffer_u16)); break; //array 16
