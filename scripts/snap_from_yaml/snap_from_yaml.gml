@@ -98,6 +98,7 @@ function __snap_from_yaml_tokenizer(_buffer) constructor
                 _chunk_end   = buffer_tell(_buffer);
                 
                 _in_comment = false;
+                _indent_search = true;
             }
         }
         else if (_indent_search)
