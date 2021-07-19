@@ -9,7 +9,7 @@
 /// @param [replaceKeywords]   Whether to replace keywords (true, false, null) with boolean/undefined equivalents. Default to <true>
 /// @param [trackFieldOrder]   Whether to track the order of struct fields as they appear in the YAML string (stored in __snap_field_order field on each GML struct). Default to <false>
 /// 
-/// @jujuadams 2020-11-01
+/// @jujuadams 2021-07-19
 
 enum __SNAP_YAML
 {
