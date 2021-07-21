@@ -4,7 +4,7 @@
 /// 
 /// @param string   The XML string to be decoded
 /// 
-/// @jujuadams 2020-10-14
+/// @jujuadams 2021-07-21
 
 function snap_from_xml(_string)
 {
@@ -40,7 +40,9 @@ function snap_from_xml(_string)
     var _tag_reading_attributes = false;
     var _tag_has_attributes     = false;
     
-    var _root = {};
+    var _root = {
+        type: "root",
+    };
     
     var _stack_parent = undefined;
     var _stack_top =_root;
@@ -103,14 +105,8 @@ function snap_from_xml(_string)
                         
                             if (!_tag_is_comment)
                             {
-                                var _attributes_struct = variable_struct_get(_stack_top, "_attr");
-                                if (_attributes_struct == undefined)
-                                {
-                                    _attributes_struct = {};
-                                    variable_struct_set(_stack_top, "_attr", _attributes_struct);
-                                }
-                                
-                                variable_struct_set(_attributes_struct, _key, _value);
+                                if (!variable_struct_exists(_stack_top, "attributes")) _stack_top.attributes = {};
+                                _stack_top.attributes[$ _key] = _value;
                             }
                         
                             _in_key          = true;
@@ -153,22 +149,14 @@ function snap_from_xml(_string)
                                     _tag = buffer_read(_buffer, buffer_string);
                                     buffer_poke(_buffer, buffer_tell(_buffer)-1, buffer_u8, _value);
                                     
-                                    _stack_top = {};
+                                    _stack_top = {
+                                        type: _tag,
+                                    };
+                                    
                                     ds_list_insert(_stack, 0, _stack_top);
                                     
-                                    var _parent_tag_value = variable_struct_get(_stack_parent, _tag);
-                                    if (_parent_tag_value == undefined)
-                                    {
-                                        variable_struct_set(_stack_parent, _tag, _stack_top);
-                                    }
-                                    else if (is_array(_parent_tag_value))
-                                    {
-                                        _parent_tag_value[@ array_length(_parent_tag_value)] = _stack_top;
-                                    }
-                                    else
-                                    {
-                                        variable_struct_set(_stack_parent, _tag, [_parent_tag_value, _stack_top]);
-                                    }
+                                    if (!variable_struct_exists(_stack_parent, "children")) _stack_parent.children = [];
+                                    array_push(_stack_parent.children, _stack_top);
                                     
                                     _in_key                 = true;
                                     _key_start              = -1;
@@ -179,11 +167,7 @@ function snap_from_xml(_string)
                         break;
                         
                         case ord(" "):
-                            if (_tag_is_prolog)
-                            {
-                                _tag = "_prolog";
-                            }
-                            else
+                            if (!_tag_is_prolog)
                             {
                                 buffer_poke(_buffer, buffer_tell(_buffer)-1, buffer_u8, 0x0);
                                 buffer_seek(_buffer, buffer_seek_start, _tag_start);
@@ -192,21 +176,20 @@ function snap_from_xml(_string)
                             
                             if (!_tag_is_comment && !_tag_terminating)
                             {
-                                _stack_top = {};
+                                _stack_top = {
+                                    type: (_tag_is_prolog? "prolog" : _tag),
+                                };
+                                
                                 ds_list_insert(_stack, 0, _stack_top);
                                 
-                                var _parent_tag_value = variable_struct_get(_stack_parent, _tag);
-                                if (_parent_tag_value == undefined)
+                                if (_tag_is_prolog)
                                 {
-                                    variable_struct_set(_stack_parent, _tag, _stack_top);
-                                }
-                                else if (is_array(_parent_tag_value))
-                                {
-                                    _parent_tag_value[@ array_length(_parent_tag_value)] = _stack_top;
+                                    _stack_parent.prolog = _stack_top;
                                 }
                                 else
                                 {
-                                    variable_struct_set(_stack_parent, _tag, [_parent_tag_value, _stack_top]);
+                                    if (!variable_struct_exists(_stack_parent, "children")) _stack_parent.children = [];
+                                    array_push(_stack_parent.children, _stack_top);
                                 }
                             }
                         
@@ -222,11 +205,7 @@ function snap_from_xml(_string)
                 {
                     if (!_tag_reading_attributes && !_tag_is_comment)
                     {
-                        if (_tag_is_prolog)
-                        {
-                            _tag = "_prolog";
-                        }
-                        else if (_tag == undefined)
+                        if (!_tag_is_prolog && (_tag == undefined))
                         {
                             buffer_poke(_buffer, buffer_tell(_buffer)-1, buffer_u8, 0x0);
                             buffer_seek(_buffer, buffer_seek_start, _tag_start);
@@ -235,21 +214,20 @@ function snap_from_xml(_string)
                         
                         if (!_tag_terminating)
                         {
-                            _stack_top = {};
+                            _stack_top = {
+                                type: (_tag_is_prolog? "prolog" : _tag),
+                            };
+                            
                             ds_list_insert(_stack, 0, _stack_top);
                             
-                            var _parent_tag_value = variable_struct_get(_stack_parent, _tag);
-                            if (_parent_tag_value == undefined)
+                            if (_tag_is_prolog)
                             {
-                                variable_struct_set(_stack_parent, _tag, _stack_top);
-                            }
-                            else if (is_array(_parent_tag_value))
-                            {
-                                _parent_tag_value[@ array_length(_parent_tag_value)] = _stack_top;
+                                _stack_parent.prolog = _stack_top;
                             }
                             else
                             {
-                                variable_struct_set(_stack_parent, _tag, [_parent_tag_value, _stack_top]);
+                                if (!variable_struct_exists(_stack_parent, "children")) _stack_parent.children = [];
+                                array_push(_stack_parent.children, _stack_top);
                             }
                         }
                     }
@@ -300,7 +278,7 @@ function snap_from_xml(_string)
                     buffer_seek(_buffer, buffer_seek_start, _text_start);
                     _text = buffer_read(_buffer, buffer_string);
                     
-                    variable_struct_set(_stack_top, "_text", _text);
+                    _stack_top.text = _text;
                 }
             
                 _stack_parent           = _stack_top;

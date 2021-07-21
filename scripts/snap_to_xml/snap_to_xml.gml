@@ -1,9 +1,9 @@
 /// @return XML string that encodes the struct/array nested data
 /// 
-/// @param struct/array           The data to be encoded
-/// @param [alphabetizeStructs]   (bool) Sorts struct variable names is ascending alphabetical order as per ds_list_sort(). Defaults to <false>
+/// @param struct/array    The data to be encoded
+/// @param [alphabetize]   Optional, sorts struct attribute names in ascending alphabetical order. Defaults to <false>
 /// 
-/// @jujuadams 2020-09-13
+/// @jujuadams 2020-07-21
 
 //In the general case, functions/methods cannot be deserialised so we default to preventing their serialisation to begin with
 //If you'd like to throw an error whenever this function tries to serialise a function/method, set SNAP_XML_SERIALISE_FUNCTION_NAMES to -1
@@ -27,22 +27,23 @@ function __snap_to_xml_parser(_ds, _alphabetise) constructor
     buffer = buffer_create(1024, buffer_grow, 1);
     indent = "";
     
-    static write_node = function(_element_name, _struct)
+    static write_node = function(_struct)
     {
         buffer_write(buffer, buffer_text, indent);
         buffer_write(buffer, buffer_text, "<");
-        buffer_write(buffer, buffer_text, _element_name);
+        buffer_write(buffer, buffer_text, _struct.type);
         
-        var _attribute_struct = variable_struct_get(_struct, "_attr");
+        var _attribute_struct = _struct[$ "attributes"];
         if (is_struct(_attribute_struct))
         {
             var _names = variable_struct_get_names(_attribute_struct);
-            var _count = array_length(_names);
+            if (alphabetise) array_sort(_names, lb_sort_ascending);
+            
             var _i = 0;
-            repeat(_count)
+            repeat(array_length(_names))
             {
                 var _key = _names[_i];
-                var _value = variable_struct_get(_attribute_struct, _key);
+                var _value = _attribute_struct[$ _key];
                 
                 if (!is_method(_value) || (SNAP_XML_SERIALISE_FUNCTION_NAMES > 0))
                 {
@@ -63,87 +64,53 @@ function __snap_to_xml_parser(_ds, _alphabetise) constructor
         
         buffer_write(buffer, buffer_text, ">");
         
-        var _names = variable_struct_get_names(_struct);
-        var _count = array_length(_names);
-        
-        var _content = variable_struct_get(_struct, "_text");
+        var _content = _struct[$ "text"];
         if (_content != undefined)
         {
             buffer_write(buffer, buffer_text, string(_content));
         }
-        else if (_count > 0)
+        else
         {
-            if (alphabetise)
+            var _children = _struct[$ "children"];
+            if (is_array(_children))
             {
-                var _list = ds_list_create();
-            
-                var _i = 0;
-                repeat(_count)
+                var _count = array_length(_children);
+                if (_count > 0)
                 {
-                    _list[| _i] = _names[_i];
-                    ++_i;
-                }
-                
-                ds_list_sort(_list, true);
-                
-                var _i = 0;
-                repeat(_count)
-                {
-                    _names[@ _i] = _list[| _i];
-                    ++_i;
-                }
-                
-                ds_list_destroy(_list);
-            }
-            
-            var _old_indent = indent;
-            indent += "    ";
-            var _i = 0;
-            repeat(_count)
-            {
-                var _key = _names[_i];
-                
-                if ((_key != "_attr") && (_key != "_text"))
-                {
-                    var _value = variable_struct_get(_struct, _key);
+                    var _old_indent = indent;
+                    indent += "    ";
                     
-                    if (is_struct(_value))
+                    var _i = 0;
+                    repeat(_count)
                     {
                         buffer_write(buffer, buffer_u8, 13);
-                        write_node(_key, _value);
+                        write_node(_children[_i]);
+                        ++_i;
                     }
-                    else if (is_array(_value))
-                    {
-                        var _j = 0;
-                        repeat(array_length(_value))
-                        {
-                            buffer_write(buffer, buffer_u8, 13);
-                            write_node(_key, _value[_j]);
-                            ++_j;
-                        }
-                    }
+                    
+                    indent = _old_indent;
+                    buffer_write(buffer, buffer_u8, 13);
+                    buffer_write(buffer, buffer_text, indent);
                 }
-                
-                ++_i;
             }
-            
-            indent = _old_indent;
-            buffer_write(buffer, buffer_u8, 13);
-            buffer_write(buffer, buffer_text, indent);
         }
         
         buffer_write(buffer, buffer_text, "</");
-        buffer_write(buffer, buffer_text, _element_name);
+        buffer_write(buffer, buffer_text, _struct.type);
         buffer_write(buffer, buffer_text, ">");
     }
     
-    var _prolog_struct = variable_struct_get(_ds, "_prolog");
+    
+    
+    var _prolog_struct = _ds[$ "prolog"];
     if (is_struct(_prolog_struct))
     {
-        var _attribute_struct = variable_struct_get(_prolog_struct, "_attr");
+        var _attribute_struct = _prolog_struct[$ "attributes"];
         if (is_struct(_attribute_struct))
         {
             var _names = variable_struct_get_names(_attribute_struct);
+            if (alphabetise) array_sort(_names, lb_sort_ascending);
+            
             var _count = array_length(_names);
             if (_count > 0)
             {
@@ -153,7 +120,7 @@ function __snap_to_xml_parser(_ds, _alphabetise) constructor
                 repeat(_count)
                 {
                     var _key = _names[_i];
-                    var _value = variable_struct_get(_attribute_struct, _key);
+                    var _value = _attribute_struct[$ _key];
                     
                     if (!is_method(_value) || (SNAP_XML_SERIALISE_FUNCTION_NAMES > 0))
                     {
@@ -176,28 +143,20 @@ function __snap_to_xml_parser(_ds, _alphabetise) constructor
         }
     }
     
-    var _names = variable_struct_get_names(_ds);
-    var _count = array_length(_names);
-    var _i = 0;
-    repeat(_count)
+    
+    
+    var _children = _ds[$ "children"];
+    if (is_array(_children))
     {
-        var _key = _names[_i];
-        var _value = variable_struct_get(_ds, _key);
-        
-        if (_key != "_prolog")
+        var _i = 0;
+        repeat(array_length(_children))
         {
-            if (!is_method(_value) || (SNAP_XML_SERIALISE_FUNCTION_NAMES > 0))
-            {
-                write_node(_key, _value);
-            }
-            else if (SNAP_XML_SERIALISE_FUNCTION_NAMES < 0)
-            {
-                show_error("Functions/methods cannot be serialised\n(Please edit macro SNAP_XML_SERIALISE_FUNCTION_NAMES to change this behaviour)\n ", true);
-            }
+            write_node(_children[_i]);
+            ++_i;
         }
-        
-        ++_i;
     }
+    
+    
     
     buffer_seek(buffer, buffer_seek_start, 0);
     result = buffer_read(buffer, buffer_string);
