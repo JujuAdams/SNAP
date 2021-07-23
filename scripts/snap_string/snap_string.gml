@@ -1,5 +1,5 @@
 /// Stringifies an input value. If the value is a nested struct/array then circular references will be handled gracefully
-/// Circular references are indicated by the use of angle brackets
+/// Circular references are indicated by the use of "<origin>" in the returned string
 /// Otherwise, the output formatting copies GameMaker's native formatting, for better or worse
 /// 
 /// @param value   Value to stringify
