@@ -9,14 +9,21 @@ global.__snap_string_buffer = buffer_create(1024, buffer_grow, 1);
 
 function snap_string(_value)
 {
-    ds_map_clear(global.__snap_found_map);
-    
-    buffer_seek(global.__snap_string_buffer, buffer_seek_start, 0);
-    __snap_string_inner(_value, "<origin>");
-    buffer_write(global.__snap_string_buffer, buffer_u8, 0x00);
-    
-    buffer_seek(global.__snap_string_buffer, buffer_seek_start, 0);
-    return buffer_read(global.__snap_string_buffer, buffer_string);
+    if (is_struct(_value) || is_array(_value))
+    {
+        ds_map_clear(global.__snap_found_map);
+        
+        buffer_seek(global.__snap_string_buffer, buffer_seek_start, 0);
+        __snap_string_inner(_value, "<origin>");
+        buffer_write(global.__snap_string_buffer, buffer_u8, 0x00);
+        
+        buffer_seek(global.__snap_string_buffer, buffer_seek_start, 0);
+        return buffer_read(global.__snap_string_buffer, buffer_string);
+    }
+    else
+    {
+        return _value;
+    }
 }
 
 function __snap_string_inner(_value, _long_name)
