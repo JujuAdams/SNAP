@@ -1,5 +1,7 @@
 <h1 align="center">SNAP: Struct N' Array Parser 4.0.0</h1>
 
+<p align="center"><i>Situation Normal, All Parsed</i></p>
+
 <p align="center">Easy data format saving and loading</p>
 
 <p align="center"><a href="https://github.com/JujuAdams/SNAP/releases/">Download the .yymps here</a></p>
