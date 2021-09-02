@@ -65,7 +65,7 @@ function foreach()
             var _key = ds_map_find_first(_ds);
             repeat(ds_map_size(_ds))
             {
-                _function(_ds[? _key], _i, _key, undefined);
+                _function(_ds[? _key], _i, _key);
                 _key = ds_map_find_next(_ds, _key);
                 ++_i;
             }
