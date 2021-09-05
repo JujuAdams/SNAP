@@ -6,7 +6,7 @@
 /// @param [cellDelimiter]     Character to use to indicate where cells start and end. First 127 ASCII chars only. Defaults to a comma
 /// @param [stringDelimiter]   Character to use to indicate where strings start and end. First 127 ASCII chars only. Defaults to a double quote
 /// 
-/// @jujuadams 2020-06-28
+/// @jujuadams 2021-09-05
 
 function snap_from_csv()
 {
@@ -32,7 +32,9 @@ function snap_from_csv()
     var _in_string   = false;
     var _string_cell = false;
 	
-	if ((buffer_get_size(_buffer) >= 4) && (buffer_peek(_buffer, 0, buffer_u32) & 0xFFFFFF == 0xBFBBEF)) {
+    //Byte-order mark check. This sometimes gets added if the CSV file has been editted in a text editor
+	if ((buffer_get_size(_buffer) >= 4) && (buffer_peek(_buffer, 0, buffer_u32) & 0xFFFFFF == 0xBFBBEF))
+    {
 		buffer_seek(_buffer, buffer_seek_start, 3);	
 		_size -= 3;
 		_word_start += 3;
