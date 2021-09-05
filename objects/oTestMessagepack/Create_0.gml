@@ -4,6 +4,9 @@ struct = {
     c : undefined,
     d : 1/9,
     e : 15/100,
+    negative: -1,
+    bigger_negative: -256,
+    really_big_negative: -256000,
     array : [
         5,
         6,
