@@ -32,10 +32,7 @@ function snap_from_csv()
     var _in_string   = false;
     var _string_cell = false;
 	
-	var _bom_a = buffer_peek( _buffer, 0, buffer_u8);
-	var _bom_b = buffer_peek( _buffer, 1, buffer_u8);
-	var _bom_c = buffer_peek( _buffer, 2, buffer_u8);
-	if (( _bom_a == 0xEF) && ( _bom_b == 0xBB) && ( _bom_c == 0xBF) ) {
+	if ((buffer_get_size(_buffer) >= 4) && (buffer_peek(_buffer, 0, buffer_u32) & 0xFFFFFF == 0xBFBBEF)) {
 		buffer_seek(_buffer, buffer_seek_start, 3);	
 		_size -= 3;
 		_word_start += 3;
