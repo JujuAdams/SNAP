@@ -3,7 +3,7 @@
   "isCompatibility": false,
   "parent": {
     "name": "GML",
-    "path": "folders/Struct N' Array Parser/GML.yy",
+    "path": "folders/SNAP/GML.yy",
   },
   "resourceVersion": "1.0",
   "name": "snap_to_gml",

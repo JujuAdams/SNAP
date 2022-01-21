@@ -2,8 +2,8 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Struct N' Array Parser",
-    "path": "folders/Struct N' Array Parser.yy",
+    "name": "SNAP",
+    "path": "folders/SNAP.yy",
   },
   "resourceVersion": "1.0",
   "name": "string_from_file",

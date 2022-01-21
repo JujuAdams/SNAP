@@ -3,7 +3,7 @@
   "isCompatibility": false,
   "parent": {
     "name": "CSV",
-    "path": "folders/Struct N' Array Parser/CSV.yy",
+    "path": "folders/SNAP/CSV.yy",
   },
   "resourceVersion": "1.0",
   "name": "snap_from_csv",

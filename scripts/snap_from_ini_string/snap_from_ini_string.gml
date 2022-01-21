@@ -73,7 +73,7 @@ function snap_from_ini_string()
                     ||  (_value == 10) //Newline
                     ||  (_value == 13) //Newline
                     ||  (_value == ord(";")) //Comment semicolon
-                    ||  (_in_string && (_value == ord("\")) && (buffer_peek(_buffer, buffer_tell(_buffer)-2, buffer_u8) != ord("\\")))) //Unescaped double quote
+                    ||  (_in_string && (_value == ord("\"")) && (buffer_peek(_buffer, buffer_tell(_buffer)-2, buffer_u8) != ord("\\")))) //Unescaped double quote
                     {
                         if (_value == ord(";")) _in_comment = true;
                         

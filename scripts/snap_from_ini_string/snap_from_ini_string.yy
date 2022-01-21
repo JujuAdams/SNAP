@@ -3,7 +3,7 @@
   "isCompatibility": false,
   "parent": {
     "name": "INI",
-    "path": "folders/Struct N' Array Parser/INI.yy",
+    "path": "folders/SNAP/INI.yy",
   },
   "resourceVersion": "1.0",
   "name": "snap_from_ini_string",

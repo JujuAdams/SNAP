@@ -3,7 +3,7 @@
   "isCompatibility": false,
   "parent": {
     "name": "JSON",
-    "path": "folders/Struct N' Array Parser/JSON.yy",
+    "path": "folders/SNAP/JSON.yy",
   },
   "resourceVersion": "1.0",
   "name": "snap_to_json",
