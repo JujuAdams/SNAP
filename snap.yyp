@@ -52,10 +52,10 @@
     {"name":"Windows","path":"options/windows/options_windows.yy",},
     {"name":"Windows UWP","path":"options/windowsuap/options_windowsuap.yy",},
     {"name":"Xbox One","path":"options/xboxone/options_xboxone.yy",},
+    {"name":"operagx","path":"options/operagx/options_operagx.yy",},
   ],
   "isDnDProject": false,
   "isEcma": false,
-  "tutorialPath": "",
   "configs": {
     "name": "Default",
     "children": [],
@@ -83,9 +83,9 @@
   ],
   "IncludedFiles": [],
   "MetaData": {
-    "IDEVersion": "2.3.2.560",
+    "IDEVersion": "2022.2.1.618",
   },
-  "resourceVersion": "1.4",
+  "resourceVersion": "1.5",
   "name": "SNAP",
   "tags": [],
   "resourceType": "GMProject",
