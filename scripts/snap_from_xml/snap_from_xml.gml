@@ -258,13 +258,10 @@ function snap_from_xml(_string)
                         }
                     }
                     
-					if (!_tag_is_comment || _tag_is_comment && _previous_value == ord("-"))
-					{
-	                    _tag      = undefined;
-	                    _in_tag   = false;
-	                    _in_key   = false;
-	                    _in_value = false;
-					}
+                    _tag      = undefined;
+                    _in_tag   = false;
+                    _in_key   = false;
+                    _in_value = false;
                 }
             }
             else if ((_value == 10) || (_value == 13)) //Newline
