@@ -7,7 +7,7 @@
 /// @param string      The INI string to parse
 /// @param [tryReal]   Try to convert strings to real values if possible. Defaults to <true>
 ///
-/// @jujuadams 2020-06-16
+/// @jujuadams 2022-05-09
 
 function snap_from_ini_string()
 {
