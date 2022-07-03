@@ -24,6 +24,8 @@ struct = {
     test2 : "\"Hello world!\"",
     url : "https://www.jujuadams.com/",
     func : function() {},
+    pointer: ptr(id),
+    instance: id,
 };
 
 show_debug_message(snap_to_json(snap_from_json(snap_to_json(struct))));

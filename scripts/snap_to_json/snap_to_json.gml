@@ -197,36 +197,7 @@ function __snap_to_json_parser(_ds, _pretty, _alphabetise) constructor
     
     static write_value = function()
     {
-        if (is_struct(value))
-        {
-            parse_struct(value);
-        }
-        else if (is_array(value))
-        {
-            parse_array(value);
-        }
-        else if (is_string(value))
-        {
-            //Sanitise strings
-            value = string_replace_all(value, "\\", "\\\\");
-            value = string_replace_all(value, "\n", "\\n");
-            value = string_replace_all(value, "\r", "\\r");
-            value = string_replace_all(value, "\t", "\\t");
-            value = string_replace_all(value, "\"", "\\\"");
-            
-            buffer_write(buffer, buffer_text, "\"");
-            buffer_write(buffer, buffer_text, value);
-            buffer_write(buffer, buffer_text, "\"");
-        }
-        else if (is_undefined(value))
-        {
-            buffer_write(buffer, buffer_text, "null");
-        }
-        else if (is_bool(value))
-        {
-            buffer_write(buffer, buffer_text, value? "true" : "false");
-        }
-        else if (is_real(value))
+        if (is_real(value))
         {
             //Strip off trailing zeroes, and if necessary, the decimal point too
             value = string_format(value, 0, 10);
@@ -245,7 +216,24 @@ function __snap_to_json_parser(_ds, _pretty, _alphabetise) constructor
             
             buffer_write(buffer, buffer_text, value);
         }
-        else if (is_method(value))
+        else if (is_string(value))
+        {
+            //Sanitise strings
+            value = string_replace_all(value, "\\", "\\\\");
+            value = string_replace_all(value, "\n", "\\n");
+            value = string_replace_all(value, "\r", "\\r");
+            value = string_replace_all(value, "\t", "\\t");
+            value = string_replace_all(value, "\"", "\\\"");
+            
+            buffer_write(buffer, buffer_text, "\"");
+            buffer_write(buffer, buffer_text, value);
+            buffer_write(buffer, buffer_text, "\"");
+        }
+        else if (is_array(value))
+        {
+            parse_array(value);
+        }
+        else if (is_method(value)) //Implicitly also a struct so we have to check this first
         {
             if (SNAP_JSON_SERIALISE_FUNCTION_NAMES <= 0)
             {
@@ -259,9 +247,60 @@ function __snap_to_json_parser(_ds, _pretty, _alphabetise) constructor
                 buffer_write(buffer, buffer_text, "\"");
             }
         }
+        else if (is_struct(value))
+        {
+            parse_struct(value);
+        }
+        else if (is_undefined(value))
+        {
+            buffer_write(buffer, buffer_text, "null");
+        }
+        else if (is_bool(value))
+        {
+            buffer_write(buffer, buffer_text, value? "true" : "false");
+        }
+        else if (is_ptr(value))
+        {
+            buffer_write(buffer, buffer_text, "\"");
+            buffer_write(buffer, buffer_text, string(value));
+            buffer_write(buffer, buffer_text, "\"");
+        }
         else
         {
-            buffer_write(buffer, buffer_text, string(value));
+            // YoYoGames in their finite wisdom added a new datatype in GMS2022.5 that doesn't stringify nicely
+            //     string(instance.id) = "ref 100001"
+            // This means we end up writing a string with a space in it to JSON. This is leads to invalid output
+            // We can check <typeof(id) == "ref"> but string comparison is slow and gross
+            // 
+            // Instance IDs have the following detectable characteristics:
+            // typeof(value)       = "ref"
+            // is_array(value)     = false  *
+            // is_bool(value)      = false  *
+            // is_infinity(value)  = false
+            // is_int32(value)     = false
+            // is_int64(value)     = false
+            // is_method(value)    = false  *
+            // is_nan(value)       = false
+            // is_numeric(value)   = true
+            // is_ptr(value)       = false  *
+            // is_real(value)      = false  *
+            // is_string(value)    = false  *
+            // is_struct(value)    = false  *
+            // is_undefined(value) = false  *
+            // is_vec3(value)      = false  *  (covered by is_array())
+            // is_vec4(value)      = false  *  (covered by is_array())
+            // 
+            // Up above we've already tested the datatypes marked with asterisks
+            // We can fish out instance references by checking <is_numeric() == true> and then excluding int32 and int64 datatypes
+            
+            if (is_numeric(value) && !is_int32(value) && !is_int64(value))
+            {
+                buffer_write(buffer, buffer_text, string(real(value))); //Save the numeric component of the instance ID
+            }
+            else
+            {
+                buffer_write(buffer, buffer_text, string(value));
+            }
         }
     }
     
