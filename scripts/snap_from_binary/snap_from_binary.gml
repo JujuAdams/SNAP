@@ -4,7 +4,7 @@
 /// @param [offset]         Start position for binary decoding in the buffer. Defaults to 0, the start of the buffer
 /// @param [destroyBuffer]  Set to <true> to destroy the input buffer. Defaults to <false>
 /// 
-/// @jujuadams 2020-06-20
+/// @jujuadams 2022-07-03
 
 /*
     0x00  -  terminator
@@ -17,6 +17,8 @@
     0x07  -  <undefined>
     0x08  -  s32
     0x09  -  u64
+    0x0A  -  pointer
+    0x0B  -  instance ID
 */
 
 function snap_from_binary()
@@ -125,6 +127,14 @@ function __snap_from_binary_parser(_buffer) constructor
                     
                     case 0x09: //u64
                         value = int64(buffer_read(buffer, buffer_u64));
+                    break;
+                    
+                    case 0x0A: //pointer
+                        value = ptr(buffer_read(buffer, buffer_u64));
+                    break;
+                    
+                    case 0x0B: //instance ID reference
+                        value = real(buffer_read(buffer, buffer_u64));
                     break;
                     
                     default:

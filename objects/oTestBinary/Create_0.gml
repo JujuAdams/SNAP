@@ -24,8 +24,11 @@ struct = {
     test2 : "\"Hello world!\"",
     url : "https://www.jujuadams.com/",
     func : function() {},
+    pointer: ptr(id),
+    instance: id,
 };
 
 buffer = snap_to_binary(struct);
 show_debug_message(buffer_base64_encode(buffer, 0, -1));
-show_debug_message(snap_to_json(snap_from_binary(buffer), true, true));
+returned_data = snap_from_binary(buffer);
+show_debug_message(snap_to_json(returned_data, true, true));
