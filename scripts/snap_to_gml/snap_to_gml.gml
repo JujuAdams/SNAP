@@ -153,7 +153,21 @@ function __snap_to_gml_parser(_ds, _alphabetise) constructor
     
     static write_value = function()
     {
-        if (is_struct(value))
+        if (is_method(value)) //Implicitly also a struct so we have to check this first
+        {
+            if (SNAP_GML_SERIALISE_FUNCTION_NAMES <= 0)
+            {
+                if (SNAP_GML_SERIALISE_FUNCTION_NAMES < 0) show_error("Functions/methods cannot be serialised\n(Please edit macro SNAP_GML_SERIALISE_FUNCTION_NAMES to change this behaviour)\n ", true);
+                buffer_write(buffer, buffer_text, "undefined");
+            }
+            else
+            {
+                buffer_write(buffer, buffer_text, "\"");
+                buffer_write(buffer, buffer_text, string(value));
+                buffer_write(buffer, buffer_text, "\"");
+            }
+        }
+        else if (is_struct(value))
         {
             depth++;
             parse_struct(value);
@@ -205,23 +219,53 @@ function __snap_to_gml_parser(_ds, _alphabetise) constructor
             
             buffer_write(buffer, buffer_text, value);
         }
-        else if (is_method(value))
+        else if (is_ptr(value))
         {
-            if (SNAP_GML_SERIALISE_FUNCTION_NAMES <= 0)
-            {
-                if (SNAP_GML_SERIALISE_FUNCTION_NAMES < 0) show_error("Functions/methods cannot be serialised\n(Please edit macro SNAP_GML_SERIALISE_FUNCTION_NAMES to change this behaviour)\n ", true);
-                buffer_write(buffer, buffer_text, "undefined");
-            }
-            else
-            {
-                buffer_write(buffer, buffer_text, "\"");
-                buffer_write(buffer, buffer_text, string(value));
-                buffer_write(buffer, buffer_text, "\"");
-            }
+            buffer_write(buffer, buffer_text, "ptr(0x");
+            buffer_write(buffer, buffer_text, string(value));
+            buffer_write(buffer, buffer_text, ")");
+        }
+        else if (is_int32(value) || is_int64(value))
+        {
+            buffer_write(buffer, buffer_text, "0x");
+            buffer_write(buffer, buffer_text, string(ptr(value))); //Cheeky hack to quickly convert to a hex string
         }
         else
         {
-            buffer_write(buffer, buffer_text, string(value));
+            // YoYoGames in their finite wisdom added a new datatype in GMS2022.5 that doesn't stringify nicely
+            //     string(instance.id) = "ref 100001"
+            // This means we end up writing a string with a space in it to JSON. This is leads to invalid output
+            // We can check <typeof(id) == "ref"> but string comparison is slow and gross
+            // 
+            // Instance IDs have the following detectable characteristics:
+            // typeof(value)       = "ref"
+            // is_array(value)     = false  *
+            // is_bool(value)      = false  *
+            // is_infinity(value)  = false
+            // is_int32(value)     = false  *
+            // is_int64(value)     = false  *
+            // is_method(value)    = false  *
+            // is_nan(value)       = false
+            // is_numeric(value)   = true
+            // is_ptr(value)       = false  *
+            // is_real(value)      = false  *
+            // is_string(value)    = false  *
+            // is_struct(value)    = false  *
+            // is_undefined(value) = false  *
+            // is_vec3(value)      = false  *  (covered by is_array())
+            // is_vec4(value)      = false  *  (covered by is_array())
+            // 
+            // Up above we've already tested the datatypes marked with asterisks
+            // We can fish out instance references by checking <is_numeric() == true>
+            
+            if (is_numeric(value))
+            {
+                buffer_write(buffer, buffer_text, string(real(value))); //Save the numeric component of the instance ID
+            }
+            else
+            {
+                buffer_write(buffer, buffer_text, string(value));
+            }
         }
     }
     
