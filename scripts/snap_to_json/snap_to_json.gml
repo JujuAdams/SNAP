@@ -143,7 +143,6 @@ function __snap_to_json_parser(_ds, _pretty, _alphabetise) constructor
     
     static parse_array = function(_array)
     {
-    
         var _count = array_length(_array);
         var _i = 0;
         
