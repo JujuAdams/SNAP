@@ -4,7 +4,7 @@
 /// @param [pretty]              (bool) Whether to format the string to be human readable. Defaults to <false>
 /// @param [alphabetizeStructs]  (bool) Sorts struct variable names is ascending alphabetical order as per ds_list_sort(). Defaults to <false>
 /// 
-/// @jujuadams 2020-09-13
+/// @jujuadams 2022-07-03
 
 //In the general case, functions/methods cannot be deserialised so we default to preventing their serialisation to begin with
 //If you'd like to throw an error whenever this function tries to serialise a function/method, set SNAP_JSON_SERIALISE_FUNCTION_NAMES to -1
