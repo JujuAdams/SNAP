@@ -37,7 +37,7 @@ function __snap_to_xml_parser(_ds, _alphabetise) constructor
         if (is_struct(_attribute_struct))
         {
             var _names = variable_struct_get_names(_attribute_struct);
-            if (alphabetise) array_sort(_names, lb_sort_ascending);
+            if (alphabetise) array_sort(_names, true);
             
             var _i = 0;
             repeat(array_length(_names))
