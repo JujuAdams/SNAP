@@ -4,13 +4,13 @@
 /// 
 /// @param struct/array   The data to be encoded. Can contain structs, arrays, strings, and numbers.   N.B. Will not encode ds_list, ds_map etc.
 /// 
-/// @jujuadams 2021-09-05
+/// @jujuadams 2022-07-03
 
 //In the general case, functions/methods cannot be deserialised so we default to preventing their serialisation to begin with
 //If you'd like to throw an error whenever this function tries to serialise a function/method, set SNAP_MESSAGEPACK_SERIALISE_FUNCTION_NAMES to -1
 //If you'd like to simply ignore functions/methods when serialising structs/arrays, set SNAP_MESSAGEPACK_SERIALISE_FUNCTION_NAMES to 0
 //If you'd like to use some clever tricks to deserialise functions/methods in a manner specific to your game, set SNAP_MESSAGEPACK_SERIALISE_FUNCTION_NAMES to 1
-#macro SNAP_MESSAGEPACK_SERIALISE_FUNCTION_NAMES  -1
+#macro SNAP_MESSAGEPACK_SERIALISE_FUNCTION_NAMES  0
 
 function snap_to_messagepack(_ds)
 {
@@ -248,11 +248,17 @@ function __snap_to_messagepack_parser(_ds) constructor
                 }
             }
         }
-        else
+        else if (is_real(_value))
         {
             //Floating Point
             buffer_write(buffer, buffer_u8, 0xcb);
             buffer_write_little(buffer_f64, _value);
+        }
+        else
+        {
+            // Instance ID references are reported as numeric but aren't considered "real numbers" or integers
+            buffer_write(buffer, buffer_u8, 0xcf); //Unsigned 64-bit integer
+            buffer_write_little(buffer_u64, int64(_value));
         }
     }
     
@@ -382,7 +388,18 @@ function __snap_to_messagepack_parser(_ds) constructor
     
     static write_value = function(_value)
     {
-        if (is_struct(_value))
+        if (is_method(_value)) //Implicitly also a struct so we have to check this first
+        {
+            if (SNAP_MESSAGEPACK_SERIALISE_FUNCTION_NAMES > 0)
+            {
+                write_string(_value);
+            }
+            else
+            {
+                buffer_write(buffer, buffer_u8, 0xc0);
+            }
+        }
+        else if (is_struct(_value))
         {
             var _messagepack_datatype = variable_struct_get(_value, "messagepack_datatype__");
             if (_messagepack_datatype == "bin")
@@ -407,7 +424,7 @@ function __snap_to_messagepack_parser(_ds) constructor
         {
             write_string(_value);
         }
-        else if (is_bool(_value))
+        else if (is_bool(_value)) //Implicitly also "numeric" so we have to check this before is_numeric()
         {
             buffer_write(buffer, buffer_u8, _value? 0xc3 : 0xc2);
         }
@@ -418,17 +435,6 @@ function __snap_to_messagepack_parser(_ds) constructor
         else if (is_undefined(_value))
         {
             buffer_write(buffer, buffer_u8, 0xc0);
-        }
-        else if (is_method(_value))
-        {
-            if (SNAP_MESSAGEPACK_SERIALISE_FUNCTION_NAMES > 0)
-            {
-                write_string(_value);
-            }
-            else
-            {
-                buffer_write(buffer, buffer_u8, 0xc0);
-            }
         }
         else
         {

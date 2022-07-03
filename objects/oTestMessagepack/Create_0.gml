@@ -28,6 +28,7 @@ struct = {
     test2 : "\"Hello world!\"",
     url : "https://www.jujuadams.com/",
     func : function() {},
+    instance: id,
 };
 
 buffer = snap_to_messagepack(struct);
