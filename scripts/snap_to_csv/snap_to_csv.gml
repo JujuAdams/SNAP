@@ -4,7 +4,7 @@
 /// @param [cellDelimiter]     Character to use to indicate where cells start and end. First 127 ASCII chars only. Defaults to a comma
 /// @param [stringDelimiter]   Character to use to indicate where strings start and end. First 127 ASCII chars only. Defaults to a double quote
 /// 
-/// @jujuadams 2020-09-13
+/// @jujuadams 2022-07-03
 
 //In the general case, functions/methods cannot be deserialised so we default to preventing their serialisation to begin with
 //If you'd like to throw an error whenever this function tries to serialise a function/method, set SNAP_CSV_SERIALISE_FUNCTION_NAMES to -1
@@ -49,10 +49,6 @@ function snap_to_csv()
                     buffer_write(_buffer, buffer_text, _value);
                 }
             }
-            else if (is_struct(_value) || is_array(_value))
-            {
-                show_error("Array contains a nested struct or array. This is incompatible with CSV\n ", true);
-            }
             else if (is_method(_value))
             {
                 if (SNAP_CSV_SERIALISE_FUNCTION_NAMES <= 0)
@@ -64,9 +60,47 @@ function snap_to_csv()
                     buffer_write(_buffer, buffer_text, string(_value));
                 }
             }
+            else if (is_struct(_value) || is_array(_value))
+            {
+                show_error("Array contains a nested struct or array. This is incompatible with CSV\n ", true);
+            }
             else
             {
-                buffer_write(_buffer, buffer_text, string(_value));
+                // YoYoGames in their finite wisdom added a new datatype in GMS2022.5 that doesn't stringify nicely
+                //     string(instance.id) = "ref 100001"
+                // This means we end up writing a string with a space in it to JSON. This is leads to invalid output
+                // We can check <typeof(id) == "ref"> but string comparison is slow and gross
+                // 
+                // Instance IDs have the following detectable characteristics:
+                // typeof(value)       = "ref"
+                // is_array(value)     = false  *
+                // is_bool(value)      = false
+                // is_infinity(value)  = false
+                // is_int32(value)     = false
+                // is_int64(value)     = false
+                // is_method(value)    = false  *
+                // is_nan(value)       = false
+                // is_numeric(value)   = true
+                // is_ptr(value)       = false
+                // is_real(value)      = false
+                // is_string(value)    = false  *
+                // is_struct(value)    = false  *
+                // is_undefined(value) = false
+                // is_vec3(value)      = false  *  (covered by is_array())
+                // is_vec4(value)      = false  *  (covered by is_array())
+                // 
+                // Up above we've already tested the datatypes marked with asterisks
+                // We can fish out instance references by checking <is_numeric() == true> and then excluding other numeric datatypes
+                // ...but that's a lot of function calls so a <typeof(id) == "ref"> check is probably faster
+                
+                if (is_numeric(_value) && (typeof(_value) == "ref"))
+                {
+                    buffer_write(_buffer, buffer_text, string(real(_value))); //Save the numeric component of the instance ID
+                }
+                else
+                {
+                    buffer_write(_buffer, buffer_text, string(_value));
+                }
             }
             
             buffer_write(_buffer, buffer_u8, _cell_delimiter_ord);
