@@ -134,7 +134,7 @@ function __snap_from_binary_parser(_buffer) constructor
                     break;
                     
                     case 0x0B: //instance ID reference
-                        value = real(buffer_read(buffer, buffer_u64));
+                        value = real(buffer_read(buffer, buffer_u64)); //We can't make an instance ID reference so return a real number instead
                     break;
                     
                     default:

@@ -159,7 +159,7 @@ function __snap_to_binary_parser(_ds) constructor
         else if (typeof(value) == "ref") // is_ref() doesn't exist as of 2022-07-03
         {
             buffer_write(buffer, buffer_u8, 0x0B); //instance ID reference
-            buffer_write(buffer, buffer_u64, int64(real(value)));
+            buffer_write(buffer, buffer_u64, int64(real(value))); //Serialize the numeric part of the reference
         }
         else
         {

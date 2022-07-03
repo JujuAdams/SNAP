@@ -230,7 +230,7 @@ function __snap_to_yaml_parser(_ds, _alphabetise) constructor
         {
             // YoYoGames in their finite wisdom added a new datatype in GMS2022.5 that doesn't stringify nicely
             //     string(instance.id) = "ref 100001"
-            // This means we end up writing a string with a space in it to JSON. This is leads to invalid output
+            // This means we end up writing a string with a space in it to YAML. This is leads to difficulties when deserializing data
             // We can check <typeof(id) == "ref"> but string comparison is slow and gross
             // 
             // Instance IDs have the following detectable characteristics:

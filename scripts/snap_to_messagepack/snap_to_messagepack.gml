@@ -258,7 +258,7 @@ function __snap_to_messagepack_parser(_ds) constructor
         {
             // Instance ID references are reported as numeric but aren't considered "real numbers" or integers
             buffer_write(buffer, buffer_u8, 0xcf); //Unsigned 64-bit integer
-            buffer_write_little(buffer_u64, int64(_value));
+            buffer_write_little(buffer_u64, int64(_value)); //Serialize the numeric part of the reference
         }
     }
     
