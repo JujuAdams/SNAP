@@ -3,7 +3,7 @@
 /// @param struct/array    The data to be encoded
 /// @param [alphabetize]   Optional, sorts struct attribute names in ascending alphabetical order. Defaults to <false>
 /// 
-/// @jujuadams 2022-05-09
+/// @jujuadams 2022-07-03
 
 //In the general case, functions/methods cannot be deserialised so we default to preventing their serialisation to begin with
 //If you'd like to throw an error whenever this function tries to serialise a function/method, set SNAP_XML_SERIALISE_FUNCTION_NAMES to -1
