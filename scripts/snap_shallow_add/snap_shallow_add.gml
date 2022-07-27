@@ -15,7 +15,7 @@
 /// 
 /// @jujuadams 2022-07-27
 
-function snap_deep_add(_src, _dst)
+function snap_shallow_add(_src, _dst)
 {
     if (is_struct(_src))
     {
