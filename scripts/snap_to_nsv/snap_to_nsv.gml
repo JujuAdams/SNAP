@@ -31,6 +31,10 @@ function snap_to_nsv(_root_array, _width = undefined, _buffer = undefined)
         }
     }
     
+    buffer_write(_buffer, buffer_u8, 0xEF);
+    buffer_write(_buffer, buffer_u8, 0xBB);
+    buffer_write(_buffer, buffer_u8, 0xBF);
+    buffer_write(_buffer, buffer_u8, 0x4A);
     buffer_write(_buffer, buffer_u64, _width);
     buffer_write(_buffer, buffer_u64, _height);
     

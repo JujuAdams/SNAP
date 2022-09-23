@@ -12,6 +12,10 @@ function snap_from_nsv(_buffer, _offset = buffer_tell(_buffer))
     var _old_tell = buffer_tell(_buffer);
     buffer_seek(_buffer, buffer_seek_start, _offset);
     
+    //Read out the BOM + "J"
+    var _header = buffer_read(_buffer, buffer_u32);
+    if (_header != 0x4ABFBBEF) show_error("NSV header not found\n ", true);
+    
     var _width  = buffer_read(_buffer, buffer_u64);
     var _height = buffer_read(_buffer, buffer_u64);
     
