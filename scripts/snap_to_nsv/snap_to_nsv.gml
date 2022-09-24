@@ -1,15 +1,15 @@
 /// @return Buffer that encodes the provided 2D array
 /// 
 /// @param array2D   The 2D array to encode
-/// @param [width]   Width of the 2D array at its widest point
-/// @param [buffer]  Buffer to write to
+/// @param [width]   Width of the 2D array at its widest point. If not specified this is automatically detected
+/// @param [buffer]  Buffer to write to. If not specified a new buffer is created
 /// 
-/// @jujuadams 2022-09-23
+/// @jujuadams 2022-09-24
 
 //In the general case, functions/methods cannot be deserialised so we default to preventing their serialisation to begin with
-//If you'd like to throw an error whenever this function tries to serialise a function/method, set SNAP_CSV_SERIALISE_FUNCTION_NAMES to -1
-//If you'd like to simply ignore functions/methods when serialising structs/arrays, set SNAP_CSV_SERIALISE_FUNCTION_NAMES to 0
-//If you'd like to use some clever tricks to deserialise functions/methods in a manner specific to your game, set SNAP_CSV_SERIALISE_FUNCTION_NAMES to 1
+//If you'd like to throw an error whenever this function tries to serialise a function/method, set SNAP_NSV_SERIALISE_FUNCTION_NAMES to -1
+//If you'd like to simply ignore functions/methods when serialising structs/arrays, set SNAP_NSV_SERIALISE_FUNCTION_NAMES to 0
+//If you'd like to use some clever tricks to deserialise functions/methods in a manner specific to your game, set SNAP_NSV_SERIALISE_FUNCTION_NAMES to 1
 #macro SNAP_NSV_SERIALISE_FUNCTION_NAMES  -1
 
 function snap_to_nsv(_root_array, _width = undefined, _buffer = undefined)

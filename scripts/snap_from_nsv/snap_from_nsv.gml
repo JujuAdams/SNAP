@@ -5,7 +5,7 @@
 /// @param buffer    Buffer to read from
 /// @param [offset]  Where to read from in the buffer
 /// 
-/// @jujuadams 2022-09-23
+/// @jujuadams 2022-09-24
 
 function snap_from_nsv(_buffer, _offset = buffer_tell(_buffer))
 {
