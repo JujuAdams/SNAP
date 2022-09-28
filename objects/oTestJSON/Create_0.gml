@@ -34,12 +34,13 @@ show_debug_message(snap_to_json(struct, false, true ));
 show_debug_message(snap_to_json(struct, true , false));
 show_debug_message(snap_to_json(struct, true , true ));
 
- var _string = @'{
-     "comment" : "test", //Comment
-     /*
-     "hello2" : "world"
-     */
-     "between" : /*oops*/ "things"
+var _string = @'{
+"a" : "1", //Comment
+/*
+"b" : "2"
+*/
+"c" : /*oops*/ "3",
+"d": 4//done
 }';
 
 show_debug_message(snap_from_json(_string));
