@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "Foreach",
+  "name": "SnapStringify",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {

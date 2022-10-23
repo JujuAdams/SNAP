@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "Foreach",
+  "name": "SnapStringFromFile",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {

@@ -10,7 +10,17 @@ b = {
     struct_array : [a, a, a],
 }
 
-a.child  = b;
-b.parent = a;
+c = {
+    
+};
 
-show_debug_message(snap_string(a));
+a.array  = [b, c];
+b.parent = a;
+c.parent = c;
+
+var _string = SnapStringify(a);
+show_debug_message(_string);
+
+SnapStringToFile("test", "test.txt", true);
+var _loaded = SnapStringFromFile("test.txt", false);
+show_debug_message(_loaded);

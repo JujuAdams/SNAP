@@ -21,9 +21,9 @@
 /// @param method            Method to call for each element of this given struct/array/ds
 /// @param [dsType]          Data structure type if iterating over a data structure
 /// 
-/// @jujuadams 2020-06-16
+/// @jujuadams 2022-10-23
 
-function foreach()
+function Foreach()
 {
     var _ds       = argument[0];
     var _function = argument[1];

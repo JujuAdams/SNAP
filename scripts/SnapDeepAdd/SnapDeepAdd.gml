@@ -1,6 +1,6 @@
 /// @returm N/A (undefined)
 /// 
-/// This function adds numbers stored in one struct/array to numbers stored in another struct/array. This is a non-recursive operation.
+/// This function recursively adds numbers stored in one struct/array to numbers stored in another struct/array.
 /// If the structure of the two inputs do not match then the source struct/array takes precedence, albeit softly:
 /// 
 /// 1. If a source array is larger than the equivalent destination array then the destination array is sized up (new array elements are initialized to zero before adding the source value)
@@ -11,11 +11,11 @@
 /// 
 /// @param source                    Source struct/array
 /// @param destination               Destination struct/array
-/// @param [ignoreNonNumbers=false]  Set to <true> to quietly ignore non-numeric values in the source struct/array. The default value <false> will throw an error if a non-number is found in the source struct/array
+/// @param [ignoreNonNumbers=false]  Set to <true> to silently ignore non-numeric values in the source struct/array. The default value <false> will throw an error if a non-number is found in the source struct/array
 /// 
 /// @jujuadams 2022-07-27
 
-function snap_shallow_add(_src, _dst)
+function SnapDeepAdd(_src, _dst, _ignore_non_numbers = false)
 {
     if (is_struct(_src))
     {
@@ -27,12 +27,36 @@ function snap_shallow_add(_src, _dst)
         {
             var _name = _srcNames[_i];
             var _srcValue = _src[$ _name];
+            var _dstValue = _dst[$ _name];
             
-            if (is_numeric(_srcValue))
+            if (is_struct(_srcValue))
             {
-                var _dstValue = _dst[$ _name];
+                if (!is_struct(_dstValue))
+                {
+                    _dstValue = {};
+                    _dst[$ _name] = _dstValue;
+                }
+                
+                SnapDeepAdd(_srcValue, _dstValue);
+            }
+            else if (is_array(_srcValue))
+            {
+                if (!is_array(_dstValue))
+                {
+                    _dstValue = [];
+                    _dst[$ _name] = _dstValue;
+                }
+                
+                SnapDeepAdd(_srcValue, _dstValue);
+            }
+            else if (is_numeric(_srcValue))
+            {
                 if (!is_numeric(_dstValue)) _dstValue = 0;
                 _dst[$ _name] = _dstValue + _srcValue;
+            }
+            else if (!_ignore_non_numbers)
+            {
+                show_error("A value in the source data structure is not a number", true);
             }
             
             ++_i;
@@ -50,12 +74,36 @@ function snap_shallow_add(_src, _dst)
         repeat(array_length(_srcLength))
         {
             var _srcValue = _src[_i];
+            var _dstValue = _dst[_i];
             
-            if (is_numeric(_srcValue))
+            if (is_struct(_srcValue))
             {
-                var _dstValue = _dst[_i];
+                if (!is_struct(_dstValue))
+                {
+                    _dstValue = {};
+                    _dst[@ _i] = _dstValue;
+                }
+                
+                SnapDeepAdd(_srcValue, _dstValue);
+            }
+            else if (is_array(_srcValue))
+            {
+                if (!is_array(_dstValue))
+                {
+                    _dstValue = [];
+                    _dst[@ _i] = _dstValue;
+                }
+                
+                SnapDeepAdd(_srcValue, _dstValue);
+            }
+            else if (is_numeric(_srcValue))
+            {
                 if (!is_numeric(_dstValue)) _dstValue = 0;
                 _dst[@ _i] = _dstValue + _srcValue;
+            }
+            else if (!_ignore_non_numbers)
+            {
+                show_error("A value in the source data structure is not a number", true);
             }
             
             ++_i;
