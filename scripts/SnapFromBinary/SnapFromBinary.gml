@@ -1,6 +1,6 @@
 /// @return Nested struct/array data encoded from the buffer, using a proprietary format
 /// 
-/// @param buffer  Binary data to be decoded, created by snap_to_binary()
+/// @param buffer  Binary data to be decoded, created by SnapToBinary()
 /// @param offset  Start position for binary decoding in the buffer. Defaults to 0, the start of the buffer
 /// 
 /// @jujuadams 2022-10-23
@@ -24,12 +24,12 @@ function SnapFromBinary(_buffer, _offset)
 {
     var _oldOffset = buffer_tell(_buffer);
     buffer_seek(_buffer, buffer_seek_start, _offset);
-    var _value = __SnapFromBinaryInner(_buffer);
-    buffer_seek(_buffer, buffer_seek_start, _offset);
+    var _value = __SnapFromBinaryValue(_buffer);
+    buffer_seek(_buffer, buffer_seek_start, _oldOffset);
     return _value;
 }
 
-function __SnapFromBinaryInner(_buffer)
+function __SnapFromBinaryValue(_buffer)
 {
     var _datatype = buffer_read(_buffer, buffer_u8);
     switch(_datatype)
@@ -41,7 +41,7 @@ function __SnapFromBinaryInner(_buffer)
             repeat(_count)
             {
                 var _name = buffer_read(_buffer, buffer_string);
-                _struct[$ _name] = __SnapFromBinaryInner(_buffer);
+                _struct[$ _name] = __SnapFromBinaryValue(_buffer);
             }
             
             return _struct;
@@ -54,7 +54,7 @@ function __SnapFromBinaryInner(_buffer)
             var _i = 0;
             repeat(_count)
             {
-                _array[@ _i] = __SnapFromBinaryInner(_buffer);
+                _array[@ _i] = __SnapFromBinaryValue(_buffer);
                 ++_i;
             }
             

@@ -12,7 +12,7 @@ function SnapStringify(_value)
     var _stringifyBuffer = buffer_create(1024, buffer_grow, 1);
     
     buffer_seek(_stringifyBuffer, buffer_seek_start, 0);
-    __SnapStringifyInner(_value, "<origin>", _foundMap, _stringifyBuffer);
+    __SnapStringifyValue(_value, "<origin>", _foundMap, _stringifyBuffer);
     buffer_write(_stringifyBuffer, buffer_u8, 0x00);
     
     buffer_seek(_stringifyBuffer, buffer_seek_start, 0);
@@ -24,7 +24,7 @@ function SnapStringify(_value)
     return _string;
 }
 
-function __SnapStringifyInner(_value, _longName, _foundMap, _stringifyBuffer)
+function __SnapStringifyValue(_value, _longName, _foundMap, _stringifyBuffer)
 {
     if (is_struct(_value))
     {
@@ -50,7 +50,7 @@ function __SnapStringifyInner(_value, _longName, _foundMap, _stringifyBuffer)
                 buffer_write(_stringifyBuffer, buffer_u8,   0x20); //space
                 buffer_write(_stringifyBuffer, buffer_u8,   0x3A); // :
                 buffer_write(_stringifyBuffer, buffer_u8,   0x20); //space
-                __SnapStringifyInner(_value[$ _name], _longName + "." + _name, _foundMap, _stringifyBuffer);
+                __SnapStringifyValue(_value[$ _name], _longName + "." + _name, _foundMap, _stringifyBuffer);
                 if (_i < _length-1) buffer_write(_stringifyBuffer, buffer_u16, 0x202C); // ", "
                 
                 ++_i;
@@ -76,7 +76,7 @@ function __SnapStringifyInner(_value, _longName, _foundMap, _stringifyBuffer)
             var _i = 0;
             repeat(_length)
             {
-                __SnapStringifyInner(_value[_i], _longName + "[" + string(_i) + "]", _foundMap, _stringifyBuffer);
+                __SnapStringifyValue(_value[_i], _longName + "[" + string(_i) + "]", _foundMap, _stringifyBuffer);
                 if (_i < _length-1) buffer_write(_stringifyBuffer, buffer_u8, 0x2C); // ,
                 
                 ++_i;

@@ -1,11 +1,11 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "SnapScratchBuffer",
+  "name": "SnapToMessagepack",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Utility",
-    "path": "folders/SNAP/Utility.yy",
+    "name": "Messagepack",
+    "path": "folders/SNAP/Messagepack.yy",
   },
 }

@@ -28,5 +28,5 @@ struct = {
     instance: id,
 };
 
-buffer = SnapToBinary(SnapScratchBuffer(), struct);
+buffer = SnapToBinary(ScratchBuffer(), struct);
 show_debug_message(SnapToJSON(SnapFromBinary(buffer, 0), true, true, true));

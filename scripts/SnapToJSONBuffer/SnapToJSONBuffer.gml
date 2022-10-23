@@ -10,10 +10,10 @@
 
 function SnapToJSONBuffer(_buffer, _value, _pretty = false, _alphabetise = false, _accurateFloats = false)
 {
-    return __SnapToJSONBufferInner(_buffer, _value, _pretty, _alphabetise, _accurateFloats, "");
+    return __SnapToJSONBufferValue(_buffer, _value, _pretty, _alphabetise, _accurateFloats, "");
 }
 
-function __SnapToJSONBufferInner(_buffer, _value, _pretty, _alphabetise, _accurateFloats, _indent)
+function __SnapToJSONBufferValue(_buffer, _value, _pretty, _alphabetise, _accurateFloats, _indent)
 {
     if (is_real(_value) || is_int32(_value) || is_int64(_value))
     {
@@ -50,7 +50,7 @@ function __SnapToJSONBufferInner(_buffer, _value, _pretty, _alphabetise, _accura
                 repeat(_count)
                 {
                     buffer_write(_buffer, buffer_text, _indent);
-                    __SnapToJSONBufferInner(_buffer, _array[_i], _pretty, _alphabetise, _accurateFloats, _indent);
+                    __SnapToJSONBufferValue(_buffer, _array[_i], _pretty, _alphabetise, _accurateFloats, _indent);
                     buffer_write(_buffer, buffer_u16, 0x0A2C); //Comma + newline
                     ++_i;
                 }
@@ -73,7 +73,7 @@ function __SnapToJSONBufferInner(_buffer, _value, _pretty, _alphabetise, _accura
             
             repeat(_count)
             {
-                __SnapToJSONBufferInner(_buffer, _array[_i], _pretty, _alphabetise, _accurateFloats, _indent);
+                __SnapToJSONBufferValue(_buffer, _array[_i], _pretty, _alphabetise, _accurateFloats, _indent);
                 buffer_write(_buffer, buffer_u8, 0x2C); //Comma
                 ++_i;
             }
@@ -117,7 +117,7 @@ function __SnapToJSONBufferInner(_buffer, _value, _pretty, _alphabetise, _accura
                     buffer_write(_buffer, buffer_text, string(_name));
                     buffer_write(_buffer, buffer_u32,  0x203A2022); // <" : >
                     
-                    __SnapToJSONBufferInner(_buffer, _struct[$ _name], _pretty, _alphabetise, _accurateFloats, _indent);
+                    __SnapToJSONBufferValue(_buffer, _struct[$ _name], _pretty, _alphabetise, _accurateFloats, _indent);
                     
                     buffer_write(_buffer, buffer_u16, 0x0A2C); //Comma + newline
                     
@@ -149,7 +149,7 @@ function __SnapToJSONBufferInner(_buffer, _value, _pretty, _alphabetise, _accura
                 buffer_write(_buffer, buffer_text, string(_name));
                 buffer_write(_buffer, buffer_u16,  0x3A22); // Double quote then colon
                 
-                __SnapToJSONBufferInner(_buffer, _struct[$ _name], _pretty, _alphabetise, _accurateFloats, _indent);
+                __SnapToJSONBufferValue(_buffer, _struct[$ _name], _pretty, _alphabetise, _accurateFloats, _indent);
                 
                 buffer_write(_buffer, buffer_u8, 0x2C); //Comma
                 

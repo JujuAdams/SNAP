@@ -31,6 +31,6 @@ struct = {
     instance: id,
 };
 
-buffer = snap_to_messagepack(struct);
-show_debug_message(buffer_base64_encode(buffer, 0, -1));
-show_debug_message(snap_to_json(snap_from_messagepack(buffer), true, true));
+buffer = ScratchBuffer();
+SnapToMessagepack(buffer, struct);
+show_debug_message(SnapToJSON(SnapFromMessagepack(buffer, 0), true, true, true));

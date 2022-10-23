@@ -7,10 +7,10 @@
 
 function SnapToYAMLBuffer(_buffer, _ds, _alphabetise = false, accurateFloats = false)
 {
-    return __SnapToYAMLBufferInner(_buffer, _ds, _alphabetise, accurateFloats, 0);
+    return __SnapToYAMLBufferValue(_buffer, _ds, _alphabetise, accurateFloats, 0);
 }
 
-function __SnapToYAMLBufferInner(_buffer, _value, _alphabetise, _accurateFloats, _indent)
+function __SnapToYAMLBufferValue(_buffer, _value, _alphabetise, _accurateFloats, _indent)
 {
     if (is_real(_value) || is_int32(_value) || is_int64(_value))
     {
@@ -53,7 +53,7 @@ function __SnapToYAMLBufferInner(_buffer, _value, _alphabetise, _accurateFloats,
                 if (_i > 0) repeat(_indent) buffer_write(_buffer, buffer_u16, 0x2020);
                 buffer_write(_buffer, buffer_u16, 0x202D);
                 _indent++;
-                __SnapToYAMLBufferInner(_buffer, _value, _alphabetise, _accurateFloats, _indent);
+                __SnapToYAMLBufferValue(_buffer, _value, _alphabetise, _accurateFloats, _indent);
                 _indent--;
                 buffer_write(_buffer, buffer_u8, 0x0A);
                     
@@ -114,7 +114,7 @@ function __SnapToYAMLBufferInner(_buffer, _value, _alphabetise, _accurateFloats,
                 }
                 
                 _indent++;
-                __SnapToYAMLBufferInner(_buffer, _value, _alphabetise, _accurateFloats, _indent);
+                __SnapToYAMLBufferValue(_buffer, _value, _alphabetise, _accurateFloats, _indent);
                 _indent--;
                 
                 buffer_write(_buffer, buffer_u8, 0x0A);
