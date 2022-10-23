@@ -5,9 +5,10 @@
 ///      2. Block scalars using | and > prefixes
 ///      3. Anchors, documents, directives, nodes... all the weird extra stuff
 /// 
-/// @param string              The YAML string to be decoded
+/// @param string              Buffer to read data from
+/// @param offset              Offset in the buffer to read data from
 /// @param [replaceKeywords]   Whether to replace keywords (true, false, null) with boolean/undefined equivalents. Default to <true>
-/// @param [trackFieldOrder]   Whether to track the order of struct fields as they appear in the YAML string (stored in __snap_field_order field on each GML struct). Default to <false>
+/// @param [trackFieldOrder]   Whether to track the order of struct fields as they appear in the YAML string (stored in __snapFieldOrder field on each GML struct). Default to <false>
 /// 
 /// @jujuadams 2021-07-19
 
@@ -27,24 +28,25 @@ enum __SNAP_YAML
     JSON_COLON,
 }
 
-function snap_from_yaml()
+function SnapFromYAMLBuffer(_buffer, _offset, _replaceKeywords = true, _tracekFieldOrder = false)
 {
-    var _string            = argument[0];
-    var _replace_keywords  = ((argument_count > 1) && (argument[1] != undefined))? argument[1] : true;
-    var _track_field_order = ((argument_count > 2) && (argument[2] != undefined))? argument[2] : false;
+    if (_offset != undefined)
+    {
+        var _oldOffset = buffer_tell(_buffer);
+        buffer_seek(_buffer, buffer_seek_start, _offset);
+    }
     
-    var _buffer = buffer_create(string_byte_length(_string)+1, buffer_fixed, 1);
-    buffer_write(_buffer, buffer_text, _string);
-    buffer_seek(_buffer, buffer_seek_start, 0);
+    var _tokensArray = (new __SnapFromYAMLBufferTokenizer(_buffer)).result;
     
-    var _tokens_array = (new __snap_from_yaml_tokenizer(_buffer)).result;
+    if (_offset != undefined)
+    {
+        buffer_seek(_buffer, buffer_seek_start, _oldOffset);
+    }
     
-    buffer_delete(_buffer);
-    
-    return (new __snap_from_yaml_builder(_tokens_array, _replace_keywords, _track_field_order)).result;
+    return (new __SnapFromYAMLBufferBuilder(_tokensArray, _replaceKeywords, _tracekFieldOrder)).result;
 }
 
-function __snap_from_yaml_tokenizer(_buffer) constructor
+function __SnapFromYAMLBufferTokenizer(_buffer) constructor
 {
     buffer = _buffer;
     var _buffer_size = buffer_get_size(_buffer);
@@ -276,7 +278,7 @@ function __snap_from_yaml_tokenizer(_buffer) constructor
     }
 }
 
-function __snap_from_yaml_builder(_tokens_array, _replace_keywords, _track_field_order) constructor
+function __SnapFromYAMLBufferBuilder(_tokens_array, _replace_keywords, _track_field_order) constructor
 {
     tokens_array = _tokens_array;
     replace_keywords = _replace_keywords;
@@ -328,7 +330,7 @@ function __snap_from_yaml_builder(_tokens_array, _replace_keywords, _track_field
                 {
                     var _field_index = 0;
                     var _field_order_array = [];
-                    _struct.__snap_field_order = _field_order_array;
+                    _struct.__snapFieldOrder = _field_order_array;
                 }
                 
                 --token_index;
@@ -336,7 +338,7 @@ function __snap_from_yaml_builder(_tokens_array, _replace_keywords, _track_field
                 {
                     var _key = tokens_array[token_index][1];
                           
-                    //Add the key to the __snap_field_order array              
+                    //Add the key to the __snapFieldOrder array              
                     if (track_field_order) _field_order_array[@ _field_index++] = _key;
                     
                     token_index += 2; //Skip over the struct symbol
@@ -453,7 +455,7 @@ function __snap_from_yaml_builder(_tokens_array, _replace_keywords, _track_field
             {
                 var _field_index = 0;
                 var _field_order_array = [];
-                _struct.__snap_field_order = _field_order_array;
+                _struct.__snapFieldOrder = _field_order_array;
             }
             
             read_to_next();
@@ -461,7 +463,7 @@ function __snap_from_yaml_builder(_tokens_array, _replace_keywords, _track_field
             {
                 var _key = read();
                 
-                //Add the key to the __snap_field_order array
+                //Add the key to the __snapFieldOrder array
                 if (track_field_order) _field_order_array[@ _field_index++] = _key;
                 
                 read_to_next();

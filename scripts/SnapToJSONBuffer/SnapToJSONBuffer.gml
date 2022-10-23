@@ -196,6 +196,7 @@ function __SnapToJSONBufferInner(_buffer, _value, _pretty, _alphabetise, _accura
     }
     else if (is_ptr(_value))
     {
+        //Not 100% sure if the quote delimiting is necessary but better safe than sorry
         buffer_write(_buffer, buffer_u8,   0x22);
         buffer_write(_buffer, buffer_text, string(_value));
         buffer_write(_buffer, buffer_u8,   0x22);
