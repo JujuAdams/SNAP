@@ -7,10 +7,10 @@
 /// 
 /// @jujuadams 2022-10-23
 
-function SnapToJSON(_ds, _pretty = false, _alphabetise = false, accurateFloats = false)
+function SnapToJSON(_ds, _pretty = false, _alphabetise = false, _accurateFloats = false)
 {
     var _buffer = buffer_create(1024, buffer_grow, 1);
-    SnapToJSONBuffer(_buffer, _ds, _pretty, _alphabetise, accurateFloats);
+    SnapToJSONBuffer(_buffer, _ds, _pretty, _alphabetise, _accurateFloats);
     buffer_seek(_buffer, buffer_seek_start, 0);
     var _string = buffer_read(_buffer, buffer_string);
     buffer_delete(_buffer);

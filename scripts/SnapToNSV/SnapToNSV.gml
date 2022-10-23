@@ -1,22 +1,14 @@
 /// @return Buffer that encodes the provided 2D array
 /// 
-/// @param array2D   The 2D array to encode
-/// @param [width]   Width of the 2D array at its widest point. If not specified this is automatically detected
-/// @param [buffer]  Buffer to write to. If not specified a new buffer is created
+/// @param buffer            Buffer to write to
+/// @param array2D           The 2D array to encode
+/// @param [width]           Width of the 2D array at its widest point. If not specified this is automatically detected
+/// @param [accurateFloats]  (bool) Whether to output floats at a higher accuracy than GM normally defaults to. Defaults to <false>. Setting this to <true> confers a performance penalty
 /// 
-/// @jujuadams 2022-09-24
+/// @jujuadams 2022-10-23
 
-//In the general case, functions/methods cannot be deserialised so we default to preventing their serialisation to begin with
-//If you'd like to throw an error whenever this function tries to serialise a function/method, set SNAP_NSV_SERIALISE_FUNCTION_NAMES to -1
-//If you'd like to simply ignore functions/methods when serialising structs/arrays, set SNAP_NSV_SERIALISE_FUNCTION_NAMES to 0
-//If you'd like to use some clever tricks to deserialise functions/methods in a manner specific to your game, set SNAP_NSV_SERIALISE_FUNCTION_NAMES to 1
-#macro SNAP_NSV_SERIALISE_FUNCTION_NAMES  -1
-
-function snap_to_nsv(_root_array, _width = undefined, _buffer = undefined)
+function SnapToNSV(_buffer, _root_array, _width = undefined, _accurateFloats = false)
 {
-    var _resize_buffer = (_buffer == undefined);
-    if (_buffer == undefined) _buffer = buffer_create(1024, buffer_grow, 1);
-    
     var _height = array_length(_root_array);
     
     //Determine the maximum width of the 2D array
@@ -31,10 +23,6 @@ function snap_to_nsv(_root_array, _width = undefined, _buffer = undefined)
         }
     }
     
-    buffer_write(_buffer, buffer_u8, 0xEF);
-    buffer_write(_buffer, buffer_u8, 0xBB);
-    buffer_write(_buffer, buffer_u8, 0xBF);
-    buffer_write(_buffer, buffer_u8, 0x4A);
     buffer_write(_buffer, buffer_u64, _width);
     buffer_write(_buffer, buffer_u64, _height);
     
@@ -47,24 +35,21 @@ function snap_to_nsv(_root_array, _width = undefined, _buffer = undefined)
         {
             var _value = _row_array[_x];
             
-            if (is_string(_value))
+            if (is_real(_value))
+            {
+                buffer_write(_buffer, buffer_string, SnapNumberToString(_value, _accurateFloats));
+            }
+            else if (is_string(_value))
             {
                 buffer_write(_buffer, buffer_string, _value);
             }
             else if (is_method(_value))
             {
-                if (SNAP_NSV_SERIALISE_FUNCTION_NAMES <= 0)
-                {
-                    if (SNAP_NSV_SERIALISE_FUNCTION_NAMES < 0) show_error("Functions/methods cannot be serialised\n(Please edit macro SNAP_NSV_SERIALISE_FUNCTION_NAMES to change this behaviour)\n ", true);
-                }
-                else
-                {
-                    buffer_write(_buffer, buffer_string, string(_value));
-                }
+                buffer_write(_buffer, buffer_string, string(_value));
             }
             else if (is_struct(_value) || is_array(_value))
             {
-                show_error("Array contains a nested struct or array. This is incompatible with CSV\n ", true);
+                show_error("Array contains a nested struct or array. This is incompatible with NSV\n ", true);
             }
             else
             {
@@ -112,8 +97,6 @@ function snap_to_nsv(_root_array, _width = undefined, _buffer = undefined)
         
         ++_y;
     }
-    
-    if (_resize_buffer) buffer_resize(_buffer, buffer_tell(_buffer));
     
     return _buffer;
 }

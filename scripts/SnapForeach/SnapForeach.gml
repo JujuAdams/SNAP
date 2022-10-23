@@ -23,7 +23,7 @@
 /// 
 /// @jujuadams 2022-10-23
 
-function Foreach()
+function SnapForeach()
 {
     var _ds       = argument[0];
     var _function = argument[1];

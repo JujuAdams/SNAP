@@ -10,40 +10,14 @@
 
 function SnapToJSONBuffer(_buffer, _value, _pretty = false, _alphabetise = false, _accurateFloats = false)
 {
-    __SnapToJSONBufferInner(_buffer, _value, _pretty, _alphabetise, _accurateFloats, "");
+    return __SnapToJSONBufferInner(_buffer, _value, _pretty, _alphabetise, _accurateFloats, "");
 }
 
 function __SnapToJSONBufferInner(_buffer, _value, _pretty, _alphabetise, _accurateFloats, _indent)
 {
-    if (is_int32(_value) || is_int64(_value))
+    if (is_real(_value) || is_int32(_value) || is_int64(_value))
     {
-        buffer_write(_buffer, buffer_text, string(_value));
-    }
-    else if (is_real(_value))
-    {
-        if (_accurateFloats && (floor(_value) != _value))
-        {
-            //Store floating point numbers with as much accuracy as we can get
-            _value = string_format(_value, 0, 10);
-            
-            //Strip off trailing zeroes, and if necessary, the decimal point too
-            var _length = string_length(_value);
-            var _i = _length;
-            repeat(_length)
-            {
-                if (string_char_at(_value, _i) != "0") break;
-                --_i;
-            }
-            
-            if (string_char_at(_value, _i) == ".") _i--;
-            _value = string_delete(_value, _i + 1, _length - _i);
-            
-            buffer_write(_buffer, buffer_text, _value);
-        }
-        else
-        {
-            buffer_write(_buffer, buffer_text, string(_value));
-        }
+        buffer_write(_buffer, buffer_text, SnapNumberToString(_value, _accurateFloats));
     }
     else if (is_string(_value))
     {
@@ -238,4 +212,6 @@ function __SnapToJSONBufferInner(_buffer, _value, _pretty, _alphabetise, _accura
             buffer_write(_buffer, buffer_text, string(_value));
         }
     }
+    
+    return _buffer;
 }

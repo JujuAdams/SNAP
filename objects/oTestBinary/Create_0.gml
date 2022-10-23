@@ -28,7 +28,5 @@ struct = {
     instance: id,
 };
 
-buffer = snap_to_binary(struct);
-show_debug_message(buffer_base64_encode(buffer, 0, -1));
-returned_data = snap_from_binary(buffer);
-show_debug_message(snap_to_json(returned_data, true, true));
+buffer = SnapToBinary(SnapScratchBuffer(), struct);
+show_debug_message(SnapToJSON(SnapFromBinary(buffer, 0), true, true, true));

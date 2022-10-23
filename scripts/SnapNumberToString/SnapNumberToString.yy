@@ -1,11 +1,11 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "snap_to_xml",
+  "name": "SnapNumberToString",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "XML",
-    "path": "folders/SNAP/XML.yy",
+    "name": "Utility",
+    "path": "folders/SNAP/Utility.yy",
   },
 }

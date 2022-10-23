@@ -6,12 +6,6 @@
 /// 
 /// @jujuadams 2022-07-03
 
-//In the general case, functions/methods cannot be deserialised so we default to preventing their serialisation to begin with
-//If you'd like to throw an error whenever this function tries to serialise a function/method, set SNAP_MESSAGEPACK_SERIALISE_FUNCTION_NAMES to -1
-//If you'd like to simply ignore functions/methods when serialising structs/arrays, set SNAP_MESSAGEPACK_SERIALISE_FUNCTION_NAMES to 0
-//If you'd like to use some clever tricks to deserialise functions/methods in a manner specific to your game, set SNAP_MESSAGEPACK_SERIALISE_FUNCTION_NAMES to 1
-#macro SNAP_MESSAGEPACK_SERIALISE_FUNCTION_NAMES  0
-
 function snap_to_messagepack(_ds)
 {
     return (new __snap_to_messagepack_parser(_ds)).buffer;

@@ -6,10 +6,10 @@
 /// 
 /// @jujuadams 2022-10-23
 
-function SnapToYAML(_ds, _alphabetise = false, accurateFloats = false)
+function SnapToYAML(_ds, _alphabetise = false, _accurateFloats = false)
 {
     var _buffer = buffer_create(1024, buffer_grow, 1);
-    SnapToYAMLBuffer(_buffer, _ds, _alphabetise, accurateFloats);
+    SnapToYAMLBuffer(_buffer, _ds, _alphabetise, _accurateFloats);
     buffer_seek(_buffer, buffer_seek_start, 0);
     var _string = buffer_read(_buffer, buffer_string);
     buffer_delete(_buffer);
