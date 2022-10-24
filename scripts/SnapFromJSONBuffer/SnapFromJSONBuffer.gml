@@ -1,6 +1,6 @@
 /// @return Nested struct/array data that represents the contents of the JSON string
 /// 
-/// @param string  Buffer to read data from
+/// @param buffer  Buffer to read data from
 /// @param offset  Offset in the buffer to read data from
 /// 
 /// @jujuadams 2022-10-23

@@ -14,14 +14,14 @@ var _string = @'
     <price>0.49</price>  
   </book>  
   <book category="WEB">  
-    <title lang="en">Learning XML</title>  
     <author>Erik T. Ray</author>  
+    <title lang="en">Learning XML</title>  
     <year>2003</year>  
     <price>39.95</price>  
   </book>  
 </bookstore>';
 
-var _struct = snap_from_xml(_string);
-show_debug_message(snap_to_json(_struct, true, true));
-show_debug_message(snap_to_xml(_struct, false));
-show_debug_message(snap_to_xml(_struct, true ));
+var _struct = SnapFromXML(_string);
+show_debug_message(SnapToJSON(_struct, true, true));
+show_debug_message(SnapToXML(_struct, false));
+show_debug_message(SnapToXML(_struct, true ));

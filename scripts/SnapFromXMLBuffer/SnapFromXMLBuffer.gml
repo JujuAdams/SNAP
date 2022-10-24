@@ -1,17 +1,16 @@
-/// Decodes an XML string stored in a buffer and outputs a sorta-JSON equivalent
+/// Decodes XML data stored in a buffer and outputs a sorta-JSON equivalent
 ///
-/// @return Nested struct/array data that represents the contents of the XML string
+/// @return Nested struct/array data that represents the contents of the XML data
 /// 
-/// @param string   The XML string to be decoded
+/// @param buffer  Buffer to read data from
+/// @param offset  Offset in the buffer to read data from
 /// 
-/// @jujuadams 2021-07-21
+/// @jujuadams 2022-10-23
 
-function snap_from_xml(_string)
+function SnapFromXMLBuffer(_buffer, _offset, _size)
 {
-    var _size = string_byte_length(_string);
-    var _buffer = buffer_create(_size, buffer_fixed, 1);
-    buffer_write(_buffer, buffer_text, _string);
-    buffer_seek(_buffer, buffer_seek_start, 0);
+    var _oldOffset = buffer_tell(_buffer);
+    buffer_seek(_buffer, buffer_seek_start, _offset);
     
     var _skip_whitespace = true;
     
@@ -297,9 +296,10 @@ function snap_from_xml(_string)
             }
         }
     }
-
+    
     ds_list_destroy(_stack);
-    buffer_delete(_buffer);
-
-    return _root
+    
+    buffer_seek(_buffer, buffer_seek_start, _oldOffset);
+    
+    return _root;
 }

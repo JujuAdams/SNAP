@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "snap_to_xml",
+  "name": "SnapToXMLBuffer",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
