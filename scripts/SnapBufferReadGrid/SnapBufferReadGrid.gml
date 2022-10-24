@@ -1,8 +1,13 @@
-/// @param string
+/// @param buffer
+/// @param offset
 
-function snap_to_grid(_string)
+function SnapBufferReadGrid(_buffer, _inOffset)
 {
-    var _buffer = buffer_base64_decode(_string);
+    if (_inOffset != undefined)
+    {
+        var _oldOffset = buffer_tell(_buffer);
+        buffer_seek(_buffer, buffer_seek_start, _inOffset);
+    }
     
     var _datatype = buffer_read(_buffer, buffer_u8);
     var _width    = buffer_read(_buffer, buffer_u32);
@@ -23,7 +28,7 @@ function snap_to_grid(_string)
         ++_x;
     }
     
-    buffer_delete(_buffer);
+    if (_inOffset != undefined) buffer_seek(_buffer, buffer_seek_start, _oldOffset);
     
     return _grid;
 }

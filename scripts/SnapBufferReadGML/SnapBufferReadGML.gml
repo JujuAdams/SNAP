@@ -1,21 +1,21 @@
 /// @return Nested struct/array data that represents the contents of the JSON string. The root node will always be a struct
 /// 
-/// @param string  The GML string to be decoded
+/// @param buffer  The GML string to be decoded
+/// @param offset
+/// @param size
 /// 
 /// @jujuadams 2020-12-23
 
-function snap_from_gml(_string)
+function SnapBufferReadGML(_buffer, _offset, _size)
 {
-    var _buffer = buffer_create(string_byte_length(_string) + 1, buffer_fixed, 1);
-    buffer_write(_buffer, buffer_text, _string);
-    buffer_seek(_buffer, buffer_seek_start, 0);
-    var _parser = new __snap_from_gml_parser(_buffer, buffer_get_size(_buffer));
-    buffer_delete(_buffer);
-    
+    var _oldOffset = buffer_tell(_buffer);
+    buffer_seek(_buffer, buffer_seek_start, _offset);
+    var _parser = new __SnapBufferReadGMLParser(_buffer, _size);
+    buffer_seek(_buffer, buffer_seek_start, _oldOffset);
     return _parser.root;
 }
 
-function __snap_from_gml_parser(_buffer, _buffer_size) constructor
+function __SnapBufferReadGMLParser(_buffer, _buffer_size) constructor
 {
     root = {};
     
