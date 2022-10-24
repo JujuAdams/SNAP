@@ -19,4 +19,5 @@ bool1 = 1
 bool2 = on
 bool3=f';
 
-show_debug_message(snap_to_json(snap_from_ini_string(_text, false), true, true));
+show_debug_message(SnapToJSON(SnapFromINIString(_text, false), true, true));
+show_debug_message(SnapToJSON(SnapFromINIString(_text, true), true, true));

@@ -7,22 +7,18 @@
 /// @param filename    The INI file to parse
 /// @param [tryReal]   Try to convert strings to real values if possible. Defaults to <true>
 ///
-/// @jujuadams 2020-06-16
+/// @jujuadams 2022-10-24
 
-function snap_from_ini_file()
+function SnapFromINIFile(_filename, _tryReal = true)
 {
-    var _filename = argument[0];
-    var _try_real = (argument_count > 1)? argument[1] : undefined;
-    
     if (!file_exists(_filename))
     {
-        show_error("snap_from_ini_file():\nFile \"" + string(_filename) + "\" could not be found\n ", false);
+        show_error("SnapFromINIFile():\nFile \"" + string(_filename) + "\" could not be found\n ", false);
         return {};
     }
     
     var _buffer = buffer_load(_filename);
-    var _string = buffer_read(_buffer, buffer_string);
+    var _result = SnapFromINIBuffer(_buffer, 0, buffer_get_size(_buffer), _tryReal);
     buffer_delete(_buffer);
-    
-    return snap_from_ini_string(_string, _try_real);
+    return _result;
 }

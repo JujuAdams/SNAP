@@ -4,26 +4,17 @@
 ///      using the native ini_close() function. This is not a full implementation
 ///      of the INI specification
 ///
-/// @param string      The INI string to parse
+/// @param buffer      The INI string to parse
+/// @param offset
+/// @param size
 /// @param [tryReal]   Try to convert strings to real values if possible. Defaults to <true>
 ///
-/// @jujuadams 2022-05-09
+/// @jujuadams 2022-10-24
 
-function snap_from_ini_string()
+function SnapFromINIBuffer(_buffer, _offset, _size, _tryReal = true)
 {
-    var _string   = argument[0];
-    var _try_real = ((argument_count > 1) && (argument[1] != undefined))? argument[1] : true;
-    
-    if (_try_real)
-    {
-        show_error("snap_from_ini_string():\nUnfortunately, the [tryReal] feature is currently broken due to beta bugs.\nHopefully they get fixed soon!\n \nIn the meantime, please set [tryReal] to <false>\n ", false);
-        _try_real = false;
-    }
-    
-    var _size = string_byte_length(_string) + 1;
-    var _buffer = buffer_create(_size, buffer_grow, 1);
-    buffer_write(_buffer, buffer_string, _string);
-    buffer_seek(_buffer, buffer_seek_start, 0);
+    var _oldOffset = buffer_tell(_buffer);
+    buffer_seek(_buffer, buffer_seek_start, _offset);
     
     var _skip_whitespace = true;
     var _in_comment      = false;
@@ -92,7 +83,7 @@ function snap_from_ini_string()
                             _value = string_replace_all(_value, chr(1), "\\"); //Restore \\ from the system character
                         }
                         
-                        if (!_in_string && _try_real)
+                        if (!_in_string && _tryReal)
                         {
                             try { _value = real(_value); } catch(_) {}
                         }
@@ -172,7 +163,7 @@ function snap_from_ini_string()
         }
     }
     
-    buffer_delete(_buffer);
-
+    buffer_seek(_buffer, buffer_seek_start, _oldOffset);
+    
     return _root
 }
