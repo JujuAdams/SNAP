@@ -12,4 +12,4 @@
 
 &nbsp;
 
-*Whilst SNAP focused on encoding/decoding structs and arrays, @tabularelf has `ds_*` conversion scripts available in a gist: https://gist.github.com/tabularelf/547b62efbcb0beaa8e6478afae8e693f*
+*Whilst SNAP is focused on encoding/decoding structs and arrays, @tabularelf has `ds_*` conversion scripts available in a gist: https://gist.github.com/tabularelf/547b62efbcb0beaa8e6478afae8e693f*
