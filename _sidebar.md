@@ -1,12 +1,22 @@
 - [Introduction](README)
+
+---
+
+*Standardised*
+
 - [JSON](json)
 - [CSV](csv)
-- [NSV](nsv)
 - [YAML](yaml)
 - [XML](xml)
-- [Custom Binary](custom-binary)
 - [Messagepack](messagepack)
 - [INI](ini)
-- [GML](gml)
+
+---
+
+*Custom*
+
+- [NSV](nsv)
+- [Custom Binary](custom-binary)
 - [Grids and Arrays](grids-and-arrays)
+- [GML](gml)
 - [Utilities](utilities)
