@@ -55,6 +55,7 @@
     {"id":{"name":"ScratchBuffer","path":"scripts/ScratchBuffer/ScratchBuffer.yy",},"order":2,},
     {"id":{"name":"SnapToXML","path":"scripts/SnapToXML/SnapToXML.yy",},"order":0,},
     {"id":{"name":"SnapBufferWriteYAML","path":"scripts/SnapBufferWriteYAML/SnapBufferWriteYAML.yy",},"order":2,},
+    {"id":{"name":"__SnapSystem","path":"scripts/__SnapSystem/__SnapSystem.yy",},"order":11,},
     {"id":{"name":"SnapFromGML","path":"scripts/SnapFromGML/SnapFromGML.yy",},"order":1,},
     {"id":{"name":"oTestXML","path":"objects/oTestXML/oTestXML.yy",},"order":10,},
     {"id":{"name":"oTestBinary","path":"objects/oTestBinary/oTestBinary.yy",},"order":6,},
