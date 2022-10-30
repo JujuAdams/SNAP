@@ -28,18 +28,21 @@ struct = {
     instance: id,
 };
 
-show_debug_message(snap_to_json(snap_from_json(snap_to_json(struct))));
-show_debug_message(snap_to_json(struct, false, false));
-show_debug_message(snap_to_json(struct, false, true ));
-show_debug_message(snap_to_json(struct, true , false));
-show_debug_message(snap_to_json(struct, true , true ));
+var _string = SnapToJSON(struct);
 
- var _string = @'{
-     "comment" : "test", //Comment
-     /*
-     "hello2" : "world"
-     */
-     "between" : /*oops*/ "things"
+show_debug_message(SnapToJSON(SnapFromJSON(SnapToJSON(struct))));
+show_debug_message(SnapToJSON(struct, false, false, true));
+show_debug_message(SnapToJSON(struct, false, true ));
+show_debug_message(SnapToJSON(struct, true,  false));
+show_debug_message(SnapToJSON(struct, true,  true, true));
+
+var _string = @'{
+"a" : "1", //Comment
+/*
+"b" : "2"
+*/
+"c" : /*oops*/ "3",
+"d": 4//done
 }';
 
-show_debug_message(snap_from_json(_string));
+show_debug_message(SnapFromJSON(_string));

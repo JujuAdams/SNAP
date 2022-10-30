@@ -28,5 +28,5 @@ struct = {
 };
 
 show_debug_message(snap_to_json(struct, true, true));
-copy = snap_deep_copy(struct);
+copy = SnapDeepCopy(struct);
 show_debug_message(snap_to_json(copy, true, true));

@@ -27,8 +27,8 @@ struct = {
     func : function() {},
 };
 
-show_debug_message(snap_to_gml(struct, true));
-show_debug_message(snap_to_json(snap_from_gml(snap_to_gml(struct, true)), true, true));
+show_debug_message(SnapToGML(struct, true));
+show_debug_message(SnapToJSON(SnapFromGML(SnapToGML(struct, true)), true, true));
 
 var _string = @"
 //Here's a comment
@@ -41,4 +41,4 @@ c = -999;
 //In-line block comment
 d = /*888*/666;";
 
-show_debug_message(snap_from_gml(_string));
+show_debug_message(SnapFromGML(_string));
