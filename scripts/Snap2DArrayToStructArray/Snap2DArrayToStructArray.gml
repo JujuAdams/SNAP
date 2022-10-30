@@ -4,7 +4,8 @@
 ///     columnTitle: {
 ///         ignore: <true> or <false>,
 ///         numeric: <true> or <false>,
-///     }
+///     },
+///     ...
 /// }
 /// 
 /// @param inputArray       2D array to convert. Array should be row-major
