@@ -5,9 +5,9 @@
 ///      2. Block scalars using | and > prefixes
 ///      3. Anchors, documents, directives, nodes... all the weird extra stuff
 /// 
-/// @param string              Buffer to read data from
+/// @param buffer              Buffer to read data from
 /// @param offset              Offset in the buffer to read data from
-/// @param [replaceKeywords]   Whether to replace keywords (true, false, null) with boolean/undefined equivalents. Default to <true>
+/// @param [replaceKeywords]   Whether to replace keywords (true, false, null) with boolean/undefined equivalents. Defaults to <true>
 /// @param [trackFieldOrder]   Whether to track the order of struct fields as they appear in the YAML string (stored in __snapFieldOrder field on each GML struct). Default to <false>
 /// 
 /// @jujuadams 2021-07-19

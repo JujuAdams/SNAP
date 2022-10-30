@@ -4,5 +4,8 @@ function SnapBufferHandleBOM(_buffer)
 	if ((buffer_get_size(_buffer) >= 4) && (buffer_peek(_buffer, buffer_tell(_buffer), buffer_u32) & 0xFFFFFF == 0xBFBBEF))
     {
 		buffer_seek(_buffer, buffer_seek_relative, 3);
+        return true;
 	}
+    
+    return false;
 }

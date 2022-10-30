@@ -5,7 +5,7 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Messagepack",
-    "path": "folders/SNAP/Messagepack.yy",
+    "name": "MessagePack",
+    "path": "folders/SNAP/MessagePack.yy",
   },
 }

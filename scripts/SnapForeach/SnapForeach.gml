@@ -2,7 +2,7 @@
 /// 
 /// Executes a method call for each element of the given struct/array/data structure.
 /// This iterator is shallow and will not also iterate over nested structs/arrays (though
-/// you can of course call foreach() inside the specified method)
+/// you can of course call SnapForeach() inside the specified method)
 /// 
 /// This function can also iterate over all members of a ds_map, ds_list, or ds_grid.
 /// You will need to specify a value for [dsType] to iterate over a data structure

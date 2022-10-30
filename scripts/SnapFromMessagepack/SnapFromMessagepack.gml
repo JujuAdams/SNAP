@@ -2,8 +2,8 @@
 ///
 /// More information on messagepack can be found here: https://msgpack.org/index.html
 /// 
-/// @param buffer  Binary data to be decoded, created by snap_to_binary()
-/// @param offset  Start position for binary decoding in the buffer. Defaults to 0, the start of the buffer
+/// @param buffer  Binary data to be decoded
+/// @param offset  Start position for binary decoding in the buffer
 /// 
 /// @jujuadams 2022-10-23
 
