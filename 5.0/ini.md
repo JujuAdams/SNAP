@@ -30,7 +30,7 @@
 
 &nbsp;
 
-## `SnapFromINIBuffer`
+## `SnapBufferReadINI`
 
 *Returns:* Struct, the data found inside the buffer
 

@@ -6,7 +6,7 @@
 
 &nbsp;
 
-## `SnapToMessagePack`
+## `SnapBufferWriteMessagePack`
 
 *Returns:* N/A (`undefined`)
 
@@ -19,7 +19,7 @@ The MessagePack data will be inserted into the buffer at the current "head" posi
 
 &nbsp;
 
-## `SnapFromMessagePack`
+## `SnapBufferReadMessagePack`
 
 *Returns:* Struct or array, the data read from the buffer
 

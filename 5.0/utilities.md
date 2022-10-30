@@ -121,7 +121,7 @@ The following functions relate to file operations, specifically embedding or rem
 
 &nbsp;
 
-## `SnapBufferHandleBOM`
+## `SnapBufferReadBOM`
 
 *Returns:* Boolean, whether a UTF-8 byte order mark was found
 

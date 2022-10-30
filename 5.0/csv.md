@@ -27,7 +27,7 @@
 
 &nbsp;
 
-## `SnapToCSVBuffer`
+## `SnapBufferWriteCSV`
 
 *Returns:* N/A (`undefined`)
 
@@ -45,7 +45,7 @@ The CSV string will be inserted into the buffer at the current "head" position, 
 
 &nbsp;
 
-## `SnapFromCSVBuffer`
+## `SnapBufferReadCSV`
 
 *Returns:* 2D array
 

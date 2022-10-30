@@ -22,7 +22,7 @@
 
 &nbsp;
 
-## `SnapToXMLBuffer`
+## `SnapBufferWriteYAML`
 
 *Returns:* N/A (`undefined`)
 
@@ -35,7 +35,7 @@ The XML string will be inserted into the buffer at the current "head" position, 
 
 &nbsp;
 
-## `SnapFromXMLBuffer`
+## `SnapBufferReadYAML`
 
 *Returns:* Struct, the struct/array resprentation of the input XML data
 

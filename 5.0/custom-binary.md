@@ -2,7 +2,7 @@
 
 &nbsp;
 
-## `SnapToBinary`
+## `SnapBufferWriteBinary`
 
 *Returns:* N/A (`undefined`)
 
@@ -15,7 +15,7 @@ The NSV data will be inserted into the buffer at the current "head" position, as
 
 &nbsp;
 
-## `SnapFromBinary`
+## `SnapBufferReadBinary`
 
 *Returns:* Struct or array, the data read from the buffer
 

@@ -26,7 +26,7 @@
 
 &nbsp;
 
-## `SnapToYAMLBuffer`
+## `SnapBufferWriteYAML`
 
 *Returns:* N/A (`undefined`)
 
@@ -41,7 +41,7 @@
 
 &nbsp;
 
-## `SnapFromYAMLBuffer`
+## `SnapBufferReadYAML`
 
 *Returns:* Struct or array, the struct/array resprentation of the input YAML data
 

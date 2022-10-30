@@ -8,7 +8,7 @@ NSVs can only be written and read using buffers as their use of null characters 
 
 &nbsp;
 
-## `SnapToNSV`
+## `SnapBufferWriteNSV`
 
 *Returns:* N/A (`undefined`)
 
@@ -25,7 +25,7 @@ The NSV data will be inserted into the buffer at the current "head" position, as
 
 &nbsp;
 
-## `SnapFromNSV`
+## `SnapBufferReadNSV`
 
 *Returns:* 2D array
 
