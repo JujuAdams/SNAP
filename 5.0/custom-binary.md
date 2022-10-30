@@ -11,7 +11,7 @@
 |`buffer`|buffer      |Buffer to write the binary data into|
 |`data`  |struct/array|Data to encode                      |
 
-The NSV data will be inserted into the buffer at the current "head" position, as determined by GameMaker's native `buffer_tell()` function.
+The data will be inserted into the buffer at the current "head" position, as determined by GameMaker's native `buffer_tell()` function.
 
 &nbsp;
 
