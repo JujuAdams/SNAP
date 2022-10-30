@@ -4,6 +4,8 @@ Null-Separated Value fules, or NSVs, are a custom data format designed for GameM
 
 NSVs can only be written and read using buffers as their use of null characters interferes with a string representation of the data. NSVs should only be used to store and retrieve 2D arrays that contain numbers or strings. If you're looking to store more complex data structures in whilst optimising performance, please use the [Custom Binary](custom-binary) functions.
 
+!> NSVs only work on "rectangular" data where the length of each child array is the same.
+
 &nbsp;
 
 ## `SnapToNSV`
@@ -14,7 +16,7 @@ NSVs can only be written and read using buffers as their use of null characters 
 |------------------|--------|--------------------------------------------------------------------------------------|
 |`buffer`          |buffer  |The buffer to write the NSV data into                                                 |
 |`data`            |2D array|The 2D array to encode                                                                |
-|`[width]`         |integer |The maximum                  |
+|`[width]`         |integer |The length of each child array. If not provided, SNAP will find the maximum length    |
 |`[accurateFloats]`|boolean |Whether to output floats using a greater number of decimal points. Defaults to `false`|
 
 The NSV data will be inserted into the buffer at the current "head" position, as determined by GameMaker's native `buffer_tell()` function.
