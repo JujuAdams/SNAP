@@ -4,7 +4,7 @@
 
 ## `SnapToCSV`
 
-*Returns:* String, the JSON-encoded data
+*Returns:* String, the CSV data
 
 |Name               |Datatype|Purpose                                                                                |
 |-------------------|--------|---------------------------------------------------------------------------------------|

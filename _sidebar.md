@@ -4,7 +4,7 @@
 - [NSV](nsv)
 - [YAML](yaml)
 - [XML](xml)
-- [Binary](binary)
+- [Custom Binary](custom-binary)
 - [Messagepack](messagepack)
 - [INI](ini)
 - [GML](gml)
