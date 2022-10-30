@@ -20,10 +20,10 @@
 */
 
 const config = {
-	name: 'Snitch',
-	description: 'Logging and crash handling system for GameMaker Studio 2022.9 ',
+	name: 'SNAP',
+	description: 'Data format conversion for GameMaker Studio 2022.9 ',
 	latestVersion: '5.0',
 	otherVersions: [],
 	favicon: 'assets/favicon.ico',
-	themeColor: '#88a3b8',
+	themeColor: '#4f98ff',
 };
