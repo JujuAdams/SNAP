@@ -3,7 +3,7 @@
 /// @param filename     File to parse
 /// @param [removeBOM]  Whether to look for the UTF8 byte order mark and remove it. Defaults to <true>
 ///
-/// @jujuadams 2022-10-23
+/// @jujuadams 2022-10-30
 
 function SnapStringFromFile(_filename, _removeBOM = true)
 {

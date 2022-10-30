@@ -1,5 +1,7 @@
 /// @param buffer
 /// @param offset
+/// 
+/// @jujuadams 2022-10-30
 
 function SnapBufferReadGrid(_buffer, _inOffset)
 {

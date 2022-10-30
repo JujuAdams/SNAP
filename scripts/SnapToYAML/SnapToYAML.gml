@@ -4,12 +4,12 @@
 /// @param [alphabetizeStructs]  (bool) Sorts struct variable names is ascending alphabetical order as per array_sort(). Defaults to <false>
 /// @param [accurateFloats]      (bool) Whether to output floats at a higher accuracy than GM normally defaults to. Defaults to <false>. Setting this to <true> confers a performance penalty
 /// 
-/// @jujuadams 2022-10-23
+/// @jujuadams 2022-10-30
 
 function SnapToYAML(_ds, _alphabetise = false, _accurateFloats = false)
 {
     var _buffer = buffer_create(1024, buffer_grow, 1);
-    SnapToYAMLBuffer(_buffer, _ds, _alphabetise, _accurateFloats);
+    SnapBufferWriteYAML(_buffer, _ds, _alphabetise, _accurateFloats);
     buffer_seek(_buffer, buffer_seek_start, 0);
     var _string = buffer_read(_buffer, buffer_string);
     buffer_delete(_buffer);

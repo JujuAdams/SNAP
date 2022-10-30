@@ -5,7 +5,7 @@
 /// 
 /// @param struct/array   The struct/array to be copied
 /// 
-/// @jujuadams 2022-10-23
+/// @jujuadams 2022-10-30
 
 function SnapDeepCopy(_value)
 {

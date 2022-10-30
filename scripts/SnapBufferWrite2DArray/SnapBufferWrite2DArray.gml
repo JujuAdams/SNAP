@@ -1,6 +1,8 @@
 /// @param buffer
 /// @param array2D
 /// @param datatype
+/// 
+/// @jujuadams 2022-10-30
 
 function SnapBufferWrite2DArray(_buffer, _array, _datatype)
 {

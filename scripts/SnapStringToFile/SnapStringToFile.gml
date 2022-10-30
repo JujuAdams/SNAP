@@ -4,7 +4,7 @@
 /// @param filename  File to save to
 /// @param [addBOM]  Whether to add a UTF8 byte order mark to the start of the file. Defaults to <false>
 ///
-/// @jujuadams 2022-10-23
+/// @jujuadams 2022-10-30
 
 function SnapStringToFile(_string, _filename, _addBOM = false)
 {

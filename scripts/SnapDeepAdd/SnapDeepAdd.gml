@@ -13,7 +13,7 @@
 /// @param destination               Destination struct/array
 /// @param [ignoreNonNumbers=false]  Set to <true> to silently ignore non-numeric values in the source struct/array. The default value <false> will throw an error if a non-number is found in the source struct/array
 /// 
-/// @jujuadams 2022-07-27
+/// @jujuadams 2022-10-30
 
 function SnapDeepAdd(_src, _dst, _ignore_non_numbers = false)
 {

@@ -4,4 +4,4 @@ var _array = [
               ["short row",],
              ];
 
-show_debug_message(SnapFromNSV(SnapToNSV(ScratchBuffer(), _array), 0));
+show_debug_message(SnapBufferReadNSV(SnapBufferWriteNSV(ScratchBuffer(), _array), 0));

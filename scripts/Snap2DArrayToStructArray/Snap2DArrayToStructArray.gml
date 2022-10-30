@@ -10,6 +10,8 @@
 /// 
 /// @param inputArray       2D array to convert. Array should be row-major
 /// @param [configStruct]   See above
+/// 
+/// @jujuadams 2022-10-30
 
 function Snap2DArrayToStructArray(_inputArray, _configStruct = {})
 {

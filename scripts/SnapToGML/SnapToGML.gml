@@ -3,7 +3,7 @@
 /// @param struct                The struct to be encoded. Can contain structs, arrays, strings, and numbers (but the root must be a struct).   N.B. Will not encode ds_list, ds_map etc.
 /// @param [alphabetizeStructs]  (bool) Sorts struct variable names is ascending alphabetical order as per ds_list_sort(). Defaults to <false>
 /// 
-/// @jujuadams 2022-10-24
+/// @jujuadams 2022-10-30
 
 function SnapToGML(_struct, _alphabetise = false)
 {

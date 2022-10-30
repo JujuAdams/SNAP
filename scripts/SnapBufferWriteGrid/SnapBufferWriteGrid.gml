@@ -1,6 +1,8 @@
 /// @param buffer
 /// @param grid
 /// @param datatype
+/// 
+/// @jujuadams 2022-10-30
 
 function SnapBufferWriteGrid(_buffer, _grid, _datatype)
 {

@@ -32,5 +32,5 @@ struct = {
 };
 
 buffer = ScratchBuffer();
-SnapToMessagepack(buffer, struct);
-show_debug_message(SnapToJSON(SnapFromMessagepack(buffer, 0), true, true, true));
+SnapBufferWriteMessagePack(buffer, struct);
+show_debug_message(SnapToJSON(SnapBufferReadMessagePack(buffer, 0), true, true, true));

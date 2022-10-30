@@ -6,8 +6,8 @@
 ///
 /// @param filename    The INI file to parse
 /// @param [tryReal]   Try to convert strings to real values if possible. Defaults to <true>
-///
-/// @jujuadams 2022-10-24
+/// 
+/// @jujuadams 2022-10-30
 
 function SnapFromINIFile(_filename, _tryReal = true)
 {
@@ -18,7 +18,7 @@ function SnapFromINIFile(_filename, _tryReal = true)
     }
     
     var _buffer = buffer_load(_filename);
-    var _result = SnapFromINIBuffer(_buffer, 0, buffer_get_size(_buffer), _tryReal);
+    var _result = SnapBufferReadINI(_buffer, 0, buffer_get_size(_buffer), _tryReal);
     buffer_delete(_buffer);
     return _result;
 }

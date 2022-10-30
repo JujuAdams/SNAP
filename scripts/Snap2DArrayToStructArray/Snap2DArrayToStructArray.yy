@@ -5,7 +5,7 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Utility",
-    "path": "folders/SNAP/Utility.yy",
+    "name": "Grids & 2D Arrays",
+    "path": "folders/SNAP/Grids & 2D Arrays.yy",
   },
 }

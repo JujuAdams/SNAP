@@ -1,7 +1,10 @@
 /// @param buffer
+/// 
+/// @jujuadams 2022-10-30
 
 function SnapBufferWriteBOM(_buffer)
 {
-    buffer_write(_buffer, buffer_u32, 0x00BFBBEF);
-    buffer_seek(_buffer, buffer_seek_relative, -1);
+    buffer_write(_buffer, buffer_u8, 0xEF);
+    buffer_write(_buffer, buffer_u8, 0xBB);
+    buffer_write(_buffer, buffer_u8, 0xBF);
 }

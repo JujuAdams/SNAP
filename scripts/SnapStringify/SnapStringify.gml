@@ -5,6 +5,8 @@
 /// Otherwise, the output formatting copies GameMaker's native formatting, for better or worse
 /// 
 /// @param value   Value to stringify
+/// 
+/// @jujuadams 2022-10-30
 
 function SnapStringify(_value)
 {

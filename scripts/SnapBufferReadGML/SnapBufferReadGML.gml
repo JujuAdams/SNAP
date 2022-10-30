@@ -4,7 +4,7 @@
 /// @param offset
 /// @param size
 /// 
-/// @jujuadams 2020-12-23
+/// @jujuadams 2022-10-30
 
 function SnapBufferReadGML(_buffer, _offset, _size)
 {
