@@ -20,7 +20,7 @@
     0x0B  -  instance ID reference
 */
 
-function SnapToBinary(_buffer, _value)
+function SnapBufferWriteBinary(_buffer, _value)
 {
     if (is_method(_value)) //Implicitly also a struct so we have to check this first
     {
@@ -43,7 +43,7 @@ function SnapToBinary(_buffer, _value)
             if (!is_string(_name)) show_error("Keys must be strings\n ", true);
             
             buffer_write(_buffer, buffer_string, string(_name));
-            SnapToBinary(_buffer, _struct[$ _name]);
+            SnapBufferWriteBinary(_buffer, _struct[$ _name]);
             
             ++_i;
         }
@@ -59,7 +59,7 @@ function SnapToBinary(_buffer, _value)
         var _i = 0;
         repeat(_count)
         {
-            SnapToBinary(_buffer, _array[_i]);
+            SnapBufferWriteBinary(_buffer, _array[_i]);
             ++_i;
         }
     }

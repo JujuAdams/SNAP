@@ -8,7 +8,7 @@
 /// 
 /// @jujuadams 2022-10-30
 
-function SnapToJSONBuffer(_buffer, _value, _pretty = false, _alphabetise = false, _accurateFloats = false)
+function SnapBufferWriteJSON(_buffer, _value, _pretty = false, _alphabetise = false, _accurateFloats = false)
 {
     return __SnapToJSONBufferValue(_buffer, _value, _pretty, _alphabetise, _accurateFloats, "");
 }
