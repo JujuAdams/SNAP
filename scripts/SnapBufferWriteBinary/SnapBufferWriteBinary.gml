@@ -20,7 +20,7 @@
     0x0B  -  instance ID reference
 */
 
-function SnapToBinary(_buffer, _value)
+function SnapBufferWriteBinary(_buffer, _value)
 {
     if (is_method(_value)) //Implicitly also a struct so we have to check this first
     {
