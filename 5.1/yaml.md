@@ -51,4 +51,4 @@
 |`offset`           |integer |Offset in the buffer to read data from                                                                                                                   |
 |`[replaceKeywords]`|boolean |Whether to replace keyword strings (`"true"`, `"false"`, `"null"`) with their equivalents. Defaults to `true`                                            |
 |`[trackFieldOrder]`|boolean |Whether to track the order of struct fields as they appear in the YAML string (stored in `__snapFieldOrder` field on each GML struct). Default to `false`|
-|`[tabSize=2]`      |integer |Size of tabs, measured in "number of spaces". This is used to calculate                                                                                  |
+|`[tabSize=2]`      |integer |Size of tabs, measured in "number of spaces". This is used to calculate indentation                                                                      |
