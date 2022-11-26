@@ -22,8 +22,8 @@
 const config = {
 	name: 'SNAP',
 	description: 'Data format conversion for GameMaker Studio 2022.9 ',
-	latestVersion: '5.0',
-	otherVersions: [],
+	latestVersion: '5.1',
+	otherVersions: ['5.0'],
 	favicon: 'assets/favicon.ico',
 	themeColor: '#4f98ff',
 };
