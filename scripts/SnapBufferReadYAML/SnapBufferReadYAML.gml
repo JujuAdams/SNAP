@@ -9,6 +9,7 @@
 /// @param offset              Offset in the buffer to read data from
 /// @param [replaceKeywords]   Whether to replace keywords (true, false, null) with boolean/undefined equivalents. Defaults to <true>
 /// @param [trackFieldOrder]   Whether to track the order of struct fields as they appear in the YAML string (stored in __snapFieldOrder field on each GML struct). Default to <false>
+/// @param [tabSize=2]
 /// 
 /// @jujuadams 2022-10-30
 
@@ -28,7 +29,7 @@ enum __SNAP_YAML
     JSON_COLON,
 }
 
-function SnapBufferReadYAML(_buffer, _offset, _replaceKeywords = true, _tracekFieldOrder = false)
+function SnapBufferReadYAML(_buffer, _offset, _replaceKeywords = true, _tracekFieldOrder = false, _tabSize = 2)
 {
     if (_offset != undefined)
     {
@@ -43,7 +44,7 @@ function SnapBufferReadYAML(_buffer, _offset, _replaceKeywords = true, _tracekFi
         buffer_seek(_buffer, buffer_seek_start, _oldOffset);
     }
     
-    return (new __SnapFromYAMLBufferBuilder(_tokensArray, _replaceKeywords, _tracekFieldOrder)).result;
+    return (new __SnapFromYAMLBufferBuilder(_tokensArray, _replaceKeywords, _tracekFieldOrder, _tabSize)).result;
 }
 
 function __SnapFromYAMLBufferTokenizer(_buffer) constructor
@@ -285,11 +286,12 @@ function __SnapFromYAMLBufferTokenizer(_buffer) constructor
     }
 }
 
-function __SnapFromYAMLBufferBuilder(_tokens_array, _replace_keywords, _track_field_order) constructor
+function __SnapFromYAMLBufferBuilder(_tokens_array, _replace_keywords, _track_field_order, _tab_size) constructor
 {
     tokens_array = _tokens_array;
     replace_keywords = _replace_keywords;
     track_field_order = _track_field_order;
+    tab_size = _tab_size;
     
     token_count  = array_length(tokens_array);
     token_index  = 0;
@@ -310,7 +312,7 @@ function __SnapFromYAMLBufferBuilder(_tokens_array, _replace_keywords, _track_fi
             else if (_type == __SNAP_YAML.INDENT)
             {
                 var _indent_string = tokens_array[token_index][1];
-                indent = string_count(" ", _indent_string); //TODO - Cache this value earlier during parsing
+                indent = string_count(" ", _indent_string) + tab_size*string_count("\t", _indent_string); //TODO - Cache this value earlier during parsing
             }
             else
             {
