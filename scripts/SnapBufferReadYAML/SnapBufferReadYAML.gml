@@ -84,7 +84,14 @@ function __SnapFromYAMLBufferTokenizer(_buffer) constructor
     static read_chunk_and_add = function(_start, _end, _tell, _type)
     {
         var _chunk = read_chunk(_start, _end, _tell);
-        if (_chunk != undefined) result[@ array_length(result)] = [_type, _chunk];
+        if (_chunk != undefined)
+        {
+            array_push(result, [_type, _chunk]);
+        }
+        else if (_type == __SNAP_YAML.INDENT)
+        {
+            array_push(result, [_type, ""]);
+        }
     }
     
     while(buffer_tell(_buffer) < _buffer_size)
@@ -345,7 +352,11 @@ function __SnapFromYAMLBufferBuilder(_tokens_array, _replace_keywords, _track_fi
                     
                     var _last_line = line;
                     read_to_next();
-                    if ((indent <= _indent_limit) && (line != _last_line))
+                    
+                    var _actual_indent_limit = _indent_limit;
+                    if (tokens_array[token_index][0] == __SNAP_YAML.ARRAY) _actual_indent_limit -= 2;
+                    
+                    if ((indent <= _actual_indent_limit) && (line != _last_line))
                     {
                         variable_struct_set(_struct, _key, undefined);
                     }

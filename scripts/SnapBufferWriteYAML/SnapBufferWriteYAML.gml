@@ -103,19 +103,27 @@ function __SnapToYAMLBufferValue(_buffer, _value, _alphabetise, _accurateFloats,
                         buffer_write(_buffer, buffer_u8, 0x0A);
                         repeat(_indent+1) buffer_write(_buffer, buffer_u16, 0x2020);
                     }
+                    
+                    _indent++;
+                    __SnapToYAMLBufferValue(_buffer, _value, _alphabetise, _accurateFloats, _indent);
+                    _indent--;
                 }
                 else if (is_array(_value))
                 {
                     if (array_length(_value) > 0)
                     {
                         buffer_write(_buffer, buffer_u8, 0x0A);
-                        repeat(_indent+1) buffer_write(_buffer, buffer_u16, 0x2020);
+                        repeat(_indent) buffer_write(_buffer, buffer_u16, 0x2020);
                     }
+                    
+                    __SnapToYAMLBufferValue(_buffer, _value, _alphabetise, _accurateFloats, _indent);
                 }
-                
-                _indent++;
-                __SnapToYAMLBufferValue(_buffer, _value, _alphabetise, _accurateFloats, _indent);
-                _indent--;
+                else
+                {
+                    _indent++;
+                    __SnapToYAMLBufferValue(_buffer, _value, _alphabetise, _accurateFloats, _indent);
+                    _indent--;
+                }
                 
                 buffer_write(_buffer, buffer_u8, 0x0A);
                 
