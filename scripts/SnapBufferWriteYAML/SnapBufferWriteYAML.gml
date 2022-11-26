@@ -3,7 +3,7 @@
 /// @param struct/array          The data to be encoded. Can contain structs, arrays, strings, and numbers.   N.B. Will not encode ds_list, ds_map etc.
 /// @param [alphabetizeStructs]  (bool) Sorts struct variable names is ascending alphabetical order as per ds_list_sort(). Defaults to <false>
 /// 
-/// @jujuadams 2022-10-30
+/// @jujuadams 2022-11-26
 
 function SnapBufferWriteYAML(_buffer, _ds, _alphabetise = false, accurateFloats = false)
 {

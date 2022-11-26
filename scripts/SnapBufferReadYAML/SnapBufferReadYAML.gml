@@ -9,9 +9,9 @@
 /// @param offset              Offset in the buffer to read data from
 /// @param [replaceKeywords]   Whether to replace keywords (true, false, null) with boolean/undefined equivalents. Defaults to <true>
 /// @param [trackFieldOrder]   Whether to track the order of struct fields as they appear in the YAML string (stored in __snapFieldOrder field on each GML struct). Default to <false>
-/// @param [tabSize=2]
+/// @param [tabSize=2]         Size of tabs, measure in "number of spaces". This is used to calculate 
 /// 
-/// @jujuadams 2022-10-30
+/// @jujuadams 2022-11-26
 
 enum __SNAP_YAML
 {
