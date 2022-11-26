@@ -166,8 +166,7 @@ function __SnapFromYAMLBufferTokenizer(_buffer) constructor
             }
             else if (_scalar_first_character && (_value == 35)) //First character on the line is a hash
             {
-                var _next_value = buffer_peek(_buffer, buffer_tell(_buffer), buffer_u8);
-                if (_next_value == 32) _in_comment = true; //Detect "# comment" which is different to "--- # comment" because the YAML spec is shit
+                _in_comment = true;
             }
             else
             {
@@ -201,7 +200,7 @@ function __SnapFromYAMLBufferTokenizer(_buffer) constructor
                         _in_string = true;
                         _string_start = buffer_tell(_buffer);
                     }
-                    else if ((_value == 35) && (buffer_tell(_buffer) >= 1) && (buffer_peek(_buffer, buffer_tell(_buffer)-2, buffer_u8) <= 32))
+                    else if (_value == 35)
                     {
                         read_chunk_and_add(_chunk_start, _chunk_end, buffer_tell(_buffer), __SNAP_YAML.SCALAR);
                         
