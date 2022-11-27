@@ -1,4 +1,4 @@
-<h1 align="center">SNAP 5.0.0</h1>
+<h1 align="center">SNAP 5.1.1</h1>
 
 <p align="center">Data format conversion for GameMaker Studio 2022.9 by <b>@jujuadams</b></p>
 
