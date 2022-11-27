@@ -29,10 +29,33 @@ struct = {
     instance: id,
 };
 
-var _string = "{\"hello\" : \"world\", \"more\" : \"data\"}";
-show_debug_message(SnapFromYAML(_string));
+struct = {
+    a: [[[]]],
+}
 
-show_debug_message(SnapToYAML(struct, true));
-yaml = SnapFromYAML(SnapToYAML(struct, true));
+show_debug_message("");
+show_debug_message("--- Test 1 ---");
+var _string = "{\"hello\" : \"world\", \"more\" : \"data\"}";
+show_debug_message(SnapToYAML(SnapFromYAML(_string)));
+
+show_debug_message("");
+show_debug_message("--- Test 2 ---");
+var _string = SnapToYAML(struct, true);
+show_debug_message(_string);
+
+show_debug_message("");
+show_debug_message("--- Test 3 ---");
+yaml = SnapFromYAML(_string);
 show_debug_message(SnapToYAML(yaml, true));
-show_debug_message(SnapFromYAML(yaml, true, true));
+
+show_debug_message("");
+show_debug_message("--- Test 4 ---");
+show_debug_message(SnapFromYAML(SnapToYAML(yaml, true), true, true));
+
+show_debug_message("");
+show_debug_message("--- Test 5 ---");
+show_debug_message(SnapFromYAML("foo: some_fake_yui_code({ wish_i_could: do_this })"));
+
+show_debug_message("");
+show_debug_message("--- Test 6 ---");
+show_debug_message(SnapFromYAML("foo: yui_array[2]"));
