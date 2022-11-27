@@ -15,18 +15,18 @@
 
 enum __SNAP_YAML
 {
-    INDENT,
-    NEWLINE,
-    ARRAY,
-    STRUCT,
-    SCALAR,
-    STRING,
-    JSON_ARRAY_START,
-    JSON_ARRAY_END,
-    JSON_STRUCT_START,
-    JSON_STRUCT_END,
-    JSON_COMMA,
-    JSON_COLON,
+    INDENT,            //  0
+    NEWLINE,           //  1
+    ARRAY,             //  2
+    STRUCT,            //  3
+    SCALAR,            //  4
+    STRING,            //  5
+    JSON_ARRAY_START,  //  6
+    JSON_ARRAY_END,    //  7
+    JSON_STRUCT_START, //  8
+    JSON_STRUCT_END,   //  9
+    JSON_COMMA,        // 10
+    JSON_COLON,        // 11
 }
 
 function SnapBufferReadYAML(_buffer, _offset, _replaceKeywords = true, _tracekFieldOrder = false, _tabSize = 2)
@@ -190,6 +190,10 @@ function __SnapFromYAMLBufferTokenizer(_buffer) constructor
                     {
                         if (!_scalar_has_content) _chunk_start = buffer_tell(_buffer);
                     }
+                    else if ((_value == 91) || (_value == 93) || (_value == 123) || (_value == 125) || (_value == 58)) // [ ] { } :
+                    {
+                        //Ignore JSON-related characters
+                    }
                     else //Not whitespace
                     {
                         _scalar_has_content = true;
@@ -200,7 +204,7 @@ function __SnapFromYAMLBufferTokenizer(_buffer) constructor
                         _in_string = true;
                         _string_start = buffer_tell(_buffer);
                     }
-                    else if (_value == 35)
+                    else if (_value == 35) //Hash #
                     {
                         read_chunk_and_add(_chunk_start, _chunk_end, buffer_tell(_buffer), __SNAP_YAML.SCALAR);
                         
@@ -208,7 +212,7 @@ function __SnapFromYAMLBufferTokenizer(_buffer) constructor
                         _chunk_end   = buffer_tell(_buffer);
                         _in_comment  = true;
                     }
-                    else if ((_value == 91) || (_value == 93) || (_value == 123) || (_value == 125)) // [ ] { }
+                    else if (!_scalar_has_content && ((_value == 91) || (_value == 93) || (_value == 123) || (_value == 125))) // [ ] { }
                     {
                         read_chunk_and_add(_chunk_start, _chunk_end, buffer_tell(_buffer), __SNAP_YAML.SCALAR);
                         
@@ -236,16 +240,17 @@ function __SnapFromYAMLBufferTokenizer(_buffer) constructor
                         _chunk_end          = buffer_tell(_buffer);
                         _scalar_has_content = false;
                     }
-                    else if (_value == 58) //Colon :
+                    else if ((_scalar_has_content || (_json_depth > 0)) && (_value == 58)) //Colon :
                     {
+                        _scalar_has_content = false;
+                        
                         if (_json_depth > 0)
                         {
                             read_chunk_and_add(_chunk_start, _chunk_end, buffer_tell(_buffer), __SNAP_YAML.SCALAR);
                             _tokens_array[@ array_length(_tokens_array)] = [__SNAP_YAML.JSON_COLON];
                             
-                            _chunk_start        = buffer_tell(_buffer);
-                            _chunk_end          = buffer_tell(_buffer);
-                            _scalar_has_content = false;
+                            _chunk_start = buffer_tell(_buffer);
+                            _chunk_end   = buffer_tell(_buffer);
                         }
                         else
                         {
@@ -266,6 +271,7 @@ function __SnapFromYAMLBufferTokenizer(_buffer) constructor
                                 _chunk_end              = buffer_tell(_buffer);
                                 _scalar_first_character = true;
                             }
+                            
                         }
                     }
                     else if ((_value == 0) || (_value == 10) || (_value == 13)) //Null or newline
@@ -283,6 +289,16 @@ function __SnapFromYAMLBufferTokenizer(_buffer) constructor
             }
         }
     }
+    
+    //Collect any remaining scalar content
+    if (_scalar_has_content)
+    {
+        _chunk_end = buffer_tell(_buffer);
+        read_chunk_and_add(_chunk_start, _chunk_end, buffer_tell(_buffer), __SNAP_YAML.SCALAR);
+    }
+    
+    //Tie it all off with a newline otherwise the next step breaks
+    _tokens_array[@ array_length(_tokens_array)] = [__SNAP_YAML.NEWLINE];
 }
 
 function __SnapFromYAMLBufferBuilder(_tokens_array, _replace_keywords, _track_field_order, _tab_size) constructor
