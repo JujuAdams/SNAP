@@ -35,18 +35,22 @@ function __SnapToJSONBufferValue(_buffer, _value, _pretty, _alphabetise, _accura
     else if (is_array(_value))
     {
         var _array = _value;
+
         var _count = array_length(_array);
-        var _i = 0;
-        
-        if (_pretty)
+        if (_count <= 0)
         {
-            if (_count > 0)
+            buffer_write(_buffer, buffer_u16, 0x5D5B); //Open then close square bracket
+        }
+        else
+        {
+            if (_pretty)
             {
                 buffer_write(_buffer, buffer_u16, 0x0A5B); //Open square bracket + newline
                 
                 var _preIndent = _indent;
                 _indent += chr(0x09); //Tab
                 
+                var _i = 0;
                 repeat(_count)
                 {
                     buffer_write(_buffer, buffer_text, _indent);
@@ -64,22 +68,19 @@ function __SnapToJSONBufferValue(_buffer, _value, _pretty, _alphabetise, _accura
             }
             else
             {
-                buffer_write(_buffer, buffer_u16, 0x5D5B); //Open then close square bracket
+                buffer_write(_buffer, buffer_u8, 0x5B); //Open square bracket
+                
+                var _i = 0;
+                repeat(_count)
+                {
+                    __SnapToJSONBufferValue(_buffer, _array[_i], _pretty, _alphabetise, _accurateFloats, _indent);
+                    buffer_write(_buffer, buffer_u8, 0x2C); //Comma
+                    ++_i;
+                }
+                
+                if (_count > 0) buffer_seek(_buffer, buffer_seek_relative, -1);
+                buffer_write(_buffer, buffer_u8, 0x5D); //Close square bracket
             }
-        }
-        else
-        {
-            buffer_write(_buffer, buffer_u8, 0x5B); //Open square bracket
-            
-            repeat(_count)
-            {
-                __SnapToJSONBufferValue(_buffer, _array[_i], _pretty, _alphabetise, _accurateFloats, _indent);
-                buffer_write(_buffer, buffer_u8, 0x2C); //Comma
-                ++_i;
-            }
-            
-            if (_count > 0) buffer_seek(_buffer, buffer_seek_relative, -1);
-            buffer_write(_buffer, buffer_u8, 0x5D); //Close square bracket
         }
     }
     else if (is_method(_value)) //Implicitly also a struct so we have to check this first
@@ -96,17 +97,20 @@ function __SnapToJSONBufferValue(_buffer, _value, _pretty, _alphabetise, _accura
         if (_alphabetise) array_sort(_names, true);
         
         var _count = array_length(_names);
-        var _i = 0;
-        
-        if (_pretty)
+        if (_count <= 0)
         {
-            if (_count > 0)
+            buffer_write(_buffer, buffer_u16, 0x7D7B); //Open then close curly bracket
+        }
+        else
+        {
+            if (_pretty)
             {
                 buffer_write(_buffer, buffer_u16, 0x0A7B); //Open curly bracket + newline
                 
                 var _preIndent = _indent;
                 _indent += chr(0x09); //Tab
                 
+                var _i = 0;
                 repeat(_count)
                 {
                     var _name = _names[_i];
@@ -133,31 +137,28 @@ function __SnapToJSONBufferValue(_buffer, _value, _pretty, _alphabetise, _accura
             }
             else
             {
-                buffer_write(_buffer, buffer_u16, 0x7D7B); //Open then close curly bracket
+                buffer_write(_buffer, buffer_u8, 0x7B); //Open curly bracket
+                
+                var _i = 0;
+                repeat(_count)
+                {
+                    var _name = _names[_i];
+                    if (!is_string(_name)) show_error("Keys must be strings\n ", true);
+                    
+                    buffer_write(_buffer, buffer_u8,   0x22); // Double quote
+                    buffer_write(_buffer, buffer_text, string(_name));
+                    buffer_write(_buffer, buffer_u16,  0x3A22); // Double quote then colon
+                    
+                    __SnapToJSONBufferValue(_buffer, _struct[$ _name], _pretty, _alphabetise, _accurateFloats, _indent);
+                    
+                    buffer_write(_buffer, buffer_u8, 0x2C); //Comma
+                    
+                    ++_i;
+                }
+                
+                buffer_seek(_buffer, buffer_seek_relative, -1);
+                buffer_write(_buffer, buffer_u8, 0x7D); //Close curly bracket
             }
-        }
-        else
-        {
-            buffer_write(_buffer, buffer_u8, 0x7B); //Open curly bracket
-            
-            repeat(_count)
-            {
-                var _name = _names[_i];
-                if (!is_string(_name)) show_error("Keys must be strings\n ", true);
-                
-                buffer_write(_buffer, buffer_u8,   0x22); // Double quote
-                buffer_write(_buffer, buffer_text, string(_name));
-                buffer_write(_buffer, buffer_u16,  0x3A22); // Double quote then colon
-                
-                __SnapToJSONBufferValue(_buffer, _struct[$ _name], _pretty, _alphabetise, _accurateFloats, _indent);
-                
-                buffer_write(_buffer, buffer_u8, 0x2C); //Comma
-                
-                ++_i;
-            }
-            
-            buffer_seek(_buffer, buffer_seek_relative, -1);
-            buffer_write(_buffer, buffer_u8, 0x7D); //Close curly bracket
         }
     }
     else if (is_undefined(_value))
