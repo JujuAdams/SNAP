@@ -64,6 +64,13 @@ function SnapBufferReadJSON(_buffer, _inOffset = undefined)
                 {
                     _stringUsesCache = false;
                     
+                    var _size = buffer_tell(_buffer) - _readStart-1;
+                    if (_size > 0)
+                    {
+                        buffer_copy(_buffer, _readStart, _size, _cacheBuffer, buffer_tell(_cacheBuffer));
+                        buffer_seek(_cacheBuffer, buffer_seek_relative, _size);
+                    }
+                    
                     buffer_write(_cacheBuffer, buffer_u8, 0x00);
                     buffer_seek(_cacheBuffer, buffer_seek_start, 0);
                     var _value = buffer_read(_cacheBuffer, buffer_string);
@@ -112,8 +119,11 @@ function SnapBufferReadJSON(_buffer, _inOffset = undefined)
                 }
                 
                 var _size = buffer_tell(_buffer) - _readStart-1;
-                buffer_copy(_buffer, _readStart, _size, _cacheBuffer, buffer_tell(_cacheBuffer));
-                buffer_seek(_cacheBuffer, buffer_seek_relative, _size);
+                if (_size > 0)
+                {
+                    buffer_copy(_buffer, _readStart, _size, _cacheBuffer, buffer_tell(_cacheBuffer));
+                    buffer_seek(_cacheBuffer, buffer_seek_relative, _size);
+                }
                 
                 var _next_byte = buffer_read(_buffer, buffer_u8);
                 switch(_next_byte)

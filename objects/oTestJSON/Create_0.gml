@@ -46,3 +46,5 @@ var _string = @'{
 }';
 
 show_debug_message(SnapFromJSON(_string));
+
+show_debug_message(SnapFromJSON("{\"f\":\"a\\\\b\"}"));
