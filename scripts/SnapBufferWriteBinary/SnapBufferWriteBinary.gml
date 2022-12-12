@@ -1,7 +1,8 @@
 /// @return Buffer that contains binary encoded struct/array nested data, using a proprietary format
 /// 
-/// @param buffer        Buffer to write data to
-/// @param struct/array  The data to be encoded. Can contain structs, arrays, strings, and numbers.   N.B. Will not encode ds_list, ds_map etc.
+/// @param buffer                      Buffer to write data to
+/// @param struct/array                The data to be encoded. Can contain structs, arrays, strings, and numbers.   N.B. Will not encode ds_list, ds_map etc.
+/// @param [alphabetizeStructs=false]  Whether to alphabetize struct variable names. Incurs a performance penalty is set to <true>
 /// 
 /// @jujuadams 2022-10-30
 
@@ -20,7 +21,7 @@
     0x0B  -  instance ID reference
 */
 
-function SnapBufferWriteBinary(_buffer, _value)
+function SnapBufferWriteBinary(_buffer, _value, _alphabetizeStructs = false)
 {
     if (is_method(_value)) //Implicitly also a struct so we have to check this first
     {
@@ -30,9 +31,11 @@ function SnapBufferWriteBinary(_buffer, _value)
     else if (is_struct(_value))
     {
         var _struct = _value;
-        var _names = variable_struct_get_names(_struct);
-        var _count = array_length(_names);
         
+        var _names = variable_struct_get_names(_struct);
+        if (_alphabetizeStructs && is_array(_names)) array_sort(_names, true);
+        
+        var _count = array_length(_names);
         buffer_write(_buffer, buffer_u8, 0x01); //Struct
         buffer_write(_buffer, buffer_u64, _count);
         
@@ -43,7 +46,7 @@ function SnapBufferWriteBinary(_buffer, _value)
             if (!is_string(_name)) show_error("Keys must be strings\n ", true);
             
             buffer_write(_buffer, buffer_string, string(_name));
-            SnapBufferWriteBinary(_buffer, _struct[$ _name]);
+            SnapBufferWriteBinary(_buffer, _struct[$ _name], _alphabetizeStructs);
             
             ++_i;
         }
@@ -59,7 +62,7 @@ function SnapBufferWriteBinary(_buffer, _value)
         var _i = 0;
         repeat(_count)
         {
-            SnapBufferWriteBinary(_buffer, _array[_i]);
+            SnapBufferWriteBinary(_buffer, _array[_i], _alphabetizeStructs);
             ++_i;
         }
     }
