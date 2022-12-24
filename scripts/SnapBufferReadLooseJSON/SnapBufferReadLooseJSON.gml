@@ -513,7 +513,7 @@ function __SnapBufferReadLooseJSONComment(_buffer, _bufferSize)
         var _byte = buffer_read(_buffer, buffer_u8);
         if ((_byte == ord("\n")) || (_byte == ord("\r")))
         {
-            buffer_seek(_buffer, buffer_seek_start, -1);
+            buffer_seek(_buffer, buffer_seek_relative, -1);
             break;
         }
     }
