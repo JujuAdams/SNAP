@@ -30,7 +30,7 @@ This could be written as the following loose JSON:
 }
 ```
 
-In loose JSONT, the keywords `true` and `false` (without quotes) are transformed into booleans as one would expect. The keyword `null` (again, without quotes) is converted into GameMaker's native `undefined` datatype.
+In Loose JSON, the keywords `true` and `false` (without quotes) are transformed into booleans as one would expect. The keyword `null` (again, without quotes) is converted into GameMaker's native `undefined` datatype.
 
 A string must be delimited using double quotes in the following situations:
 1. If a string needs to contain any reserved symbols (`:` `,` `\n` `\r` `{` `}` `[` `]`)
