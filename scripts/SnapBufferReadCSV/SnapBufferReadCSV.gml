@@ -8,7 +8,7 @@
 /// @param [cellDelimiter]     Character to use to indicate where cells start and end. First 127 ASCII chars only. Defaults to a comma
 /// @param [stringDelimiter]   Character to use to indicate where strings start and end. First 127 ASCII chars only. Defaults to a double quote
 /// 
-/// @jujuadams 2022-10-30
+/// @jujuadams 2023-01-02
 
 function SnapBufferReadCSV(_buffer, _inOffset, _inSize = undefined, _cellDelimiter = ",", _stringDelimiter = "\"")
 {
