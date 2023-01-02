@@ -8,8 +8,8 @@
 
 function SnapFromCSV(_string, _cellDelimiter = ",", _stringDelimiter = "\"")
 {
-    var _buffer = buffer_create(string_byte_length(_string), buffer_fixed, 1);
-    buffer_write(_buffer, buffer_text, _string);
+    var _buffer = buffer_create(string_byte_length(_string)+1, buffer_fixed, 1);
+    buffer_write(_buffer, buffer_string, _string);
     var _data = SnapBufferReadCSV(_buffer, 0, buffer_get_size(_buffer), _cellDelimiter, _stringDelimiter);
     buffer_delete(_buffer);
     return _data;
