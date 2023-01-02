@@ -37,6 +37,8 @@ A string must be delimited using double quotes in the following situations:
 2. If a string needs to be exactly `"true"` `"false"` or `"null"`
 3. If a string must contain whitespace at the start or end
 
+Strings can further contain escaped characters.
+
 &nbsp;
 
 ## `SnapToLooseJSON`
