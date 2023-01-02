@@ -66,6 +66,10 @@ function SnapBufferReadCSV(_buffer, _inOffset, _inSize = undefined, _cellDelimit
                 {
                     _read = true;
                 }
+                else
+                {
+                    break;
+                }
             }
             
             if (!_inString)
