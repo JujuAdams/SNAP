@@ -1,5 +1,6 @@
 - [Introduction](README)
 - [JSON](json)
+- [Loose JSON](loose-json)
 - [CSV](csv)
 - [YAML](yaml)
 - [XML](xml)
