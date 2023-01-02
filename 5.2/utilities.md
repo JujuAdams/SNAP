@@ -128,3 +128,15 @@ The following functions relate to file operations, specifically embedding or rem
 |Name    |Datatype|Purpose          |
 |--------|--------|-----------------|
 |`buffer`|buffer  |Buffer to process|
+
+&nbsp;
+
+## `SnapMD5`
+
+*Returns:* Hexadecimal string, the MD5 hash of the given struct/array
+
+|Name   |Datatype|Purpose          |
+|-------|--------|-----------------|
+|`value`|any     |The value to hash|
+
+This function can also be used on non-struct/array data, though the hash may not line up with other MD5 implementations.
