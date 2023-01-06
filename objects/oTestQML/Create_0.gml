@@ -11,17 +11,6 @@ with(root)
         5,
         6,
         7,
-        {
-            struct : "struct!",
-            nested : {
-                nested : "nested!",
-                array : [
-                    "more",
-                    "MORE",
-                    "M O R E"
-                ]
-            }
-        }
     ];
     
     test = "text!";
@@ -37,7 +26,10 @@ with(root)
 
 var _constructorDict = {
     "Root":      ExampleClassRoot,
-    "Rectangle": ExampleClassRectangle,
+    //"Rectangle": ExampleClassRectangle,
 };
 
-show_debug_message(SnapToQML(root, _constructorDict));
+var _string = SnapToQML(root, _constructorDict);
+show_debug_message(_string);
+show_debug_message(SnapToJSON(SnapFromQML(_string, _constructorDict), true, true, true));
+show_debug_message(SnapToQML(SnapFromQML(_string, _constructorDict), _constructorDict));
