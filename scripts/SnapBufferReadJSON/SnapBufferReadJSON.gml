@@ -474,7 +474,7 @@ function SnapBufferReadJSON(_buffer, _inOffset = undefined)
                         }
                         else if (_expectingColon)
                         {
-                            show_error("Wwas expecting colon\n ", true);
+                            show_error("Was expecting colon\n ", true);
                         }
                         else if (_inStructKey)
                         {
