@@ -103,15 +103,10 @@ function __SnapToQMLBufferValue(_buffer, _value, _constructorDict, _accurateFloa
         var _struct = _value;
         
         var _instanceof = instanceof(_struct);
-        if (_instanceof != "struct")
-        {
-            var _name = _constructorDict[$ _instanceof];
-            if (is_string(_name))
-            {
-                buffer_write(_buffer, buffer_text, _name);
-                buffer_write(_buffer, buffer_u8, 0x20); //Space
-            }
-        }
+        var _name = _constructorDict[$ _instanceof];
+        if (!is_string(_name)) show_error("SNAP:\nFound struct with unrecognised instanceof (" + string(_instanceof) + ")\n ", true);
+        buffer_write(_buffer, buffer_text, _name);
+        buffer_write(_buffer, buffer_u8, 0x20); //Space
         
         var _names = variable_struct_get_names(_struct);
         array_sort(_names, true);
