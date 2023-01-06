@@ -1,19 +1,29 @@
-/// @return "Loose JSON" string that encodes the struct/array nested data
+/// @return QML string that encodes the struct/array nested data
 /// 
 /// @param buffer                Buffer to write data into
 /// @param struct/array          The data to be encoded. Can contain structs, arrays, strings, and numbers.   N.B. Will not encode ds_list, ds_map etc.
-/// @param [pretty]              (bool) Whether to format the string to be human readable. Defaults to <false>
-/// @param [alphabetizeStructs]  (bool) Sorts struct variable names is ascending alphabetical order as per ds_list_sort(). Defaults to <false>
+/// @param constructorDict
 /// @param [accurateFloats]      (bool) Whether to output floats at a higher accuracy than GM normally defaults to. Defaults to <false>. Setting this to <true> confers a performance penalty
 /// 
 /// @jujuadams 2022-10-30
 
-function SnapBufferWriteLooseJSON(_buffer, _value, _pretty = false, _alphabetise = false, _accurateFloats = false)
+function SnapBufferWriteQML(_buffer, _value, _constructorDict, _accurateFloats = false)
 {
-    return __SnapToLooseJSONBufferValue(_buffer, _value, _pretty, _alphabetise, _accurateFloats, "");
+    var _invertedConstructorDict = {};
+    
+    var _namesArray = variable_struct_get_names(_constructorDict);
+    var _i = 0;
+    repeat(array_length(_namesArray))
+    {
+        var _name = _namesArray[_i];
+        _invertedConstructorDict[$ script_get_name(_constructorDict[$ _name])] = _name;
+        ++_i;
+    }
+    
+    return __SnapToQMLBufferValue(_buffer, _value, _invertedConstructorDict, _accurateFloats, "");
 }
 
-function __SnapToLooseJSONBufferValue(_buffer, _value, _pretty, _alphabetise, _accurateFloats, _indent)
+function __SnapToQMLBufferValue(_buffer, _value, _constructorDict, _accurateFloats, _indent)
 {
     if (is_real(_value) || is_int32(_value) || is_int64(_value))
     {
@@ -62,44 +72,26 @@ function __SnapToLooseJSONBufferValue(_buffer, _value, _pretty, _alphabetise, _a
         }
         else
         {
-            if (_pretty)
+            buffer_write(_buffer, buffer_u16, 0x0A5B); //Open square bracket + newline
+            
+            var _preIndent = _indent;
+            _indent += chr(0x09); //Tab
+            
+            var _i = 0;
+            repeat(_count)
             {
-                buffer_write(_buffer, buffer_u16, 0x0A5B); //Open square bracket + newline
-                
-                var _preIndent = _indent;
-                _indent += chr(0x09); //Tab
-                
-                var _i = 0;
-                repeat(_count)
-                {
-                    buffer_write(_buffer, buffer_text, _indent);
-                    __SnapToLooseJSONBufferValue(_buffer, _array[_i], _pretty, _alphabetise, _accurateFloats, _indent);
-                    buffer_write(_buffer, buffer_u16, 0x0A2C); //Comma + newline
-                    ++_i;
-                }
-                
-                _indent = _preIndent;
-                
-                buffer_seek(_buffer, buffer_seek_relative, -2);
-                buffer_write(_buffer, buffer_u8, 0x0A); //Newline
                 buffer_write(_buffer, buffer_text, _indent);
-                buffer_write(_buffer, buffer_u8, 0x5D); //Close square bracket
+                __SnapToQMLBufferValue(_buffer, _array[_i], _constructorDict, _accurateFloats, _indent);
+                buffer_write(_buffer, buffer_u16, 0x0A2C); //Comma + newline
+                ++_i;
             }
-            else
-            {
-                buffer_write(_buffer, buffer_u8, 0x5B); //Open square bracket
-                
-                var _i = 0;
-                repeat(_count)
-                {
-                    __SnapToLooseJSONBufferValue(_buffer, _array[_i], _pretty, _alphabetise, _accurateFloats, _indent);
-                    buffer_write(_buffer, buffer_u8, 0x2C); //Comma
-                    ++_i;
-                }
-                
-                if (_count > 0) buffer_seek(_buffer, buffer_seek_relative, -1);
-                buffer_write(_buffer, buffer_u8, 0x5D); //Close square bracket
-            }
+            
+            _indent = _preIndent;
+            
+            buffer_seek(_buffer, buffer_seek_relative, -2);
+            buffer_write(_buffer, buffer_u8, 0x0A); //Newline
+            buffer_write(_buffer, buffer_text, _indent);
+            buffer_write(_buffer, buffer_u8, 0x5D); //Close square bracket
         }
     }
     else if (is_method(_value)) //Implicitly also a struct so we have to check this first
@@ -110,8 +102,19 @@ function __SnapToLooseJSONBufferValue(_buffer, _value, _pretty, _alphabetise, _a
     {
         var _struct = _value;
         
+        var _instanceof = instanceof(_struct);
+        if (_instanceof != "struct")
+        {
+            var _name = _constructorDict[$ _instanceof];
+            if (is_string(_name))
+            {
+                buffer_write(_buffer, buffer_text, _name);
+                buffer_write(_buffer, buffer_u8, 0x20); //Space
+            }
+        }
+        
         var _names = variable_struct_get_names(_struct);
-        if (_alphabetise) array_sort(_names, true);
+        array_sort(_names, true);
         
         var _count = array_length(_names);
         if (_count <= 0)
@@ -120,60 +123,48 @@ function __SnapToLooseJSONBufferValue(_buffer, _value, _pretty, _alphabetise, _a
         }
         else
         {
-            if (_pretty)
+            buffer_write(_buffer, buffer_u16, 0x0A7B); //Open curly bracket + newline
+            
+            var _preIndent = _indent;
+            _indent += chr(0x09); //Tab
+            
+            var _i = 0;
+            repeat(_count)
             {
-                buffer_write(_buffer, buffer_u16, 0x0A7B); //Open curly bracket + newline
+                var _name = _names[_i];
+                if (!is_string(_name)) show_error("Keys must be strings\n ", true);
                 
-                var _preIndent = _indent;
-                _indent += chr(0x09); //Tab
-                
-                var _i = 0;
-                repeat(_count)
+                if not ((_name == "children") && is_array(_struct[$ _name]))
                 {
-                    var _name = _names[_i];
-                    if (!is_string(_name)) show_error("Keys must be strings\n ", true);
-                    
                     buffer_write(_buffer, buffer_text, _indent);
-                    __SnapToLooseJSONBufferValue(_buffer, _name, _pretty, _alphabetise, _accurateFloats, _indent);
+                    __SnapToQMLBufferValue(_buffer, _name, _constructorDict, _accurateFloats, _indent);
                     buffer_write(_buffer, buffer_u16,  0x203A); // <: >
                     
-                    __SnapToLooseJSONBufferValue(_buffer, _struct[$ _name], _pretty, _alphabetise, _accurateFloats, _indent);
+                    __SnapToQMLBufferValue(_buffer, _struct[$ _name], _constructorDict, _accurateFloats, _indent);
                     
-                    buffer_write(_buffer, buffer_u16, 0x0A2C); //Comma + newline
-                    
-                    ++_i;
+                    buffer_write(_buffer, buffer_u8, 0x0A); //Newline
                 }
                 
-                _indent = _preIndent;
-                
-                buffer_seek(_buffer, buffer_seek_relative, -2);
-                buffer_write(_buffer, buffer_u8, 0x0A); //Newline
-                buffer_write(_buffer, buffer_text, _indent);
-                buffer_write(_buffer, buffer_u8, 0x7D); //Close curly bracket
+                ++_i;
             }
-            else
+            
+            if (variable_struct_exists(_struct, "children"))
             {
-                buffer_write(_buffer, buffer_u8, 0x7B); //Open curly bracket
-                
+                var _childrenArray = _struct.children;
                 var _i = 0;
-                repeat(_count)
+                repeat(array_length(_childrenArray))
                 {
-                    var _name = _names[_i];
-                    if (!is_string(_name)) show_error("Keys must be strings\n ", true);
-                    
-                    __SnapToLooseJSONBufferValue(_buffer, _name, _pretty, _alphabetise, _accurateFloats, _indent);
-                    buffer_write(_buffer, buffer_u8,  0x3A); // :
-                    
-                    __SnapToLooseJSONBufferValue(_buffer, _struct[$ _name], _pretty, _alphabetise, _accurateFloats, _indent);
-                    
-                    buffer_write(_buffer, buffer_u8, 0x2C); //Comma
+                    buffer_write(_buffer, buffer_text, _indent);
+                    __SnapToQMLBufferValue(_buffer, _childrenArray[_i], _constructorDict, _accurateFloats, _indent);
+                    buffer_write(_buffer, buffer_u8, 0x0A); //Newline
                     
                     ++_i;
                 }
-                
-                buffer_seek(_buffer, buffer_seek_relative, -1);
-                buffer_write(_buffer, buffer_u8, 0x7D); //Close curly bracket
             }
+            
+            _indent = _preIndent;
+            buffer_write(_buffer, buffer_text, _indent);
+            buffer_write(_buffer, buffer_u8, 0x7D); //Close curly bracket
         }
     }
     else if (is_undefined(_value))
