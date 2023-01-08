@@ -35,7 +35,7 @@ function SnapBufferReadQML(_buffer, _constructorDict, _inOffset = undefined)
         }
         else if (_byte > 0x20)
         {
-            _result = __SnapBufferReadQMLValue(_buffer, _constructorDict, _bufferSize);
+            _result = __SnapBufferReadQMLValue(_buffer, _constructorDict, _bufferSize, _byte);
             break;
         }
     }
