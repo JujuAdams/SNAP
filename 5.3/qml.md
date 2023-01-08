@@ -5,7 +5,7 @@
 SNAP's implementation of QML is incomplete as a complete QML implementation necessarily involves writing a whole user interface system (an exercise for the reader, perhaps). The design of QML has many benefits if used beyond the scope of UI layouts, primarily the fact that it is possible to give structs a "type", thereby allowing SNAP to call a constructor when deserializing QML.
 
 Consider this short QML segment:
-```QML
+```qml
 Tree {
 	x: 678
 	y: 426
@@ -16,7 +16,7 @@ Tree {
 In a manner similar to JSON, QML allows us to describe a struct (delineated by curly bracket `{}`) and the variable for that struct. The key difference is the label `Tree` however, which indicates that the struct that follows should use whatever constructor is tied to the label of `"Tree"`.
 
 We might want to deserialize the above QML using the following GML code:
-```GML
+```gml
 //Define a constructor for trees decoded from QML
 function ConstructorTree() constructor
 {
@@ -37,7 +37,7 @@ treeStruct = SnapFromQML(QMLstring, _instanceofDict);
 In this situation, when the QML parser sees a new struct labelled `Tree` in the QML string, it will will construct a new instance of `ConstructorTree()` and then assign variables to it as required.
 
 Structs created from QML can have children. As noted above in the `ConstructorTree()` function, all QML constructors must contain a variable called `children` that is initialized to be an empty array. When deserializing QML, children of a particular struct are stored in this `children` array. For example, the following QML string...
-```QML
+```qml
 Copse {
 	x1: 578
 	y1: 326
@@ -60,7 +60,7 @@ Copse {
 
 ...would be deserialized as the following data (written here as GML literals):
 
-```GML
+```gml
 root = { //instanceof = "ConstructorField"
 	x1: 578,
 	y1: 326,
