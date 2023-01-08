@@ -103,7 +103,7 @@ As mentioned above, SNAP's QML parser is not a complete implementation. There ar
 |`[relaxed]`           |boolean     |Whether to run in "relaxed mode", see above. Defaults to `false`                      |
 |`[accurateFloats]`    |boolean     |Whether to output floats using a greater number of decimal points. Defaults to `false`|
 
-!> Setting any of the optional arguments to `true` will incur a memory and performance penalty. You will generally only want to turn the optional features on during development.
+!> Setting `accurateFloats` to `true` will incur a memory and performance penalty.
 
 &nbsp;
 
@@ -133,7 +133,7 @@ As mentioned above, SNAP's QML parser is not a complete implementation. There ar
 
 The QML string will be inserted into the buffer at the current "head" position, as determined by GameMaker's native `buffer_tell()` function.
 
-!> Setting any of the optional arguments to `true` will incur a memory and performance penalty. You will generally only want to turn the optional features on during development.
+!> Setting `accurateFloats` to `true` will incur a memory and performance penalty.
 
 &nbsp;
 
