@@ -90,7 +90,7 @@ function __SnapToQMLBufferValue(_buffer, _value, _constructorDict, _accurateFloa
             
             _indent = _preIndent;
             
-            buffer_seek(_buffer, buffer_seek_relative, -2);
+            buffer_seek(_buffer, buffer_seek_relative, -1);
             buffer_write(_buffer, buffer_u8, 0x0A); //Newline
             buffer_write(_buffer, buffer_text, _indent);
             buffer_write(_buffer, buffer_u8, 0x5D); //Close square bracket
