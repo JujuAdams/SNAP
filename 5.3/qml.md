@@ -13,7 +13,7 @@ Tree {
 }
 ```
 
-In a manner similar to JSON, QML allows us to describe a struct (delineated by curly bracket `{}`) and the variable for that struct. The key difference is the label `Tree` however, which indicates that the struct that follows should use whatever constructor is tied to the label of `"Tree"`.
+In a manner similar to JSON, QML allows us to describe a struct (delineated by curly brackets `{}`) and the variable for that struct. The key difference is the label `Tree` however, which indicates that the struct that follows should use whatever constructor is tied to the label of `"Tree"`.
 
 We might want to deserialize the above QML using the following GML code:
 ```gml
