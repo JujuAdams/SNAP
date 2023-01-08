@@ -23,7 +23,7 @@ function SnapBufferWriteQML(_buffer, _value, _constructorDict, _accurateFloats =
     return __SnapToQMLBufferValue(_buffer, _value, _invertedConstructorDict, _accurateFloats, "");
 }
 
-function __SnapToQMLBufferValue(_buffer, _value, _constructorDict, _accurateFloats, _indent)
+function __SnapToQMLBufferValue(_buffer, _value, _invertedConstructorDict, _accurateFloats, _indent)
 {
     var _childrenArrayVariableName = "children";
     
@@ -105,8 +105,8 @@ function __SnapToQMLBufferValue(_buffer, _value, _constructorDict, _accurateFloa
         var _struct = _value;
         
         var _instanceof = instanceof(_struct);
-        var _name = _constructorDict[$ _instanceof];
-        if (!is_string(_name)) show_error("SNAP:\nFound struct with unrecognised instanceof (" + string(_instanceof) + ")\n ", true);
+        var _name = _invertedConstructorDict[$ _instanceof];
+        if (!is_string(_name)) show_error("SNAP:\nFound struct with unrecognised instanceof \"" + string(_instanceof) + "\"\n ", true);
         buffer_write(_buffer, buffer_text, _name);
         buffer_write(_buffer, buffer_u8, 0x20); //Space
         
@@ -125,6 +125,7 @@ function __SnapToQMLBufferValue(_buffer, _value, _constructorDict, _accurateFloa
             var _preIndent = _indent;
             _indent += chr(0x09); //Tab
             
+            var _hasAttributes = false;
             var _i = 0;
             repeat(_count)
             {
@@ -133,11 +134,13 @@ function __SnapToQMLBufferValue(_buffer, _value, _constructorDict, _accurateFloa
                 
                 if not ((_name == _childrenArrayVariableName) && is_array(_struct[$ _name]))
                 {
+                    _hasAttributes = true;
+                    
                     buffer_write(_buffer, buffer_text, _indent);
-                    __SnapToQMLBufferValue(_buffer, _name, _constructorDict, _accurateFloats, _indent);
+                    __SnapToQMLBufferValue(_buffer, _name, _invertedConstructorDict, _accurateFloats, _indent);
                     buffer_write(_buffer, buffer_u16,  0x203A); // <: >
                     
-                    __SnapToQMLBufferValue(_buffer, _struct[$ _name], _constructorDict, _accurateFloats, _indent);
+                    __SnapToQMLBufferValue(_buffer, _struct[$ _name], _invertedConstructorDict, _accurateFloats, _indent);
                     
                     buffer_write(_buffer, buffer_u8, 0x0A); //Newline
                 }
@@ -152,6 +155,13 @@ function __SnapToQMLBufferValue(_buffer, _value, _constructorDict, _accurateFloa
                 var _i = 0;
                 repeat(array_length(_childrenArray))
                 {
+                    //Add some spacing between children (and attributes)
+                    if ((_i > 0) || _hasAttributes)
+                    {
+                        buffer_write(_buffer, buffer_text, _indent);
+                        buffer_write(_buffer, buffer_u8, 0x0A);
+                    }
+                    
                     buffer_write(_buffer, buffer_text, _indent);
                     __SnapToQMLBufferValue(_buffer, _childrenArray[_i], _invertedConstructorDict, _accurateFloats, _indent);
                     buffer_write(_buffer, buffer_u8, 0x0A); //Newline
