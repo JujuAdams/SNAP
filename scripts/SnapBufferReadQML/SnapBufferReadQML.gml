@@ -68,7 +68,7 @@ function __SnapBufferReadQMLArray(_buffer, _constructorDict, _bufferSize)
         {
             return _result;
         }
-        else if ((_byte == ord(":")) || (_byte == ord(",")))
+        else if ((_byte == ord(":")) || (_byte == ord(";")))
         {
             show_error("Found unexpected character " + chr(_byte) + " (decimal=" + string(_byte) + ")\nWas expecting a value\n ", true);
         }
@@ -85,7 +85,7 @@ function __SnapBufferReadQMLArray(_buffer, _constructorDict, _bufferSize)
                 {
                     return _result;
                 }
-                else if ((_byte == ord(",")) || (_byte == ord("\n")) || (_byte == ord("\r")))
+                else if ((_byte == ord(";")) || (_byte == ord("\n")) || (_byte == ord("\r")))
                 {
                     break;
                 }
@@ -118,7 +118,7 @@ function __SnapBufferReadQMLStruct(_buffer, _constructorDict, _bufferSize, _resu
         {
             return _result;
         }
-        else if ((_byte == ord(":")) || (_byte == ord(",")))
+        else if ((_byte == ord(":")) || (_byte == ord(";")))
         {
             show_error("Found unexpected character " + chr(_byte) + " (decimal=" + string(_byte) + ")\nWas expecting a key\n ", true);
         }
@@ -200,7 +200,7 @@ function __SnapBufferReadQMLStruct(_buffer, _constructorDict, _bufferSize, _resu
                 {
                     return _result;
                 }
-                else if ((_byte == ord(",")) || (_byte == ord("\n")) || (_byte == ord("\r")))
+                else if ((_byte == ord(";")) || (_byte == ord("\n")) || (_byte == ord("\r")))
                 {
                     break;
                 }
@@ -252,7 +252,7 @@ function __SnapBufferReadQMLString(_buffer, _constructorDict, _bufferSize)
         var _byte = buffer_read(_buffer, buffer_u8);
         
         if ((_byte == ord(":"))
-         || (_byte == ord(","))
+         || (_byte == ord(";"))
          || (_byte == ord("{"))
          || (_byte == ord("}"))
          || (_byte == ord("]"))

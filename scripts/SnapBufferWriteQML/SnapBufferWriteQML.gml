@@ -81,8 +81,8 @@ function __SnapToQMLBufferValue(_buffer, _value, _constructorDict, _accurateFloa
             repeat(_count)
             {
                 buffer_write(_buffer, buffer_text, _indent);
-                __SnapToQMLBufferValue(_buffer, _array[_i], _constructorDict, _accurateFloats, _indent);
-                buffer_write(_buffer, buffer_u16, 0x0A2C); //Comma + newline
+                __SnapToQMLBufferValue(_buffer, _array[_i], _invertedConstructorDict, _accurateFloats, _indent);
+                buffer_write(_buffer, buffer_u8, 0x0A); //Newline
                 ++_i;
             }
             
