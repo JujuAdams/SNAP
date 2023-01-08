@@ -4,7 +4,7 @@
 /// @param constructorDict
 /// @param [offset]          Offset in the buffer to read data from
 /// 
-/// @jujuadams 2022-12-11
+/// @jujuadams 2023-01-08
 
 function SnapBufferReadQML(_buffer, _constructorDict, _inOffset = undefined)
 {

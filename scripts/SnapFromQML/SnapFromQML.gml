@@ -3,7 +3,7 @@
 /// @param string            The QML string to be decoded
 /// @param constructorDict
 /// 
-/// @jujuadams 2022-12-23
+/// @jujuadams 2023-01-08
 
 function SnapFromQML(_string, _constructorDict)
 {

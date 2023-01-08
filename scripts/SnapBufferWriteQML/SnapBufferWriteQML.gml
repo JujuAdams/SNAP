@@ -5,7 +5,7 @@
 /// @param constructorDict
 /// @param [accurateFloats]      (bool) Whether to output floats at a higher accuracy than GM normally defaults to. Defaults to <false>. Setting this to <true> confers a performance penalty
 /// 
-/// @jujuadams 2022-10-30
+/// @jujuadams 2023-01-08
 
 function SnapBufferWriteQML(_buffer, _value, _constructorDict, _accurateFloats = false)
 {
