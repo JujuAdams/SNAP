@@ -88,7 +88,7 @@ If you enable relaxed mode when calling a SNAP QML function, you need not define
 As mentioned above, SNAP's QML parser is not a complete implementation. There are two notable missing features:
 
 1. QML allows for JavaScript to be used to declaratively define properties relative to other properties. This sort of behaviour is far *far* beyond the scope of SNAP. SNAP instead parses in-line JavaScript as a string literal.
-2. QML allows for structs to be created "on" properties; effectively this assigns a struct to a variable on the parent. SNAP's parser doesn't support this, but can do in the future if [someone asks for it](https://github.com/JujuAdams/SNAP/issues).
+2. QML allows for structs to be created "on" properties; effectively this assigns a struct to a variable on the parent (rather than the child struct being in the `children` array). SNAP's parser doesn't support this but can do in the future if [someone asks for it](https://github.com/JujuAdams/SNAP/issues).
 
 &nbsp;
 
