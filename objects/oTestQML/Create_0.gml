@@ -26,7 +26,7 @@ with(root)
 
 var _constructorDict = {
     "Root":      ExampleClassRoot,
-    //"Rectangle": ExampleClassRectangle,
+    "Rectangle": ExampleClassRectangle,
 };
 
 var _string = SnapToQML(root, _constructorDict);
