@@ -8,7 +8,7 @@ function SnapBufferWrite2DArray(_buffer, _array, _datatype)
 {
     if (_datatype == buffer_text)
     {
-        show_error("Cannot use buffer_text for the datatype\n ", true);
+        show_error("SNAP:\nCannot use buffer_text for the datatype\n ", true);
     }
     
     var _width  = array_length(_array);

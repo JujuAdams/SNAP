@@ -43,7 +43,7 @@ function SnapBufferWriteBinary(_buffer, _value, _alphabetizeStructs = false)
         repeat(_count)
         {
             var _name = _names[_i];
-            if (!is_string(_name)) show_error("Keys must be strings\n ", true);
+            if (!is_string(_name)) show_error("SNAP:\nKeys must be strings\n ", true);
             
             buffer_write(_buffer, buffer_string, string(_name));
             SnapBufferWriteBinary(_buffer, _struct[$ _name], _alphabetizeStructs);

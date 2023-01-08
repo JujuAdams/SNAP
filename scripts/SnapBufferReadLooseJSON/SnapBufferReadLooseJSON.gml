@@ -38,7 +38,7 @@ function SnapBufferReadLooseJSON(_buffer, _inOffset = undefined)
         }
         else if (_byte > 0x20)
         {
-            show_error("Found unexpected character " + chr(_byte) + " (decimal=" + string(_byte) + ")\nWas expecting either { or [\n ", true);
+            show_error("SNAP:\nFound unexpected character " + chr(_byte) + " (decimal=" + string(_byte) + ")\nWas expecting either { or [\n ", true);
         }
     }
     
@@ -72,7 +72,7 @@ function __SnapBufferReadLooseJSONArray(_buffer, _bufferSize)
         }
         else if ((_byte == ord(":")) || (_byte == ord(",")))
         {
-            show_error("Found unexpected character " + chr(_byte) + " (decimal=" + string(_byte) + ")\nWas expecting a value\n ", true);
+            show_error("SNAP:\nFound unexpected character " + chr(_byte) + " (decimal=" + string(_byte) + ")\nWas expecting a value\n ", true);
         }
         else if (_byte > 0x20)
         {
@@ -93,13 +93,13 @@ function __SnapBufferReadLooseJSONArray(_buffer, _bufferSize)
                 }
                 else if (_byte > 0x20)
                 {
-                    show_error("Found unexpected character " + chr(_byte) + " (decimal=" + string(_byte) + ")\nWas expecting comma, newline, or closing bracket\n ", true);
+                    show_error("SNAP:\nFound unexpected character " + chr(_byte) + " (decimal=" + string(_byte) + ")\nWas expecting comma, newline, or closing bracket\n ", true);
                 }
             }
         }
     }
     
-    show_error("Found unterminated array\n ", true);
+    show_error("SNAP:\nFound unterminated array\n ", true);
 }
 
 function __SnapBufferReadLooseJSONStruct(_buffer, _bufferSize)
@@ -124,13 +124,13 @@ function __SnapBufferReadLooseJSONStruct(_buffer, _bufferSize)
         }
         else if ((_byte == ord(":")) || (_byte == ord(",")))
         {
-            show_error("Found unexpected character " + chr(_byte) + " (decimal=" + string(_byte) + ")\nWas expecting a key\n ", true);
+            show_error("SNAP:\nFound unexpected character " + chr(_byte) + " (decimal=" + string(_byte) + ")\nWas expecting a key\n ", true);
         }
         else if (_byte > 0x20)
         {
             var _key = __SnapBufferReadLooseJSONValue(_buffer, _bufferSize, _byte);
             
-            if (!is_string(_key)) show_error("Struct keys must be strings (key was " + string(_key) + ", typeof=" + typeof(_key) + ")\n ", true);
+            if (!is_string(_key)) show_error("SNAP:\nStruct keys must be strings (key was " + string(_key) + ", typeof=" + typeof(_key) + ")\n ", true);
             
             //Find a colon
             while(buffer_tell(_buffer) < _bufferSize)
@@ -147,7 +147,7 @@ function __SnapBufferReadLooseJSONStruct(_buffer, _bufferSize)
                 }
                 else if (_byte > 0x20)
                 {
-                    show_error("Found unexpected character " + chr(_byte) + " (decimal=" + string(_byte) + ")\nWas expecting a colon\n ", true);
+                    show_error("SNAP:\nFound unexpected character " + chr(_byte) + " (decimal=" + string(_byte) + ")\nWas expecting a colon\n ", true);
                 }
             }
             
@@ -166,7 +166,7 @@ function __SnapBufferReadLooseJSONStruct(_buffer, _bufferSize)
                     break;
                 }
             }
-            if (_byte <= 0x20) show_error("Could not find start of value for key \"" + _key + "\"\n ", true);
+            if (_byte <= 0x20) show_error("SNAP:\nCould not find start of value for key \"" + _key + "\"\n ", true);
             
             //Read a value and store it in the struct
             var _value = __SnapBufferReadLooseJSONValue(_buffer, _bufferSize, _byte);
@@ -191,13 +191,13 @@ function __SnapBufferReadLooseJSONStruct(_buffer, _bufferSize)
                 }
                 else if (_byte > 0x20)
                 {
-                    show_error("Found unexpected character " + chr(_byte) + " (decimal=" + string(_byte) + ")\nWas expecting comma, newline, or closing bracket\n ", true);
+                    show_error("SNAP:\nFound unexpected character " + chr(_byte) + " (decimal=" + string(_byte) + ")\nWas expecting comma, newline, or closing bracket\n ", true);
                 }
             }
         }
     }
     
-    show_error("Found unterminated struct\n ", true);
+    show_error("SNAP:\nFound unterminated struct\n ", true);
 }
 
 function __SnapBufferReadLooseJSONValue(_buffer, _bufferSize, _firstByte)
@@ -338,7 +338,7 @@ function __SnapBufferReadLooseJSONDelimitedString(_buffer, _bufferSize)
         }
     }
     
-    show_error("Found unterminated string\n ", true);
+    show_error("SNAP:\nFound unterminated string\n ", true);
 }
 
 function __SnapBufferReadLooseJSONString(_buffer, _bufferSize)
@@ -503,7 +503,7 @@ function __SnapBufferReadLooseJSONString(_buffer, _bufferSize)
         }
     }
     
-    show_error("Found unterminated value\n ", true);
+    show_error("SNAP:\nFound unterminated value\n ", true);
 }
 
 function __SnapBufferReadLooseJSONComment(_buffer, _bufferSize)

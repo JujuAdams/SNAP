@@ -13,7 +13,7 @@ function SnapFromINIFile(_filename, _tryReal = true)
 {
     if (!file_exists(_filename))
     {
-        show_error("SnapFromINIFile():\nFile \"" + string(_filename) + "\" could not be found\n ", false);
+        show_error("SNAP:\nSnapFromINIFile():\nFile \"" + string(_filename) + "\" could not be found\n ", false);
         return {};
     }
     

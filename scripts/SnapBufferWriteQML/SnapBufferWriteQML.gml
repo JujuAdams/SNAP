@@ -133,7 +133,7 @@ function __SnapToQMLBufferValue(_buffer, _value, _invertedInstanceofDict, _relax
             repeat(_count)
             {
                 var _name = _names[_i];
-                if (!is_string(_name)) show_error("Keys must be strings\n ", true);
+                if (!is_string(_name)) show_error("SNAP:\nKeys must be strings\n ", true);
                 
                 if not ((_name == _childrenArrayVariableName) && is_array(_struct[$ _name]))
                 {

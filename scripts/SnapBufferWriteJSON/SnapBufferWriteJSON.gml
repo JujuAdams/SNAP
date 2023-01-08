@@ -114,7 +114,7 @@ function __SnapToJSONBufferValue(_buffer, _value, _pretty, _alphabetise, _accura
                 repeat(_count)
                 {
                     var _name = _names[_i];
-                    if (!is_string(_name)) show_error("Keys must be strings\n ", true);
+                    if (!is_string(_name)) show_error("SNAP:\nKeys must be strings\n ", true);
                     
                     buffer_write(_buffer, buffer_text, _indent);
                     buffer_write(_buffer, buffer_u8,   0x22); // Double quote
@@ -143,7 +143,7 @@ function __SnapToJSONBufferValue(_buffer, _value, _pretty, _alphabetise, _accura
                 repeat(_count)
                 {
                     var _name = _names[_i];
-                    if (!is_string(_name)) show_error("Keys must be strings\n ", true);
+                    if (!is_string(_name)) show_error("SNAP:\nKeys must be strings\n ", true);
                     
                     buffer_write(_buffer, buffer_u8,   0x22); // Double quote
                     buffer_write(_buffer, buffer_text, string(_name));

@@ -49,7 +49,7 @@ function SnapBufferWriteNSV(_buffer, _root_array, _width = undefined, _accurateF
             }
             else if (is_struct(_value) || is_array(_value))
             {
-                show_error("Array contains a nested struct or array. This is incompatible with NSV\n ", true);
+                show_error("SNAP:\nArray contains a nested struct or array. This is incompatible with NSV\n ", true);
             }
             else
             {

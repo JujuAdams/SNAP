@@ -98,7 +98,7 @@ function __SnapFromBinaryValue(_buffer)
         break;
         
         default:
-            show_error("Unsupported datatype " + string(buffer_peek(_buffer, buffer_u8, buffer_tell(_buffer)-1)) + " (position = " + string(buffer_tell(_buffer) - 1) + ")\n ", false);
+            show_error("SNAP:\nUnsupported datatype " + string(buffer_peek(_buffer, buffer_u8, buffer_tell(_buffer)-1)) + " (position = " + string(buffer_tell(_buffer) - 1) + ")\n ", false);
         break;
     }
 }

@@ -90,7 +90,7 @@ function SnapForeach()
         break;
         
         default:
-            show_error("Cannot iterate over datatype \"" + string(typeof(_ds)) + "\"\n ", false);
+            show_error("SNAP:\nCannot iterate over datatype \"" + string(typeof(_ds)) + "\"\n ", false);
         break;
     }
 }

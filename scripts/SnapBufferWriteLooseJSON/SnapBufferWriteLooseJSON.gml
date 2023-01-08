@@ -131,7 +131,7 @@ function __SnapToLooseJSONBufferValue(_buffer, _value, _pretty, _alphabetise, _a
                 repeat(_count)
                 {
                     var _name = _names[_i];
-                    if (!is_string(_name)) show_error("Keys must be strings\n ", true);
+                    if (!is_string(_name)) show_error("SNAP:\nKeys must be strings\n ", true);
                     
                     buffer_write(_buffer, buffer_text, _indent);
                     __SnapToLooseJSONBufferValue(_buffer, _name, _pretty, _alphabetise, _accurateFloats, _indent);
@@ -159,7 +159,7 @@ function __SnapToLooseJSONBufferValue(_buffer, _value, _pretty, _alphabetise, _a
                 repeat(_count)
                 {
                     var _name = _names[_i];
-                    if (!is_string(_name)) show_error("Keys must be strings\n ", true);
+                    if (!is_string(_name)) show_error("SNAP:\nKeys must be strings\n ", true);
                     
                     __SnapToLooseJSONBufferValue(_buffer, _name, _pretty, _alphabetise, _accurateFloats, _indent);
                     buffer_write(_buffer, buffer_u8,  0x3A); // :

@@ -88,7 +88,7 @@ function __SnapToYAMLBufferValue(_buffer, _value, _alphabetise, _accurateFloats,
                 
                 if (is_struct(_name) || is_array(_name))
                 {
-                    show_error("Key type \"" + typeof(_name) + "\" not supported\n ", false);
+                    show_error("SNAP:\nKey type \"" + typeof(_name) + "\" not supported\n ", false);
                     _name = string(ptr(_name));
                 }
                 

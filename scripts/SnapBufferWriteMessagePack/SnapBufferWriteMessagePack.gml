@@ -40,7 +40,7 @@ function SnapBufferWriteMessagePack(_buffer, _value)
             }
             else
             {
-                show_error("Trying to write a binary array longer than 4294967295 elements\n(How did you make an array this big?!)\n ", true);
+                show_error("SNAP:\nTrying to write a binary array longer than 4294967295 elements\n(How did you make an array this big?!)\n ", true);
             }
             
             var _i = 0;
@@ -92,7 +92,7 @@ function SnapBufferWriteMessagePack(_buffer, _value)
             }
             else
             {
-                show_error("Trying to write an extended binary array longer than 4294967295 elements\n(How did you make an array this big?!)\n ", true);
+                show_error("SNAP:\nTrying to write an extended binary array longer than 4294967295 elements\n(How did you make an array this big?!)\n ", true);
             }
             
             buffer_write(_buffer, buffer_s8, _struct.type);
@@ -126,7 +126,7 @@ function SnapBufferWriteMessagePack(_buffer, _value)
             }
             else
             {
-                show_error("Trying to write a struct longer than 4294967295 elements\n(How did you make a struct this big?!)\n ", true);
+                show_error("SNAP:\nTrying to write a struct longer than 4294967295 elements\n(How did you make a struct this big?!)\n ", true);
             }
             
             var _i = 0;
@@ -161,7 +161,7 @@ function SnapBufferWriteMessagePack(_buffer, _value)
         }
         else
         {
-            show_error("Trying to write an array longer than 4294967295 elements\n(How did you make an array this big?!)\n ", true);
+            show_error("SNAP:\nTrying to write an array longer than 4294967295 elements\n(How did you make an array this big?!)\n ", true);
         }
         
         var _i = 0;
@@ -268,7 +268,7 @@ function SnapBufferWriteMessagePack(_buffer, _value)
     }
     else
     {
-        show_error("Unsupported datatype \"" + typeof(_value) + "\"\n ", false);
+        show_error("SNAP:\nUnsupported datatype \"" + typeof(_value) + "\"\n ", false);
         buffer_write(_buffer, buffer_u8, 0xC0);
     }
     
@@ -339,7 +339,7 @@ function __SnapToMessagepackString(_buffer, _string)
     }
     else
     {
-        show_error("Trying to write a string longer than 4294967295 bytes\n(How did you make a string this big?!)\n ", true);
+        show_error("SNAP:\nTrying to write a string longer than 4294967295 bytes\n(How did you make a string this big?!)\n ", true);
     }
     
     buffer_write(_buffer, buffer_text, _string);

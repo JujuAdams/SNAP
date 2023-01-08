@@ -230,7 +230,7 @@ function SnapBufferReadJSON(_buffer, _inOffset = undefined)
                         catch(_error)
                         {
                             show_debug_message(_error);
-                            show_error("Could not convert \"" + string(_value) + "\" to numerical value\n ", true);
+                            show_error("SNAP:\nCould not convert \"" + string(_value) + "\" to numerical value\n ", true);
                         }
                     break;
                 }
@@ -285,7 +285,7 @@ function SnapBufferReadJSON(_buffer, _inOffset = undefined)
                     }
                     else
                     {
-                        show_error("Found unexpected comma\n ", true);
+                        show_error("SNAP:\nFound unexpected comma\n ", true);
                     }
                 break;
                 
@@ -298,18 +298,18 @@ function SnapBufferReadJSON(_buffer, _inOffset = undefined)
                     }
                     else
                     {
-                        show_error("Found unexpected colon\n ", true);
+                        show_error("SNAP:\nFound unexpected colon\n ", true);
                     }
                 break;
                 
                 case ord("\""):
                     if (_expectingComma)
                     {
-                        show_error("Found \", was expecting comma\n ", true);
+                        show_error("SNAP:\nFound \", was expecting comma\n ", true);
                     }
                     else if (_expectingColon)
                     {
-                        show_error("Found \", was expecting colon\n ", true);
+                        show_error("SNAP:\nFound \", was expecting colon\n ", true);
                     }
                     else
                     {
@@ -321,11 +321,11 @@ function SnapBufferReadJSON(_buffer, _inOffset = undefined)
                 case ord("["):
                     if (_expectingComma)
                     {
-                        show_error("Found [, was expecting comma\n ", true);
+                        show_error("SNAP:\nFound [, was expecting comma\n ", true);
                     }
                     else if (_expectingColon)
                     {
-                        show_error("Found [, was expecting colon\n ", true);
+                        show_error("SNAP:\nFound [, was expecting colon\n ", true);
                     }
                     else
                     {
@@ -333,7 +333,7 @@ function SnapBufferReadJSON(_buffer, _inOffset = undefined)
                         
                         if (_inStructKey)
                         {
-                            show_error("Cannot use an array as a struct key\n ", true);
+                            show_error("SNAP:\nCannot use an array as a struct key\n ", true);
                         }
                         else if (_inStructValue)
                         {
@@ -378,22 +378,22 @@ function SnapBufferReadJSON(_buffer, _inOffset = undefined)
                     }
                     else
                     {
-                        show_error("Found unexpected ]\n ", true);
+                        show_error("SNAP:\nFound unexpected ]\n ", true);
                     }
                 break;
                 
                 case ord("{"):
                     if (_expectingComma)
                     {
-                        show_error("Found {, was expecting comma\n ", true);
+                        show_error("SNAP:\nFound {, was expecting comma\n ", true);
                     }
                     else if (_expectingColon)
                     {
-                        show_error("Found {, was expecting colon\n ", true);
+                        show_error("SNAP:\nFound {, was expecting colon\n ", true);
                     }
                     else if (_inStructKey)
                     {
-                        show_error("Cannot use a struct as a struct key\n ", true);
+                        show_error("SNAP:\nCannot use a struct as a struct key\n ", true);
                     }
                     else
                     {
@@ -423,7 +423,7 @@ function SnapBufferReadJSON(_buffer, _inOffset = undefined)
                 case ord("}"):
                     if (_expectingColon)
                     {
-                        show_error("Found }, was expecting colon\n ", true);
+                        show_error("SNAP:\nFound }, was expecting colon\n ", true);
                     }
                     else if (_inStructKey || _inStructValue)
                     {
@@ -447,7 +447,7 @@ function SnapBufferReadJSON(_buffer, _inOffset = undefined)
                     }
                     else
                     {
-                        show_error("Found unexpected }\n ", true);
+                        show_error("SNAP:\nFound unexpected }\n ", true);
                     }
                 break;
                 
@@ -470,15 +470,15 @@ function SnapBufferReadJSON(_buffer, _inOffset = undefined)
                     {
                         if (_expectingComma)
                         {
-                            show_error("Was expecting comma\n ", true);
+                            show_error("SNAP:\nWas expecting comma\n ", true);
                         }
                         else if (_expectingColon)
                         {
-                            show_error("Was expecting colon\n ", true);
+                            show_error("SNAP:\nWas expecting colon\n ", true);
                         }
                         else if (_inStructKey)
                         {
-                            show_error("Struct keys must be strings\n ", true);
+                            show_error("SNAP:\nStruct keys must be strings\n ", true);
                         }
                         
                         _readStart = buffer_tell(_buffer)-1;
@@ -491,7 +491,7 @@ function SnapBufferReadJSON(_buffer, _inOffset = undefined)
     
     if (_cacheBuffer != undefined) buffer_delete(_cacheBuffer);
     
-    if (array_length(_stack) > 0) show_error("One or more JSON objects/arrays not terminataed\n ", true);
+    if (array_length(_stack) > 0) show_error("SNAP:\nOne or more JSON objects/arrays not terminataed\n ", true);
     
     if (_inOffset != undefined)
     {

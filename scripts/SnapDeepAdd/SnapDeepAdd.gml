@@ -19,7 +19,7 @@ function SnapDeepAdd(_src, _dst, _ignore_non_numbers = false)
 {
     if (is_struct(_src))
     {
-        if (!is_struct(_dst)) show_error("Source is a struct but destination is not a struct (=" + typeof(_dst) + ")", true);
+        if (!is_struct(_dst)) show_error("SNAP:\nSource is a struct but destination is not a struct (=" + typeof(_dst) + ")", true);
         
         var _srcNames = variable_struct_get_names(_src);
         var _i = 0;
@@ -56,7 +56,7 @@ function SnapDeepAdd(_src, _dst, _ignore_non_numbers = false)
             }
             else if (!_ignore_non_numbers)
             {
-                show_error("A value in the source data structure is not a number", true);
+                show_error("SNAP:\nA value in the source data structure is not a number", true);
             }
             
             ++_i;
@@ -64,7 +64,7 @@ function SnapDeepAdd(_src, _dst, _ignore_non_numbers = false)
     }
     else if (is_array(_src))
     {
-        if (!is_array(_dst)) show_error("Source is an array but destination is not an array (=" + typeof(_dst) + ")", true);
+        if (!is_array(_dst)) show_error("SNAP:\nSource is an array but destination is not an array (=" + typeof(_dst) + ")", true);
         
         var _srcLength = array_length(_src);
         var _dstLength = array_length(_dst);
@@ -103,7 +103,7 @@ function SnapDeepAdd(_src, _dst, _ignore_non_numbers = false)
             }
             else if (!_ignore_non_numbers)
             {
-                show_error("A value in the source data structure is not a number", true);
+                show_error("SNAP:\nA value in the source data structure is not a number", true);
             }
             
             ++_i;
@@ -111,6 +111,6 @@ function SnapDeepAdd(_src, _dst, _ignore_non_numbers = false)
     }
     else
     {
-        show_error("Source data structure is not a struct or array", true);
+        show_error("SNAP:\nSource data structure is not a struct or array", true);
     }
 }

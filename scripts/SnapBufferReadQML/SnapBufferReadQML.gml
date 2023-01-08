@@ -32,7 +32,7 @@ function SnapBufferReadQML(_buffer, _instanceofDict, _relaxed = false, _inOffset
         }
         else if ((_byte == ord("[")) || (_byte == ord("]")) || (_byte == ord("\"")) || (_byte == ord("{")) || (_byte == ord("}")))
         {
-            show_error("Found unexpected character " + chr(_byte) + " (decimal=" + string(_byte) + ")\nWas expecting struct class name\n ", true);
+            show_error("SNAP:\nFound unexpected character " + chr(_byte) + " (decimal=" + string(_byte) + ")\nWas expecting struct class name\n ", true);
         }
         else if (_byte > 0x20)
         {
@@ -71,7 +71,7 @@ function __SnapBufferReadQMLArray(_buffer, _instanceofDict, _relaxed, _bufferSiz
         }
         else if ((_byte == ord(":")) || (_byte == ord(";")))
         {
-            show_error("Found unexpected character " + chr(_byte) + " (decimal=" + string(_byte) + ")\nWas expecting a value\n ", true);
+            show_error("SNAP:\nFound unexpected character " + chr(_byte) + " (decimal=" + string(_byte) + ")\nWas expecting a value\n ", true);
         }
         else if (_byte > 0x20)
         {
@@ -92,13 +92,13 @@ function __SnapBufferReadQMLArray(_buffer, _instanceofDict, _relaxed, _bufferSiz
                 }
                 else if (_byte > 0x20)
                 {
-                    show_error("Found unexpected character " + chr(_byte) + " (decimal=" + string(_byte) + ")\nWas expecting comma, newline, or closing bracket\n ", true);
+                    show_error("SNAP:\nFound unexpected character " + chr(_byte) + " (decimal=" + string(_byte) + ")\nWas expecting comma, newline, or closing bracket\n ", true);
                 }
             }
         }
     }
     
-    show_error("Found unterminated array\n ", true);
+    show_error("SNAP:\nFound unterminated array\n ", true);
 }
 
 function __SnapBufferReadQMLStruct(_buffer, _instanceofDict, _relaxed, _bufferSize, _result)
@@ -123,7 +123,7 @@ function __SnapBufferReadQMLStruct(_buffer, _instanceofDict, _relaxed, _bufferSi
         }
         else if ((_byte == ord(":")) || (_byte == ord(";")))
         {
-            show_error("Found unexpected character " + chr(_byte) + " (decimal=" + string(_byte) + ")\nWas expecting a key\n ", true);
+            show_error("SNAP:\nFound unexpected character " + chr(_byte) + " (decimal=" + string(_byte) + ")\nWas expecting a key\n ", true);
         }
         else if (_byte > 0x20)
         {
@@ -147,7 +147,7 @@ function __SnapBufferReadQMLStruct(_buffer, _instanceofDict, _relaxed, _bufferSi
             }
             else
             {
-                if (!is_string(_key)) show_error("Struct keys must be strings (key was " + string(_key) + ", typeof=" + typeof(_key) + ")\n ", true);
+                if (!is_string(_key)) show_error("SNAP:\nStruct keys must be strings (key was " + string(_key) + ", typeof=" + typeof(_key) + ")\n ", true);
                 
                 //Find a colon
                 while(buffer_tell(_buffer) < _bufferSize)
@@ -164,7 +164,7 @@ function __SnapBufferReadQMLStruct(_buffer, _instanceofDict, _relaxed, _bufferSi
                     }
                     else if (_byte > 0x20)
                     {
-                        show_error("Found unexpected character " + chr(_byte) + " (decimal=" + string(_byte) + ")\nWas expecting a colon\n ", true);
+                        show_error("SNAP:\nFound unexpected character " + chr(_byte) + " (decimal=" + string(_byte) + ")\nWas expecting a colon\n ", true);
                     }
                 }
                 
@@ -183,7 +183,7 @@ function __SnapBufferReadQMLStruct(_buffer, _instanceofDict, _relaxed, _bufferSi
                         break;
                     }
                 }
-                if (_byte <= 0x20) show_error("Could not find start of value for key \"" + _key + "\"\n ", true);
+                if (_byte <= 0x20) show_error("SNAP:\nCould not find start of value for key \"" + _key + "\"\n ", true);
                 
                 //Read a value and store it in the struct
                 var _value = __SnapBufferReadQMLValue(_buffer, _instanceofDict, _relaxed, _bufferSize, _byte);
@@ -209,13 +209,13 @@ function __SnapBufferReadQMLStruct(_buffer, _instanceofDict, _relaxed, _bufferSi
                 }
                 else if (_byte > 0x20)
                 {
-                    show_error("Found unexpected character " + chr(_byte) + " (decimal=" + string(_byte) + ")\nWas expecting comma, newline, or closing bracket\n ", true);
+                    show_error("SNAP:\nFound unexpected character " + chr(_byte) + " (decimal=" + string(_byte) + ")\nWas expecting comma, newline, or closing bracket\n ", true);
                 }
             }
         }
     }
     
-    show_error("Found unterminated struct\n ", true);
+    show_error("SNAP:\nFound unterminated struct\n ", true);
 }
 
 function __SnapBufferReadQMLValue(_buffer, _instanceofDict, _relaxed, _bufferSize, _firstByte)
@@ -556,7 +556,7 @@ function __SnapBufferReadQMLDelimitedString(_buffer, _instanceofDict, _relaxed, 
         }
     }
     
-    show_error("Found unterminated string\n ", true);
+    show_error("SNAP:\nFound unterminated string\n ", true);
 }
 
 function __SnapBufferReadQMLComment(_buffer, _instanceofDict, _relaxed, _bufferSize)
