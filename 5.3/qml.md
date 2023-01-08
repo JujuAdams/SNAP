@@ -85,11 +85,12 @@ If you enable relaxed mode when calling a SNAP QML function, you need not define
 
 !> "Relaxed mode" is convenient during development but is a significant security hole in your program if you expose relaxed QML parsing to your users.
 
-As mentioned above, SNAP's QML parser is not a complete implementation. There are three notable missing features:
+As mentioned above, SNAP's QML parser is not a complete implementation:
 
 1. QML allows for JavaScript to be used to declaratively define properties relative to other properties. This sort of behaviour is far *far* beyond the scope of SNAP. SNAP instead parses in-line JavaScript as a string literal.
 2. QML allows for structs to be created "on" properties; effectively this assigns a struct to a variable on the parent (rather than the child struct being in the `children` array). SNAP's parser doesn't support this but can do in the future if [someone asks for it](https://github.com/JujuAdams/SNAP/issues).
 3. QML allows for new properties to be defined in the QML file itself, with an associated type. SNAP does not support this syntax, or type safety for that matter, but you can freely define new variables on generated structs without limitation.
+4. QML allows for variables to be set on nested structs (e.g. `font.pixelSize: 42`). SNAP will interpret the variable name as literally `"font.pixelSize"` rather than trying to find a variable called `font` that holds a struct with a member variable `pixelSize`.
 
 &nbsp;
 
