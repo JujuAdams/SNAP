@@ -1,5 +1,95 @@
 # QML
 
+[QML](https://en.wikipedia.org/wiki/QML) (Qt Modeling Language) is a markup language originally designed for describing user interface layouts. It was created for [Qt](https://en.wikipedia.org/wiki/Qt_(software)), a cross-platform GUI framework.
+
+SNAP's implementation of QML is incomplete as a complete QML implementation necessarily involves writing a whole user interface system (an exercise for the reader, perhaps). The design of QML has many benefits if used beyond the scope of UI layouts, primarily the fact that it is possible to give structs a "type", thereby allowing SNAP to call a constructor when deserializing QML.
+
+Consider this short QML segment:
+```QML
+Tree {
+	x: 678
+	y: 426
+	leaves: "willow"
+}
+```
+
+In a manner similar to JSON, QML allows us to describe a struct (delineated by curly bracket `{}`) and the variable for that struct. The key difference is the label `Tree` however, which indicates that the struct that follows should use whatever constructor is tied to the label of `"Tree"`.
+
+We might want to deserialize the above QML using the following GML code:
+```GML
+//Define a constructor for trees decoded from QML
+function ConstructorTree() constructor
+{
+	x = 0;
+	y = 0;
+	leaves = "default";
+	children = []; //Required for use with SNAP's QML parser
+}
+
+//Define a struct ("dictionary") that maps QML labels to GML constructors
+var _instanceofDict = {
+	"Tree": ConstructorTree
+};
+
+treeStruct = SnapFromQML(QMLstring, _instanceofDict);
+```
+
+In this situation, when the QML parser sees a new struct labelled `Tree` in the QML string, it will will construct a new instance of `ConstructorTree()` and then assign variables to it as required.
+
+Structs created from QML can have children. As noted above in the `ConstructorTree()` function, all QML constructors must contain a variable called `children` that is initialized to be an empty array. When deserializing QML, children of a particular struct are stored in this `children` array. For example, the following QML string...
+```QML
+Copse {
+	x1: 578
+	y1: 326
+	x2: 778
+	y2: 526
+
+	Tree {
+		x: 678
+		y: 426
+		leaves: "willow"
+	}
+
+	Tree {
+		x: 601
+		y: 350
+		leaves: "pine"
+	}
+}
+```
+
+...would be deserialized as the following data (written here as GML literals):
+
+```GML
+root = { //instanceof = "ConstructorField"
+	x1: 578,
+	y1: 326,
+	x2: 778,
+	y2: 526,
+	children: [
+		{ //instanceof = "ConstructorTree"
+			x: 678
+			y: 426
+			leaves: "willow"
+		},
+		{ //instanceof = "ConstructorTree"
+			x: 601,
+			y: 350,
+			leaves: "pine",
+		}
+	]
+}
+```
+
+If you enable relaxed mode when calling a SNAP QML function, you need not define 100% of the constructors that you're using. Instead, SNAP will recognise the literal names of the constructor functions as valid QML labels.
+
+!> "Relaxed mode" is convenient during development but is a significant security hole in your program if you expose relaxed QML parsing to your users.
+
+As mentioned above, SNAP's QML parser is not a complete implementation. There are two notable missing features:
+
+1. QML allows for JavaScript to be used to declaratively define properties relative to other properties. This sort of behaviour is far *far* beyond the scope of SNAP. SNAP instead parses in-line JavaScript as a string literal.
+2. QML allows for structs to be created "on" properties; effectively this assigns a struct to a variable on the parent. SNAP's parser doesn't support this, but can do in the future if [someone asks for it](https://github.com/JujuAdams/SNAP/issues).
+
 &nbsp;
 
 ## `SnapToQML`
