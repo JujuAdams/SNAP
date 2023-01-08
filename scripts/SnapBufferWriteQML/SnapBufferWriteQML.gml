@@ -25,6 +25,8 @@ function SnapBufferWriteQML(_buffer, _value, _constructorDict, _accurateFloats =
 
 function __SnapToQMLBufferValue(_buffer, _value, _constructorDict, _accurateFloats, _indent)
 {
+    var _childrenArrayVariableName = "children";
+    
     if (is_real(_value) || is_int32(_value) || is_int64(_value))
     {
         buffer_write(_buffer, buffer_text, SnapNumberToString(_value, _accurateFloats));
@@ -129,7 +131,7 @@ function __SnapToQMLBufferValue(_buffer, _value, _constructorDict, _accurateFloa
                 var _name = _names[_i];
                 if (!is_string(_name)) show_error("Keys must be strings\n ", true);
                 
-                if not ((_name == "children") && is_array(_struct[$ _name]))
+                if not ((_name == _childrenArrayVariableName) && is_array(_struct[$ _name]))
                 {
                     buffer_write(_buffer, buffer_text, _indent);
                     __SnapToQMLBufferValue(_buffer, _name, _constructorDict, _accurateFloats, _indent);
@@ -143,16 +145,16 @@ function __SnapToQMLBufferValue(_buffer, _value, _constructorDict, _accurateFloa
                 ++_i;
             }
             
-            if (variable_struct_exists(_struct, "children"))
+            //Write children too
+            var _childrenArray = _struct[$ _childrenArrayVariableName];
+            if (is_array(_childrenArray))
             {
-                var _childrenArray = _struct.children;
                 var _i = 0;
                 repeat(array_length(_childrenArray))
                 {
                     buffer_write(_buffer, buffer_text, _indent);
-                    __SnapToQMLBufferValue(_buffer, _childrenArray[_i], _constructorDict, _accurateFloats, _indent);
+                    __SnapToQMLBufferValue(_buffer, _childrenArray[_i], _invertedConstructorDict, _accurateFloats, _indent);
                     buffer_write(_buffer, buffer_u8, 0x0A); //Newline
-                    
                     ++_i;
                 }
             }
