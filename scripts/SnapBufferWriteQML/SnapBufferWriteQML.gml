@@ -1,29 +1,30 @@
 /// @return QML string that encodes the struct/array nested data
 /// 
-/// @param buffer                Buffer to write data into
-/// @param struct/array          The data to be encoded. Can contain structs, arrays, strings, and numbers.   N.B. Will not encode ds_list, ds_map etc.
-/// @param constructorDict
-/// @param [accurateFloats]      (bool) Whether to output floats at a higher accuracy than GM normally defaults to. Defaults to <false>. Setting this to <true> confers a performance penalty
+/// @param buffer                   Buffer to write data into
+/// @param struct/array             The data to be encoded. Can contain structs, arrays, strings, and numbers.   N.B. Will not encode ds_list, ds_map etc.
+/// @param instanceofDict
+/// @param [relaxed=false]
+/// @param [accurateFloats=false]   (bool) Whether to output floats at a higher accuracy than GM normally defaults to. Setting this to <true> confers a performance penalty
 /// 
 /// @jujuadams 2023-01-08
 
-function SnapBufferWriteQML(_buffer, _value, _constructorDict, _accurateFloats = false)
+function SnapBufferWriteQML(_buffer, _value, _instanceofDict, _relaxed = false, _accurateFloats = false)
 {
-    var _invertedConstructorDict = {};
-    
-    var _namesArray = variable_struct_get_names(_constructorDict);
+    //Invert the instanceof dict for easier lookups
+    var _invertedInstanceofDict = {};
+    var _namesArray = variable_struct_get_names(_instanceofDict);
     var _i = 0;
     repeat(array_length(_namesArray))
     {
         var _name = _namesArray[_i];
-        _invertedConstructorDict[$ script_get_name(_constructorDict[$ _name])] = _name;
+        _invertedInstanceofDict[$ script_get_name(_instanceofDict[$ _name])] = _name;
         ++_i;
     }
     
-    return __SnapToQMLBufferValue(_buffer, _value, _invertedConstructorDict, _accurateFloats, "");
+    return __SnapToQMLBufferValue(_buffer, _value, _invertedInstanceofDict, _relaxed, _accurateFloats, "");
 }
 
-function __SnapToQMLBufferValue(_buffer, _value, _invertedConstructorDict, _accurateFloats, _indent)
+function __SnapToQMLBufferValue(_buffer, _value, _invertedInstanceofDict, _relaxed, _accurateFloats, _indent)
 {
     var _childrenArrayVariableName = "children";
     
@@ -83,7 +84,7 @@ function __SnapToQMLBufferValue(_buffer, _value, _invertedConstructorDict, _accu
             repeat(_count)
             {
                 buffer_write(_buffer, buffer_text, _indent);
-                __SnapToQMLBufferValue(_buffer, _array[_i], _invertedConstructorDict, _accurateFloats, _indent);
+                __SnapToQMLBufferValue(_buffer, _array[_i], _invertedInstanceofDict, _relaxed, _accurateFloats, _indent);
                 buffer_write(_buffer, buffer_u8, 0x0A); //Newline
                 ++_i;
             }
@@ -105,8 +106,10 @@ function __SnapToQMLBufferValue(_buffer, _value, _invertedConstructorDict, _accu
         var _struct = _value;
         
         var _instanceof = instanceof(_struct);
-        var _name = _invertedConstructorDict[$ _instanceof];
+        var _name = _invertedInstanceofDict[$ _instanceof];
+        if (_relaxed && (_name == undefined)) _name = _instanceof;
         if (!is_string(_name)) show_error("SNAP:\nFound struct with unrecognised instanceof \"" + string(_instanceof) + "\"\n ", true);
+        
         buffer_write(_buffer, buffer_text, _name);
         buffer_write(_buffer, buffer_u8, 0x20); //Space
         
@@ -137,10 +140,10 @@ function __SnapToQMLBufferValue(_buffer, _value, _invertedConstructorDict, _accu
                     _hasAttributes = true;
                     
                     buffer_write(_buffer, buffer_text, _indent);
-                    __SnapToQMLBufferValue(_buffer, _name, _invertedConstructorDict, _accurateFloats, _indent);
+                    __SnapToQMLBufferValue(_buffer, _name, _invertedInstanceofDict, _relaxed, _accurateFloats, _indent);
                     buffer_write(_buffer, buffer_u16,  0x203A); // <: >
                     
-                    __SnapToQMLBufferValue(_buffer, _struct[$ _name], _invertedConstructorDict, _accurateFloats, _indent);
+                    __SnapToQMLBufferValue(_buffer, _struct[$ _name], _invertedInstanceofDict, _relaxed, _accurateFloats, _indent);
                     
                     buffer_write(_buffer, buffer_u8, 0x0A); //Newline
                 }
@@ -163,7 +166,7 @@ function __SnapToQMLBufferValue(_buffer, _value, _invertedConstructorDict, _accu
                     }
                     
                     buffer_write(_buffer, buffer_text, _indent);
-                    __SnapToQMLBufferValue(_buffer, _childrenArray[_i], _invertedConstructorDict, _accurateFloats, _indent);
+                    __SnapToQMLBufferValue(_buffer, _childrenArray[_i], _invertedInstanceofDict, _relaxed, _accurateFloats, _indent);
                     buffer_write(_buffer, buffer_u8, 0x0A); //Newline
                     ++_i;
                 }

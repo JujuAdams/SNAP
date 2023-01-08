@@ -24,12 +24,12 @@ with(root)
     array_push(children, new ExampleClassRectangle());
 };
 
-var _constructorDict = {
+var _instanceofDict = {
     "Root":      ExampleClassRoot,
     "Rectangle": ExampleClassRectangle,
 };
 
-var _string = SnapToQML(root, _constructorDict);
+var _string = SnapToQML(root, _instanceofDict);
 show_debug_message(_string);
-show_debug_message(SnapToJSON(SnapFromQML(_string, _constructorDict), true, true, true));
-show_debug_message(SnapToQML(SnapFromQML(_string, _constructorDict), _constructorDict));
+show_debug_message(SnapToJSON(SnapFromQML(_string, _instanceofDict), true, true, true));
+show_debug_message(SnapToQML(SnapFromQML(_string, _instanceofDict), _instanceofDict));

@@ -1,12 +1,13 @@
 /// @return Nested struct/array data that represents the contents of the QML string
 /// 
-/// @param buffer            Buffer to read data from
-/// @param constructorDict
-/// @param [offset]          Offset in the buffer to read data from
+/// @param buffer                Buffer to read data from
+/// @param instanceofDict
+/// @param [relaxedMode=false]
+/// @param [offset]              Offset in the buffer to read data from
 /// 
 /// @jujuadams 2023-01-08
 
-function SnapBufferReadQML(_buffer, _constructorDict, _inOffset = undefined)
+function SnapBufferReadQML(_buffer, _instanceofDict, _relaxed = false, _inOffset = undefined)
 {
     if (_inOffset != undefined)
     {
@@ -23,11 +24,11 @@ function SnapBufferReadQML(_buffer, _constructorDict, _inOffset = undefined)
         
         if ((_byte == ord("/")) && (buffer_peek(_buffer, buffer_tell(_buffer), buffer_u8) == ord("/")))
         {
-            __SnapBufferReadQMLComment(_buffer, _constructorDict, _bufferSize);
+            __SnapBufferReadQMLComment(_buffer, _instanceofDict, _relaxed, _bufferSize);
         }
         else if ((_byte == ord("/")) && (buffer_peek(_buffer, buffer_tell(_buffer), buffer_u8) == ord("*")))
         {
-            __SnapBufferReadQMLMultilineComment(_buffer, _constructorDict, _bufferSize);
+            __SnapBufferReadQMLMultilineComment(_buffer, _instanceofDict, _relaxed, _bufferSize);
         }
         else if ((_byte == ord("[")) || (_byte == ord("]")) || (_byte == ord("\"")) || (_byte == ord("{")) || (_byte == ord("}")))
         {
@@ -35,7 +36,7 @@ function SnapBufferReadQML(_buffer, _constructorDict, _inOffset = undefined)
         }
         else if (_byte > 0x20)
         {
-            _result = __SnapBufferReadQMLValue(_buffer, _constructorDict, _bufferSize, _byte);
+            _result = __SnapBufferReadQMLValue(_buffer, _instanceofDict, _relaxed, _bufferSize, _byte);
             break;
         }
     }
@@ -48,7 +49,7 @@ function SnapBufferReadQML(_buffer, _constructorDict, _inOffset = undefined)
     return _result;
 }
 
-function __SnapBufferReadQMLArray(_buffer, _constructorDict, _bufferSize)
+function __SnapBufferReadQMLArray(_buffer, _instanceofDict, _relaxed, _bufferSize)
 {
     var _result = [];
     
@@ -58,11 +59,11 @@ function __SnapBufferReadQMLArray(_buffer, _constructorDict, _bufferSize)
         
         if ((_byte == ord("/")) && (buffer_peek(_buffer, buffer_tell(_buffer), buffer_u8) == ord("/")))
         {
-            __SnapBufferReadQMLComment(_buffer, _constructorDict, _bufferSize);
+            __SnapBufferReadQMLComment(_buffer, _instanceofDict, _relaxed, _bufferSize);
         }
         else if ((_byte == ord("/")) && (buffer_peek(_buffer, buffer_tell(_buffer), buffer_u8) == ord("*")))
         {
-            __SnapBufferReadQMLMultilineComment(_buffer, _constructorDict, _bufferSize);
+            __SnapBufferReadQMLMultilineComment(_buffer, _instanceofDict, _relaxed, _bufferSize);
         }
         else if (_byte == ord("]"))
         {
@@ -74,7 +75,7 @@ function __SnapBufferReadQMLArray(_buffer, _constructorDict, _bufferSize)
         }
         else if (_byte > 0x20)
         {
-            var _value = __SnapBufferReadQMLValue(_buffer, _constructorDict, _bufferSize, _byte);
+            var _value = __SnapBufferReadQMLValue(_buffer, _instanceofDict, _relaxed, _bufferSize, _byte);
             array_push(_result, _value);
             
             //Find a comma, newline, or closing bracket
@@ -100,7 +101,7 @@ function __SnapBufferReadQMLArray(_buffer, _constructorDict, _bufferSize)
     show_error("Found unterminated array\n ", true);
 }
 
-function __SnapBufferReadQMLStruct(_buffer, _constructorDict, _bufferSize, _result)
+function __SnapBufferReadQMLStruct(_buffer, _instanceofDict, _relaxed, _bufferSize, _result)
 {
     var _childrenArrayVariableName = "children";
     
@@ -110,11 +111,11 @@ function __SnapBufferReadQMLStruct(_buffer, _constructorDict, _bufferSize, _resu
         
         if ((_byte == ord("/")) && (buffer_peek(_buffer, buffer_tell(_buffer), buffer_u8) == ord("/")))
         {
-            __SnapBufferReadQMLComment(_buffer, _constructorDict, _bufferSize);
+            __SnapBufferReadQMLComment(_buffer, _instanceofDict, _relaxed, _bufferSize);
         }
         else if ((_byte == ord("/")) && (buffer_peek(_buffer, buffer_tell(_buffer), buffer_u8) == ord("*")))
         {
-            __SnapBufferReadQMLMultilineComment(_buffer, _constructorDict, _bufferSize);
+            __SnapBufferReadQMLMultilineComment(_buffer, _instanceofDict, _relaxed, _bufferSize);
         }
         else if (_byte == ord("}"))
         {
@@ -126,7 +127,7 @@ function __SnapBufferReadQMLStruct(_buffer, _constructorDict, _bufferSize, _resu
         }
         else if (_byte > 0x20)
         {
-            var _key = __SnapBufferReadQMLValue(_buffer, _constructorDict, _bufferSize, _byte);
+            var _key = __SnapBufferReadQMLValue(_buffer, _instanceofDict, _relaxed, _bufferSize, _byte);
             if (is_struct(_key))
             {
                 //If the "key" is actually a struct then we should add whatever we find to the parent's <children> array
@@ -155,7 +156,7 @@ function __SnapBufferReadQMLStruct(_buffer, _constructorDict, _bufferSize, _resu
                     
                     if ((_byte == ord("/")) && (buffer_peek(_buffer, buffer_tell(_buffer), buffer_u8) == ord("*")))
                     {
-                        __SnapBufferReadQMLMultilineComment(_buffer, _constructorDict, _bufferSize);
+                        __SnapBufferReadQMLMultilineComment(_buffer, _instanceofDict, _relaxed, _bufferSize);
                     }
                     else if (_byte == ord(":"))
                     {
@@ -175,7 +176,7 @@ function __SnapBufferReadQMLStruct(_buffer, _constructorDict, _bufferSize, _resu
                     
                     if ((_byte == ord("/")) && (buffer_peek(_buffer, buffer_tell(_buffer), buffer_u8) == ord("*")))
                     {
-                        __SnapBufferReadQMLMultilineComment(_buffer, _constructorDict, _bufferSize);
+                        __SnapBufferReadQMLMultilineComment(_buffer, _instanceofDict, _relaxed, _bufferSize);
                     }
                     else if (_byte > 0x20)
                     {
@@ -185,7 +186,7 @@ function __SnapBufferReadQMLStruct(_buffer, _constructorDict, _bufferSize, _resu
                 if (_byte <= 0x20) show_error("Could not find start of value for key \"" + _key + "\"\n ", true);
                 
                 //Read a value and store it in the struct
-                var _value = __SnapBufferReadQMLValue(_buffer, _constructorDict, _bufferSize, _byte);
+                var _value = __SnapBufferReadQMLValue(_buffer, _instanceofDict, _relaxed, _bufferSize, _byte);
                 _result[$ _key] = _value;
             }
             
@@ -196,7 +197,7 @@ function __SnapBufferReadQMLStruct(_buffer, _constructorDict, _bufferSize, _resu
                 
                 if ((_byte == ord("/")) && (buffer_peek(_buffer, buffer_tell(_buffer), buffer_u8) == ord("*")))
                 {
-                    __SnapBufferReadQMLMultilineComment(_buffer, _constructorDict, _bufferSize);
+                    __SnapBufferReadQMLMultilineComment(_buffer, _instanceofDict, _relaxed, _bufferSize);
                 }
                 else if (_byte == ord("}"))
                 {
@@ -217,11 +218,11 @@ function __SnapBufferReadQMLStruct(_buffer, _constructorDict, _bufferSize, _resu
     show_error("Found unterminated struct\n ", true);
 }
 
-function __SnapBufferReadQMLValue(_buffer, _constructorDict, _bufferSize, _firstByte)
+function __SnapBufferReadQMLValue(_buffer, _instanceofDict, _relaxed, _bufferSize, _firstByte)
 {
     if (_firstByte == ord("["))
     {
-        return __SnapBufferReadQMLArray(_buffer, _constructorDict, _bufferSize);
+        return __SnapBufferReadQMLArray(_buffer, _instanceofDict, _relaxed, _bufferSize);
     }
     else if (_firstByte == ord("{"))
     {
@@ -229,15 +230,15 @@ function __SnapBufferReadQMLValue(_buffer, _constructorDict, _bufferSize, _first
     }
     else if (_firstByte == ord("\""))
     {
-        return __SnapBufferReadQMLDelimitedString(_buffer, _constructorDict, _bufferSize);
+        return __SnapBufferReadQMLDelimitedString(_buffer, _instanceofDict, _relaxed, _bufferSize);
     }
     else
     {
-        return __SnapBufferReadQMLString(_buffer, _constructorDict, _bufferSize);
+        return __SnapBufferReadQMLString(_buffer, _instanceofDict, _relaxed, _bufferSize);
     }
 }
 
-function __SnapBufferReadQMLString(_buffer, _constructorDict, _bufferSize)
+function __SnapBufferReadQMLString(_buffer, _instanceofDict, _relaxed, _bufferSize)
 {
     static _cacheBuffer = buffer_create(1024, buffer_grow, 1);
     buffer_seek(_cacheBuffer, buffer_seek_start, 0);
@@ -318,7 +319,9 @@ function __SnapBufferReadQMLString(_buffer, _constructorDict, _bufferSize)
                     show_error("SNAP:\nStruct class names must be strings (typeof=" + typeof(_result) + ")\n ", true);
                 }
                 
-                var _constructor = _constructorDict[$ _result];
+                var _constructor = _instanceofDict[$ _result];
+                if (_relaxed && (_constructor == undefined)) _constructor = asset_get_index(_result);
+                
                 if (is_numeric(_constructor))
                 {
                     if (!script_exists(_constructor))
@@ -326,11 +329,11 @@ function __SnapBufferReadQMLString(_buffer, _constructorDict, _bufferSize)
                         show_error("SNAP:\nStruct class name \"" + string(_result) + "\" has script index " + string(_constructor) + " but this script doesn't exist\n ", true);
                     }
                     
-                    _result = __SnapBufferReadQMLStruct(_buffer, _constructorDict, _bufferSize, new _constructor());
+                    _result = __SnapBufferReadQMLStruct(_buffer, _instanceofDict, _relaxed, _bufferSize, new _constructor());
                 }
                 else if (is_method(_constructor))
                 {
-                    _result = __SnapBufferReadQMLStruct(_buffer, _constructorDict, _bufferSize, new _constructor());
+                    _result = __SnapBufferReadQMLStruct(_buffer, _instanceofDict, _relaxed, _bufferSize, new _constructor());
                 }
                 else if (is_undefined(_constructor))
                 {
@@ -343,7 +346,7 @@ function __SnapBufferReadQMLString(_buffer, _constructorDict, _bufferSize)
             }
             else if ((_byte == ord("/")) && (buffer_peek(_buffer, buffer_tell(_buffer), buffer_u8) == ord("*")))
             {
-                __SnapBufferReadQMLMultilineComment(_buffer, _constructorDict, _bufferSize);
+                __SnapBufferReadQMLMultilineComment(_buffer, _instanceofDict, _relaxed, _bufferSize);
             }
             
             return _result;
@@ -435,7 +438,7 @@ function __SnapBufferReadQMLString(_buffer, _constructorDict, _bufferSize)
     show_error("SNAP:\nFound unterminated value\n ", true);
 }
 
-function __SnapBufferReadQMLDelimitedString(_buffer, _constructorDict, _bufferSize)
+function __SnapBufferReadQMLDelimitedString(_buffer, _instanceofDict, _relaxed, _bufferSize)
 {
     static _cacheBuffer = buffer_create(1024, buffer_grow, 1);
     buffer_seek(_cacheBuffer, buffer_seek_start, 0);
@@ -556,7 +559,7 @@ function __SnapBufferReadQMLDelimitedString(_buffer, _constructorDict, _bufferSi
     show_error("Found unterminated string\n ", true);
 }
 
-function __SnapBufferReadQMLComment(_buffer, _constructorDict, _bufferSize)
+function __SnapBufferReadQMLComment(_buffer, _instanceofDict, _relaxed, _bufferSize)
 {
     while(buffer_tell(_buffer) < _bufferSize)
     {
@@ -569,7 +572,7 @@ function __SnapBufferReadQMLComment(_buffer, _constructorDict, _bufferSize)
     }
 }
 
-function __SnapBufferReadQMLMultilineComment(_buffer, _constructorDict, _bufferSize)
+function __SnapBufferReadQMLMultilineComment(_buffer, _instanceofDict, _relaxed, _bufferSize)
 {
     while(buffer_tell(_buffer) < _bufferSize)
     {
