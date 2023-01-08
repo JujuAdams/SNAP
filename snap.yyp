@@ -113,10 +113,10 @@
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Loose JSON","folderPath":"folders/SNAP/Loose JSON.yy","order":2,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"MessagePack","folderPath":"folders/SNAP/MessagePack.yy","order":7,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"NSV","folderPath":"folders/SNAP/NSV.yy","order":5,},
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"QML","folderPath":"folders/SNAP/QML.yy","order":12,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Utility","folderPath":"folders/SNAP/Utility.yy","order":0,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"XML","folderPath":"folders/SNAP/XML.yy","order":8,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"YAML","folderPath":"folders/SNAP/YAML.yy","order":3,},
-    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"QML","folderPath":"folders/SNAP/QML.yy","order":12,},
   ],
   "AudioGroups": [
     {"resourceType":"GMAudioGroup","resourceVersion":"1.3","name":"audiogroup_default","targets":-1,},
