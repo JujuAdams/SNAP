@@ -102,6 +102,8 @@ function __SnapBufferReadQMLArray(_buffer, _constructorDict, _bufferSize)
 
 function __SnapBufferReadQMLStruct(_buffer, _constructorDict, _bufferSize, _result)
 {
+    var _childrenArrayVariableName = "children";
+    
     while(buffer_tell(_buffer) < _bufferSize)
     {
         var _byte = buffer_read(_buffer, buffer_u8);
@@ -128,19 +130,19 @@ function __SnapBufferReadQMLStruct(_buffer, _constructorDict, _bufferSize, _resu
             if (is_struct(_key))
             {
                 //If the "key" is actually a struct then we should add whatever we find to the parent's <children> array
-                if (variable_struct_exists(_result, "children"))
+                if (variable_struct_exists(_result, _childrenArrayVariableName))
                 {
-                    if (!is_array(_result.children))
+                    if (!is_array(_result[$ _childrenArrayVariableName]))
                     {
-                        show_error("SNAP:\n.children variable for struct exists already but is not an array\n ", true);
+                        show_error("SNAP:\n." + string(_childrenArrayVariableName) + " variable for struct exists already but is not an array\n ", true);
                     }
                 }
                 else
                 {
-                    _result.children = [];
+                    _result[$ _childrenArrayVariableName] = [];
                 }
                 
-                array_push(_result.children, _key);
+                array_push(_result[$ _childrenArrayVariableName], _key);
             }
             else
             {
