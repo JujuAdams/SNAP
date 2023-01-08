@@ -44,7 +44,7 @@ function __SnapToQMLBufferValue(_buffer, _value, _constructorDict, _accurateFloa
          || (_value == "false")
          || (_value == "null")
          || (string_pos(":", _value) > 0)
-         || (string_pos(",", _value) > 0)
+         || (string_pos(";", _value) > 0)
          || (string_pos("{", _value) > 0)
          || (string_pos("}", _value) > 0)
          || (string_pos("[", _value) > 0)
