@@ -2,7 +2,7 @@
 ///
 /// @return 2D array that represents the contents of the CSV string
 /// 
-/// @param string              Buffer to read data from
+/// @param buffer              Buffer to read data from
 /// @param offset              Offset in the buffer to read data from
 /// @param [size]              Number of bytes to read from the buffer. If not specified, the whole buffer is read
 /// @param [cellDelimiter]     Character to use to indicate where cells start and end. First 127 ASCII chars only. Defaults to a comma
