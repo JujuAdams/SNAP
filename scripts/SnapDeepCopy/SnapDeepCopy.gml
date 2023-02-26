@@ -3,6 +3,8 @@
 /// This function is designed to copy simple tree-like structures that have been imported from SNAP functions.
 /// It can be used in general to recursively copy struct/arrays. Be careful that your data doesn't have reference loops!
 /// 
+/// N.B. Sequences structs are not "real" structs in GameMaker and cannot be copied in their entirety.
+/// 
 /// @param struct/array   The struct/array to be copied
 /// 
 /// @jujuadams 2022-10-30
