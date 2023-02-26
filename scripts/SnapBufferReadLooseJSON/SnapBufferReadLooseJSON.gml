@@ -130,7 +130,27 @@ function __SnapBufferReadLooseJSONStruct(_buffer, _bufferSize)
         {
             var _key = __SnapBufferReadLooseJSONValue(_buffer, _bufferSize, _byte);
             
-            if (!is_string(_key)) show_error("SNAP:\nStruct keys must be strings (key was " + string(_key) + ", typeof=" + typeof(_key) + ")\n ", true);
+            if (!is_string(_key))
+            {
+                if (is_array(_key))
+                {
+                    var _keyArray = _key;
+                    var _keyArrayLength = array_length(_keyArray);
+                    
+                    if (_keyArrayLength <= 0)
+                    {
+                        show_error("SNAP:\nStruct key arrays must have at least one element\n ", true);
+                    }
+                    else if (_keyArrayLength <= 1)
+                    {
+                        if (!is_string(_keyArray[0])) show_error("SNAP:\nStruct keys must be strings (key was " + string(_keyArray[0]) + ", typeof=" + typeof(_keyArray[0]) + ")\n ", true);
+                    }
+                }
+                else
+                {
+                    show_error("SNAP:\nStruct keys must be strings (key was " + string(_key) + ", typeof=" + typeof(_key) + ")\n ", true);
+                }
+            }
             
             //Find a colon
             while(buffer_tell(_buffer) < _bufferSize)
@@ -170,7 +190,26 @@ function __SnapBufferReadLooseJSONStruct(_buffer, _bufferSize)
             
             //Read a value and store it in the struct
             var _value = __SnapBufferReadLooseJSONValue(_buffer, _bufferSize, _byte);
-            _result[$ _key] = _value;
+            
+            if (is_string(_key))
+            {
+                _result[$ _key] = _value;
+            }
+            else //Is an array
+            {
+                //Use the original return value to set the first key
+                _result[$ _keyArray[0]] = _value;
+                
+                //Use duplicate return values for subsequent keys
+                var _i = 1;
+                repeat(_keyArrayLength-1)
+                {
+                    var _key = _keyArray[_i];
+                    if (!is_string(_key)) show_error("SNAP:\nStruct keys must be strings (key was " + string(_key) + ", typeof=" + typeof(_key) + ")\n ", true);
+                    _result[$ _keyArray[_i]] = __SnapBufferReadLooseJSONDeepCopyInner(_value, self, self);
+                    ++_i;
+                }
+            }
             
             //Find a comma, newline, or closing bracket
             while(buffer_tell(_buffer) < _bufferSize)
@@ -530,4 +569,49 @@ function __SnapBufferReadLooseJSONMultilineComment(_buffer, _bufferSize)
             if (_byte == ord("/")) break;
         }
     }
+}
+
+function __SnapBufferReadLooseJSONDeepCopyInner(_value, _oldStruct, _newStruct)
+{
+    var _copy = _value;
+    
+    if (is_method(_value))
+    {
+        var _self = method_get_self(_value);
+        if (_self == _oldStruct)
+        {
+            //If this method is bound to the source struct, create a new method bound to the new struct
+            _value = method(_newStruct, method_get_index(_value));
+        }
+        else if (_self != undefined)
+        {
+            //If the scope of the method isn't <undefined> (global) then spit out a warning
+            show_debug_message("SnapDeepCopy(): Warning! Deep copy found a method reference that could not be appropriately handled");
+        }
+    }
+    else if (is_struct(_value))
+    {
+        var _namesArray = variable_struct_get_names(_value);
+        var _copy = {};
+        var _i = 0;
+        repeat(array_length(_namesArray))
+        {
+            var _name = _namesArray[_i];
+            _copy[$ _name] = __SnapBufferReadLooseJSONDeepCopyInner(_value[$ _name], _value, _copy);
+            ++_i;
+        }
+    }
+    else if (is_array(_value))
+    {
+        var _count = array_length(_value);
+        var _copy = array_create(_count);
+        var _i = 0;
+        repeat(_count)
+        {
+            _copy[@ _i] = __SnapBufferReadLooseJSONDeepCopyInner(_value[_i], _oldStruct, _newStruct);
+            ++_i;
+        }
+    }
+    
+    return _copy;
 }

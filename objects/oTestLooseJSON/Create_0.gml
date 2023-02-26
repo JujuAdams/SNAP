@@ -52,3 +52,7 @@ show_debug_message(SnapFromLooseJSON(_string));
 
 var _output = SnapFromLooseJSON("{\"f\":\"a\\\\b\"}");
 show_debug_message(_output);
+
+var _output = SnapFromLooseJSON("{[a,b]:{value:c,other value:d}}");
+_output.b.value = "e";
+show_debug_message(_output);
