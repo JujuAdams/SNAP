@@ -84,9 +84,9 @@ function __SnapMerge(_src, _dst, _resolveToSource)
             if (_dstLength < _srcLength) array_resize(_dst, _srcLength);
             
             var _i = 0;
-            repeat(_dstLength)
+            repeat(_srcLength)
             {
-                _dst[@ _i] = __SnapMerge(_srcValue, _dst[_i], _resolveToSource);
+                _dst[@ _i] = __SnapMerge(_src[_i], _dst[_i], _resolveToSource);
                 ++_i;
             }
             
