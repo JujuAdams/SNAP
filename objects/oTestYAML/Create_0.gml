@@ -29,14 +29,14 @@ struct = {
     instance: id,
 };
 
-struct = {
-    a: [[[]]],
-}
+//struct = {
+//    a: [[[]]],
+//}
 
 show_debug_message("");
 show_debug_message("--- Test 1 ---");
 var _string = "{\"hello\" : \"world\", \"more\" : \"data\"}";
-show_debug_message(SnapToYAML(SnapFromYAML(_string)));
+show_debug_message(SnapToJSON(SnapFromYAML(_string), true, true));
 
 show_debug_message("");
 show_debug_message("--- Test 2 ---");
@@ -59,3 +59,7 @@ show_debug_message(SnapFromYAML("foo: some_fake_yui_code({ wish_i_could: do_this
 show_debug_message("");
 show_debug_message("--- Test 6 ---");
 show_debug_message(SnapFromYAML("foo: yui_array[2]"));
+
+show_debug_message("");
+show_debug_message("--- Test 7 ---");
+show_debug_message(SnapFromYAML("-\n  - 1\n  - 2\n-\n  - 3\n  - 4"));
