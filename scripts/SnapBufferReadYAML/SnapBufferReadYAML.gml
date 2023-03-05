@@ -436,6 +436,7 @@ function __SnapFromYAMLBufferBuilder(_tokens_array, _replace_keywords, _track_fi
             {
                 if (tokens_array[token_index][0] != __SNAP_YAML.ARRAY) break;
                 ++token_index; //Skip over the array symbol
+                indent += 2;
                 
                 var _last_line = line;
                 read_to_next();
@@ -445,7 +446,6 @@ function __SnapFromYAMLBufferBuilder(_tokens_array, _replace_keywords, _track_fi
                 }
                 else
                 {
-                    indent += 2;
                     _array[@ array_length(_array)] = read();
                 }
                 
