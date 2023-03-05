@@ -27,6 +27,6 @@ struct = {
     func : function() { d += 1 },
 };
 
-show_debug_message(snap_to_json(struct, true, true));
+show_debug_message(SnapToJSON(struct, true, true));
 copy = SnapDeepCopy(struct);
-show_debug_message(snap_to_json(copy, true, true));
+show_debug_message(SnapToJSON(copy, true, true));
