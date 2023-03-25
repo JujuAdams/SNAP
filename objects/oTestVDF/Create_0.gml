@@ -25,3 +25,7 @@ show_debug_message(SnapToVDF(struct, false, true));
 show_debug_message("---------------------------------------------------------------------------------------");
 show_debug_message(SnapToVDF(struct, true, true));
 show_debug_message("---------------------------------------------------------------------------------------");
+show_debug_message(SnapToJSON(SnapFromVDF("\"a\" { \"b\" \"c\" }"), true, true, true));
+show_debug_message("---------------------------------------------------------------------------------------");
+show_debug_message(SnapToJSON(SnapFromVDF(SnapToVDF(struct)), true, true, true));
+show_debug_message("---------------------------------------------------------------------------------------");
