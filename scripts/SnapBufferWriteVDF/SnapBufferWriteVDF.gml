@@ -11,7 +11,36 @@
 
 function SnapBufferWriteVDF(_buffer, _value, _alphabetise = false, _accurateFloats = false)
 {
-    return __SnapToVDFBufferValue(_buffer, _value, _alphabetise, _accurateFloats, "");
+    if (!is_struct(_value))
+    {
+        show_error("SNAP:\nTop-level data structure must be a struct\n ", true);
+    }
+    
+    var _names = variable_struct_get_names(_value);
+    if (_alphabetise) array_sort(_names, true);
+    
+    var _count = array_length(_names);
+    if (_count > 0)
+    {
+        var _i = 0;
+        repeat(_count)
+        {
+            var _name = _names[_i];
+            if (!is_string(_name)) show_error("SNAP:\nKeys must be strings\n ", true);
+            
+            buffer_write(_buffer, buffer_u8,   0x22); // Double quote
+            buffer_write(_buffer, buffer_text, string(_name));
+            buffer_write(_buffer, buffer_u8,   0x22); // Double quote
+            
+            __SnapToVDFBufferValue(_buffer, _value[$ _name], _alphabetise, _accurateFloats, "");
+            
+            if (_i < _count-1) buffer_write(_buffer, buffer_u8, 0x0A); //Newline
+            
+            ++_i;
+        }
+    }
+    
+    return _buffer;
 }
 
 function __SnapToVDFBufferValue(_buffer, _value, _alphabetise, _accurateFloats, _indent)
@@ -33,9 +62,9 @@ function __SnapToVDFBufferValue(_buffer, _value, _alphabetise, _accurateFloats, 
         var _names = variable_struct_get_names(_struct);
         if (_alphabetise) array_sort(_names, true);
         
-        buffer_write(_buffer, buffer_u8,  0x0A); //Newline
+        buffer_write(_buffer, buffer_u8,   0x0A); //Newline
         buffer_write(_buffer, buffer_text, _indent);
-        buffer_write(_buffer, buffer_u16, 0x0A7B); //Open curly bracket + newline
+        buffer_write(_buffer, buffer_u16,  0x0A7B); //Open curly bracket + newline
         
         var _count = array_length(_names);
         if (_count > 0)
@@ -52,7 +81,7 @@ function __SnapToVDFBufferValue(_buffer, _value, _alphabetise, _accurateFloats, 
                 buffer_write(_buffer, buffer_text, _indent);
                 buffer_write(_buffer, buffer_u8,   0x22); // Double quote
                 buffer_write(_buffer, buffer_text, string(_name));
-                buffer_write(_buffer, buffer_u8,  0x22); // Double quote
+                buffer_write(_buffer, buffer_u8,   0x22); // Double quote
                 
                 __SnapToVDFBufferValue(_buffer, _struct[$ _name], _alphabetise, _accurateFloats, _indent);
                 
@@ -66,6 +95,12 @@ function __SnapToVDFBufferValue(_buffer, _value, _alphabetise, _accurateFloats, 
         
         buffer_write(_buffer, buffer_text, _indent);
         buffer_write(_buffer, buffer_u8, 0x7D); //Close curly bracket
+    }
+    else if (is_real(_value) || is_int32(_value) || is_int64(_value))
+    {
+        buffer_write(_buffer, buffer_u16,  0x2220); // Space + double quote
+        buffer_write(_buffer, buffer_text, SnapNumberToString(_value, _accurateFloats));
+        buffer_write(_buffer, buffer_u8,   0x22); // Double quote
     }
     else
     {
