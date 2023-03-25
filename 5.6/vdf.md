@@ -20,7 +20,7 @@ Valve's [KeyValue format](https://developer.valvesoftware.com/wiki/KeyValues), m
 
 &nbsp;
 
-## `VDF`
+## `SnapFromVDF`
 
 *Returns:* Struct, the root node of the VDF data
 
