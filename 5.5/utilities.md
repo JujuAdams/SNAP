@@ -52,6 +52,18 @@ The order that values are sent into `method` is guaranteed for arrays and ds_lis
 
 &nbsp;
 
+## `SnapMerge`
+
+*Returns:* N/A (`undefined`)
+
+|Name                |Datatype    |Purpose     |
+|--------------------|------------|------------|
+|`source`            |struct/array|            |
+|`destination`       |struct/array|            |
+|`[ignoreNonNumbers]`|boolean     |            |
+
+&nbsp;
+
 ## `SnapShallowAdd`
 
 *Returns:* N/A (`undefined`)
