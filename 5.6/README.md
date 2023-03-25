@@ -1,5 +1,5 @@
 <h1 align="center">SNAP 5.6</h1>
-<p align="center">Data format conversion for GameMaker LTS 2022 by <b>@jujuadams</b></p>
+<p align="center">Data format converters for GameMaker LTS 2022 by <b>@jujuadams</b></p>
 
 <p align="center"><a href="https://github.com/JujuAdams/SNAP/releases/">Download the .yymps</a></p>
 <p align="center">Chat about SNAP on the <a href="https://discord.gg/8krYCqr">Discord server</a></p>
