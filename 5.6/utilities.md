@@ -52,6 +52,22 @@ The order that values are sent into `method` is guaranteed for arrays and ds_lis
 
 &nbsp;
 
+## `SnapMerge`
+
+*Returns:* N/A (`undefined`)
+
+|Name               |Datatype    |Purpose                                                                                                                         |
+|-------------------|------------|--------------------------------------------------------------------------------------------------------------------------------|
+|`source`           |struct/array|Source struct/array to copy from                                                                                                |
+|`destination`      |struct/array|Destination struct/array to copy to                                                                                             |
+|`[resolveToSource]`|boolean     |Whether to prefer the source or the destination if there is a datatype conflict. Defaults to `false`, preferring the destination|
+
+This function is designed to merge one simple tree-like structures into another. Values from the source tree are copied into the destination tree recursively. Values from the source will overwrite values in the destination, but any values that are present in the destination but not the source will be maintained. In situations where there is a datatype conflict, the `resolveToSource` argument will determine which way data is copied.
+
+!> Structs and arrays are copied by reference. If you wish to ensure that structs and arrays copied to the destination are fresh copies, first use `SnapDeepCopy()` on the source.
+
+&nbsp;
+
 ## `SnapShallowAdd`
 
 *Returns:* N/A (`undefined`)
