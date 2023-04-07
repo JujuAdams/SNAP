@@ -1,4 +1,4 @@
-/// @return Nested struct/array data that represents the contents of the JSON string
+/// @return Nested struct/array data that represents the contents of the "Loose JSON" string
 /// 
 /// @param buffer  Buffer to read data from
 /// @param offset  Offset in the buffer to read data from
