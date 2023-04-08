@@ -104,7 +104,7 @@ function __SnapBufferReadConfigJSONArray(_buffer, _bufferSize)
 
 function __SnapBufferReadConfigJSONStruct(_buffer, _bufferSize)
 {
-    var _result = [];
+    var _result = {};
     
     while(buffer_tell(_buffer) < _bufferSize)
     {
@@ -196,18 +196,12 @@ function __SnapBufferReadConfigJSONStruct(_buffer, _bufferSize)
             
             if (is_string(_key))
             {
-                array_push(_result, {
-                    k: _key,
-                    v: _value,
-                });
+                __SnapBufferReadConfigJSONStructMerge(_result, _key, _value);
             }
             else //Is an array
             {
                 //Use the original return value to set the first key
-                array_push(_result, {
-                    k: _keyArray[0],
-                    v: _value,
-                });
+                __SnapBufferReadConfigJSONStructMerge(_result, _keyArray[0], _value);
                 
                 //Use duplicate return values for subsequent keys
                 var _i = 1;
@@ -215,12 +209,7 @@ function __SnapBufferReadConfigJSONStruct(_buffer, _bufferSize)
                 {
                     var _key = _keyArray[_i];
                     if (!is_string(_key)) show_error("SNAP:\nStruct keys must be strings (key was " + string(_key) + ", typeof=" + typeof(_key) + ")\n ", true);
-                    
-                    array_push(_result, {
-                        k: _keyArray[_i],
-                        v: __SnapBufferReadConfigJSONDeepCopyInner(_value, self, self),
-                    });
-                    
+                    __SnapBufferReadConfigJSONStructMerge(_result, _key, __SnapBufferReadConfigJSONDeepCopyInner(_value, self, self));
                     ++_i;
                 }
             }
@@ -251,6 +240,48 @@ function __SnapBufferReadConfigJSONStruct(_buffer, _bufferSize)
     }
     
     show_error("SNAP:\nFound unterminated struct\n ", true);
+}
+
+function __SnapBufferReadConfigJSONStructMerge(_rootStruct, _key, _newValue)
+{
+    if (variable_struct_exists(_rootStruct, _key))
+    {
+        var _oldValue = _rootStruct[$ _key];
+        if (is_array(_oldValue))
+        {
+            if (is_array(_newValue))
+            {
+                //Merge the new values into the old values
+                var _i = 0;
+                repeat(array_length(_newValue))
+                {
+                    array_push(_oldValue, _newValue[_i]);
+                    ++_i;
+                }
+                
+                return;
+            }
+        }
+        else if (is_struct(_oldValue))
+        {
+            if (is_struct(_newValue))
+            {
+                //Merge the new values into the old values
+                var _variableNameArray = variable_struct_get_names(_newValue);
+                var _i = 0;
+                repeat(array_length(_variableNameArray))
+                {
+                    var _variableName = _variableNameArray[_i];
+                    __SnapBufferReadConfigJSONStructMerge(_oldValue, _variableName, _newValue[$ _variableName]);
+                    ++_i;
+                }
+                
+                return;
+            }
+        }
+    }
+    
+    _rootStruct[$ _key] = _newValue;
 }
 
 function __SnapBufferReadConfigJSONValue(_buffer, _bufferSize, _firstByte)
