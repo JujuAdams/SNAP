@@ -3,7 +3,7 @@
 /// @param buffer  Buffer to read data from
 /// @param offset  Offset in the buffer to read data from
 /// 
-/// @jujuadams 2023-04-07
+/// @jujuadams 2023-04-08
 
 function SnapBufferReadConfigJSON(_buffer, _inOffset = undefined)
 {
