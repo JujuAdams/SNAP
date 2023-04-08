@@ -9,10 +9,29 @@ var _string = @"{
         }
         c
     ]
+    c: [
+        d
+        e
+        f
+    ]
+    
     d: {}
+    d: {
+        z: 26
+    }
+    
+    e: {
+        z: [
+            a
+        ]
+    }
+    
+    e: {
+        z: [
+            b
+        ]
+    }
 }";
 
 var _json = SnapFromConfigJSON(_string);
 show_debug_message(SnapToLooseJSON(_json, true, true, true));
-
-show_debug_message(SnapToConfigJSON(_json, true, true, true));
