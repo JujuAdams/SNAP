@@ -206,7 +206,7 @@ function __SnapBufferReadLooseJSONStruct(_buffer, _bufferSize)
                 {
                     var _key = _keyArray[_i];
                     if (!is_string(_key)) show_error("SNAP:\nStruct keys must be strings (key was " + string(_key) + ", typeof=" + typeof(_key) + ")\n ", true);
-                    _result[$ _keyArray[_i]] = __SnapBufferReadLooseJSONDeepCopyInner(_value, self, self);
+                    _result[$ _key] = __SnapBufferReadLooseJSONDeepCopyInner(_value, self, self);
                     ++_i;
                 }
             }
