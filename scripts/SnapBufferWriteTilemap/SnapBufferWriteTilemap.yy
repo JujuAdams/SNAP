@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "SnapBufferWrite2DArray",
+  "name": "SnapBufferWriteTilemap",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
