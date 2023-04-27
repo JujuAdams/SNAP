@@ -1,17 +1,20 @@
 /// @return Nested struct data that represents the contents of the VDF string
 /// 
-/// @param buffer  Buffer to read data from
-/// @param offset  Offset in the buffer to read data from
+/// @param buffer      Buffer to read data from
+/// @param [offset=0]  Offset in the buffer to read data from
+/// @param [size=all]  Number of bytes to read from the buffer. If not specified, the whole buffer is read
 /// 
 /// @jujuadams 2023-03-25
 
-function SnapBufferReadVDF(_buffer, _inOffset = undefined)
+function SnapBufferReadVDF(_buffer, _inOffset = undefined, _inSize = undefined)
 {
     if (_inOffset != undefined)
     {
         var _oldOffset = buffer_tell(_buffer);
         buffer_seek(_buffer, buffer_seek_start, _inOffset);
     }
+    
+    var _size = _inSize ?? buffer_get_size(_buffer) - buffer_tell(_buffer);
     
     var _cacheBuffer = undefined;
     
@@ -23,17 +26,14 @@ function SnapBufferReadVDF(_buffer, _inOffset = undefined)
     var _structKey     = undefined;
     var _inStructValue = false;
     
-    var _inComment           = false;
-    var _inMultilineComment  = false;
-    var _newComment          = false;
-    var _newMultilineComment = false;
+    var _inComment          = false;
+    var _inMultilineComment = false;
     
     var _root     = {};
     var _stackTop = _root;
     var _stack    = [_stackTop];
     
-    var _bufferSize = buffer_get_size(_buffer);
-    while(buffer_tell(_buffer) < _bufferSize)
+    while(buffer_tell(_buffer) < _size)
     {
         var _byte = buffer_read(_buffer, buffer_u8);
         if (_byte == 0x00) break;
