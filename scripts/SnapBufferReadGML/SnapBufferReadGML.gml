@@ -126,7 +126,15 @@ function __SnapBufferReadGMLParser(_buffer, _buffer_size) constructor
                             }
                             else
                             {
-                                show_error("SNAP:\n\nLine " + string(line) + ", unexpected token " + string(token) + "\nis_string = " + string(token_is_string) + "\nis_real = " + string(token_is_real) + "\nis_symbol = " + string(token_is_symbol) + "\n ", true);
+                                var _asset_index = try_to_find_asset_index(token);
+                                if (_asset_index >= 0)
+                                {
+                                    token = _asset_index;
+                                }
+                                else
+                                {
+                                    show_error("SNAP:\n\nLine " + string(line) + ", unexpected token " + string(token) + "\nis_string = " + string(token_is_string) + "\nis_real = " + string(token_is_real) + "\nis_symbol = " + string(token_is_symbol) + "\n ", true);
+                                }
                             }
                         }
                         
@@ -216,7 +224,15 @@ function __SnapBufferReadGMLParser(_buffer, _buffer_size) constructor
                             }
                             else
                             {
-                                show_error("SNAP:\n\nLine " + string(line) + ", unexpected token " + string(token) + "\nis_string = " + string(token_is_string) + "\nis_real = " + string(token_is_real) + "\nis_symbol = " + string(token_is_symbol) + "\n ", true);
+                                var _asset_index = try_to_find_asset_index(token);
+                                if (_asset_index >= 0)
+                                {
+                                    token = _asset_index;
+                                }
+                                else
+                                {
+                                    show_error("SNAP:\n\nLine " + string(line) + ", unexpected token " + string(token) + "\nis_string = " + string(token_is_string) + "\nis_real = " + string(token_is_real) + "\nis_symbol = " + string(token_is_symbol) + "\n ", true);
+                                }
                             }
                         }
                         
@@ -355,7 +371,15 @@ function __SnapBufferReadGMLParser(_buffer, _buffer_size) constructor
                             }
                             else
                             {
-                                show_error("SNAP:\n\nLine " + string(line) + ", unexpected token " + string(token) + "\nis_string = " + string(token_is_string) + "\nis_real = " + string(token_is_real) + "\nis_symbol = " + string(token_is_symbol) + "\n ", true);
+                                var _asset_index = try_to_find_asset_index(token);
+                                if (_asset_index >= 0)
+                                {
+                                    token = _asset_index;
+                                }
+                                else
+                                {
+                                    show_error("SNAP:\n\nLine " + string(line) + ", unexpected token " + string(token) + "\nis_string = " + string(token_is_string) + "\nis_real = " + string(token_is_real) + "\nis_symbol = " + string(token_is_symbol) + "\n ", true);
+                                }
                             }
                         }
                         
@@ -467,6 +491,19 @@ function __SnapBufferReadGMLParser(_buffer, _buffer_size) constructor
                 }
             }
         }
+    }
+    
+    static try_to_find_asset_index = function(_asset)
+    {
+        static _constantStruct = __DynamoGMLConstants();
+        
+        if (!is_string(_asset)) return _asset;
+        
+        var _index = asset_get_index(_asset);
+        if (_index >= 0) return _index;
+        
+        if (!variable_struct_exists(_constantStruct, _asset)) return -1;
+        return _constantStruct[$ _asset];
     }
     
     read_root();

@@ -1,4 +1,4 @@
-<h1 align="center">SNAP 5.8.0</h1>
+<h1 align="center">SNAP 5.8.1</h1>
 
 <p align="center">Data format converters for GameMaker Studio 2022 LTS by Juju Adams</p>
 
