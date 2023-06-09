@@ -23,19 +23,29 @@ function __SnapVisualizeInner(_buffer, _prefix, _value)
 {
     if (is_struct(_value))
     {
-        if (variable_struct_names_count(_value) == 0)
+        var _struct = _value;
+        
+        var _instanceOf = instanceof(_struct);
+        if (_instanceOf == "struct")
         {
             buffer_write(_buffer, buffer_text, "{}");
         }
         else
         {
-            var _struct = _value;
-            
-            buffer_write(_buffer, buffer_text, "{}");
-            buffer_write(_buffer, buffer_u8, 0x0a); // newline
+            buffer_write(_buffer, buffer_text, "{");
+            buffer_write(_buffer, buffer_text, _instanceOf);
+            buffer_write(_buffer, buffer_text, "}");
+        }
+        
+        if (variable_struct_names_count(_struct) > 0)
+        {
+            buffer_write(_buffer, buffer_text, "\n");
             
             var _oldPrefix = _prefix;
+            
             var _nameArray = variable_struct_get_names(_struct);
+            array_sort(_nameArray, true);
+            
             var _i = 0;
             repeat(array_length(_nameArray)-1)
             {
@@ -119,18 +129,29 @@ function __SnapVisualizeASCIIInner(_buffer, _prefix, _value)
 {
     if (is_struct(_value))
     {
-        if (variable_struct_names_count(_value) == 0)
+        var _struct = _value;
+        
+        var _instanceOf = instanceof(_struct);
+        if (_instanceOf == "struct")
         {
-            buffer_write(_buffer, buffer_text, "{}"); // {}
+            buffer_write(_buffer, buffer_text, "{}");
         }
         else
         {
-            var _struct = _value;
-            
-            buffer_write(_buffer, buffer_text, "{}\n");
+            buffer_write(_buffer, buffer_text, "{");
+            buffer_write(_buffer, buffer_text, _instanceOf);
+            buffer_write(_buffer, buffer_text, "}");
+        }
+        
+        if (variable_struct_names_count(_value) > 0)
+        {
+            buffer_write(_buffer, buffer_text, "\n");
             
             var _oldPrefix = _prefix;
+            
             var _nameArray = variable_struct_get_names(_struct);
+            array_sort(_nameArray, true);
+            
             var _i = 0;
             repeat(array_length(_nameArray)-1)
             {
