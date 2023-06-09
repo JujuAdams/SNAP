@@ -50,7 +50,7 @@ function __SnapVisualizeInner(_buffer, _prefix, _value)
             repeat(array_length(_nameArray)-1)
             {
                 var _name = _nameArray[_i];
-                _prefix = _oldPrefix + "|    ";
+                _prefix = _oldPrefix + "│    ";
                 repeat(string_length(_name)) _prefix += " ";
                 
                 buffer_write(_buffer, buffer_text, _oldPrefix);
