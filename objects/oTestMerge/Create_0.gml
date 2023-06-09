@@ -27,4 +27,4 @@ b = {
 };
 
 SnapMerge(b, a);
-show_debug_message(SnapToJSON(a, true, true));
+show_debug_message(SnapVisualize(a));

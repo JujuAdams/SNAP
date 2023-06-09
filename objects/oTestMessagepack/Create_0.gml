@@ -33,4 +33,4 @@ struct = {
 
 buffer = ScratchBuffer();
 SnapBufferWriteMessagePack(buffer, struct);
-show_debug_message(SnapToJSON(SnapBufferReadMessagePack(buffer, 0), true, true, true));
+show_debug_message(SnapVisualize(SnapBufferReadMessagePack(buffer, 0)));

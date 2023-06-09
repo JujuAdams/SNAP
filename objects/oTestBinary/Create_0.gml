@@ -29,4 +29,4 @@ struct = {
 };
 
 buffer = SnapBufferWriteBinary(ScratchBuffer(), struct);
-show_debug_message(SnapToJSON(SnapBufferReadBinary(buffer, 0), true, true, true));
+show_debug_message(SnapVisualize(SnapBufferReadBinary(buffer, 0)));

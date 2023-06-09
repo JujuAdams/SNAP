@@ -31,5 +31,5 @@ var _instanceofDict = {
 
 var _string = SnapToQML(root, _instanceofDict);
 show_debug_message(_string);
-show_debug_message(SnapToJSON(SnapFromQML(_string, _instanceofDict), true, true, true));
+show_debug_message(SnapVisualize(SnapFromQML(_string, _instanceofDict)));
 show_debug_message(SnapToQML(SnapFromQML(_string, _instanceofDict), _instanceofDict));

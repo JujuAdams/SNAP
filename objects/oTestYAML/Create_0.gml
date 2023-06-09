@@ -36,7 +36,7 @@ struct = {
 show_debug_message("");
 show_debug_message("--- Test 1 ---");
 var _string = "{\"hello\" : \"world\", \"more\" : \"data\"}";
-show_debug_message(SnapToJSON(SnapFromYAML(_string), true, true));
+show_debug_message(SnapVisualize(SnapFromYAML(_string)));
 
 show_debug_message("");
 show_debug_message("--- Test 2 ---");

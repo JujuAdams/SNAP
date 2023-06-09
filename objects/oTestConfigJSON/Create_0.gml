@@ -34,4 +34,4 @@ var _string = @"{
 }";
 
 var _json = SnapFromConfigJSON(_string);
-show_debug_message(SnapToLooseJSON(_json, true, true, true));
+show_debug_message(SnapVisualize(_json));
