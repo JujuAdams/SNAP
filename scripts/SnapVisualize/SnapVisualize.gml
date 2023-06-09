@@ -65,7 +65,7 @@ function __SnapVisualizeInner(_buffer, _prefix, _value)
             
             var _name = _nameArray[_i];
             buffer_write(_buffer, buffer_text, _oldPrefix);
-            buffer_write(_buffer, buffer_text, "└─ ");
+            buffer_write(_buffer, buffer_text, "╰─ ");
             buffer_write(_buffer, buffer_text, _name);
             buffer_write(_buffer, buffer_text, ":");
             
@@ -101,7 +101,7 @@ function __SnapVisualizeInner(_buffer, _prefix, _value)
             
             _prefix = _oldPrefix + "   ";
             buffer_write(_buffer, buffer_text, _oldPrefix);
-            buffer_write(_buffer, buffer_text, "└─");
+            buffer_write(_buffer, buffer_text, "╰─");
             __SnapVisualizeInner(_buffer, _prefix, _array[_i]);
         }
     }
