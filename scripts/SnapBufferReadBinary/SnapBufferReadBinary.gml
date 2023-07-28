@@ -1,3 +1,4 @@
+// Feather disable all
 /// @return Nested struct/array data encoded from the buffer, using a proprietary format
 /// 
 /// @param buffer  Binary data to be decoded, created by SnapBufferWriteBinary()

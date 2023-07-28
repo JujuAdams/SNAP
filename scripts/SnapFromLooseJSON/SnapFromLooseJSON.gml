@@ -1,3 +1,4 @@
+// Feather disable all
 /// @return Nested struct/array data that represents the contents of the "Loose JSON" string
 /// 
 /// @param string  The "Loose JSON" string to be decoded

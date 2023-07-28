@@ -1,3 +1,4 @@
+// Feather disable all
 /// @return CSV string that encodes the provided 2D array
 /// 
 /// @param buffer

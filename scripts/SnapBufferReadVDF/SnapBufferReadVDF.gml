@@ -1,3 +1,4 @@
+// Feather disable all
 /// @return Nested struct data that represents the contents of the VDF string
 /// 
 /// @param buffer      Buffer to read data from

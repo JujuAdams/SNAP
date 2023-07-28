@@ -1,3 +1,4 @@
+// Feather disable all
 /// @return String that represents all the text inside the file
 ///
 /// @param filename     File to parse

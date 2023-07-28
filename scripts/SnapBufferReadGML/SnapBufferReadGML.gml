@@ -1,3 +1,4 @@
+// Feather disable all
 /// @return Nested struct/array data that represents the contents of the JSON string. The root node will always be a struct
 /// 
 /// @param buffer  The GML string to be decoded

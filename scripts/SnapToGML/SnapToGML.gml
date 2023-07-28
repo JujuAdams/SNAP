@@ -1,3 +1,4 @@
+// Feather disable all
 /// @return GML string that encodes the provided struct
 /// 
 /// @param struct                The struct to be encoded. Can contain structs, arrays, strings, and numbers (but the root must be a struct).   N.B. Will not encode ds_list, ds_map etc.

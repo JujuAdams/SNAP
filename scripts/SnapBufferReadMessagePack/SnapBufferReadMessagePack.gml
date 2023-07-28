@@ -1,3 +1,4 @@
+// Feather disable all
 /// @return Nested struct/array data decoded from the buffer, using the messagepack standard
 ///
 /// More information on messagepack can be found here: https://msgpack.org/index.html

@@ -1,3 +1,4 @@
+// Feather disable all
 /// Config struct should be in this format:
 /// 
 /// {

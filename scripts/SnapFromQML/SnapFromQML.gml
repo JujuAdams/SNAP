@@ -1,3 +1,4 @@
+// Feather disable all
 /// @return Nested struct/array data that represents the contents of the QML string
 /// 
 /// @param string            The QML string to be decoded

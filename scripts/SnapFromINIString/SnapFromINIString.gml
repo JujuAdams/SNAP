@@ -1,3 +1,4 @@
+// Feather disable all
 /// @return Struct/array that represents the data in the INI file
 ///
 /// N.B. That this script is only intended to read the .ini files that GM generates
@@ -11,7 +12,7 @@
 
 function SnapFromINIString(_string, _tryReal = true)
 {
-    var _buffer = buffer_create(string_byte_length(_string), buffer_fixed, 1);
+    var _buffer = buffer_create(string_byte_length(_string)+1, buffer_fixed, 1);
     buffer_write(_buffer, buffer_text, _string);
     var _data = SnapBufferReadINI(_buffer, 0, buffer_get_size(_buffer), _tryReal);
     buffer_delete(_buffer);

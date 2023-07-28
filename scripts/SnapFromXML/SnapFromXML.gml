@@ -1,3 +1,4 @@
+// Feather disable all
 /// Decodes an XML string and outputs a struct
 /// 
 /// @param string  String to decode

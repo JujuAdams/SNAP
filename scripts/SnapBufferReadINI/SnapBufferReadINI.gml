@@ -1,3 +1,4 @@
+// Feather disable all
 /// @return Struct/array that represents the data in the INI file
 ///
 /// N.B. That this script is only intended to read the .ini files that GM generates
@@ -104,8 +105,8 @@ function SnapBufferReadINI(_buffer, _offset, _size, _tryReal = true)
                             if (_value == ord("\"")) _in_string = true;
                         }
                         
-                        if (_value > 32) _last_non_whitespace = buffer_tell(_buffer) - 1;
-                        if ((_value == 32) && (buffer_peek(_buffer, buffer_tell(_buffer) - 2, buffer_u8) == ord("\\"))) _last_non_whitespace = buffer_tell(_buffer) - 1;
+                        if (_in_string || (_value > 32)) _last_non_whitespace = buffer_tell(_buffer) - 1;
+                        if (!_in_string && (_value == 32) && (buffer_peek(_buffer, buffer_tell(_buffer) - 2, buffer_u8) == ord("\\"))) _last_non_whitespace = buffer_tell(_buffer) - 1;
                         if (_value == ord("\\")) _seen_backslash = true;
                     }
                 }

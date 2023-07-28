@@ -1,3 +1,4 @@
+// Feather disable all
 /// @return GML string that encodes the struct
 /// 
 /// @param buffer

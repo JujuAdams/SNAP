@@ -1,3 +1,4 @@
+// Feather disable all
 /// Attempts to read a UTF-8 byte order mark from a buffer, and returns <true> if a BOM is found
 /// 
 /// @param buffer  Buffer to try to read the byte order mark from

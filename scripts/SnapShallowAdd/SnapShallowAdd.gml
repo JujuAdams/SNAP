@@ -1,3 +1,4 @@
+// Feather disable all
 /// @returm N/A (undefined)
 /// 
 /// This function adds numbers stored in one struct/array to numbers stored in another struct/array. This is a non-recursive operation.

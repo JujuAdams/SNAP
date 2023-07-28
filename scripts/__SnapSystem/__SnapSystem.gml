@@ -1,3 +1,4 @@
+// Feather disable all
 #macro __SNAP_VERSION  "5.8.1"
 #macro __SNAP_DATE     "2023-04-30"
 

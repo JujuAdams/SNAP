@@ -1,3 +1,4 @@
+// Feather disable all
 /// @return Nested struct/array data that represents the contents of the YAML string
 /// 
 /// N.B. This is not a full implementation of the YAML spec and doesn't try to be. This YAML parser doesn't support:

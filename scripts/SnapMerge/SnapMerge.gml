@@ -1,3 +1,4 @@
+// Feather disable all
 /// @returm N/A (undefined)
 /// 
 /// This function is designed to merge one simple tree-like structures into another. Values from the source tree are copied

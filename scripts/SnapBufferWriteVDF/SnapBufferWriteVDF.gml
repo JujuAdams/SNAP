@@ -1,3 +1,4 @@
+// Feather disable all
 /// @return VDF string that encodes the struct/array nested data
 /// 
 /// N.B. This function cannot encode arrays, and any numbers will be stringified
