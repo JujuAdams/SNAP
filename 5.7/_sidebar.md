@@ -11,7 +11,6 @@
 - [INI](ini)
 - [GML](gml)
 - [Grids & 2D Arrays](grids-and-arrays)
-- [Tilemaps](tilemaps)
 - [VDF](vdf)
 - [QML](qml)
 - [Utilities](utilities)
