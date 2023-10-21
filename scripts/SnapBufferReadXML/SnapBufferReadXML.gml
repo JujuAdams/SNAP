@@ -1,3 +1,4 @@
+// Feather disable all
 /// Decodes XML data stored in a buffer and outputs a sorta-JSON equivalent
 ///
 /// @return Nested struct/array data that represents the contents of the XML data

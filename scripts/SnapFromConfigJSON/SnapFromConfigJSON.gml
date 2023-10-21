@@ -1,3 +1,4 @@
+// Feather disable all
 /// @return Nested struct/array data that represents the contents of the "Config JSON" string
 /// 
 /// @param string  The "Config JSON" string to be decoded

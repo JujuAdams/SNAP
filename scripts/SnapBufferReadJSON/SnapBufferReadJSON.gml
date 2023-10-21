@@ -1,3 +1,4 @@
+// Feather disable all
 /// @return Nested struct/array data that represents the contents of the JSON string
 /// 
 /// @param buffer  Buffer to read data from

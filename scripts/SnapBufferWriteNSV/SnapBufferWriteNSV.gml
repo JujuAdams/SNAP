@@ -1,3 +1,4 @@
+// Feather disable all
 /// @return Buffer that encodes the provided 2D array
 /// 
 /// @param buffer            Buffer to write to

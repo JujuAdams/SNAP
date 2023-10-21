@@ -1,3 +1,4 @@
+// Feather disable all
 /// Stringifies an input value in the same vein as GameMaker's native string() function
 /// The string that this function is not intended to be parseable back into data - please use SnapToJSON() for that
 /// If the value is a nested struct/array then circular references will be handled gracefully

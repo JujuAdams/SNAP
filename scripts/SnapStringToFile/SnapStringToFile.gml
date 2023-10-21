@@ -1,3 +1,4 @@
+// Feather disable all
 /// @return The result of the save operation, see documentation for buffer_save()
 ///
 /// @param string    String to save

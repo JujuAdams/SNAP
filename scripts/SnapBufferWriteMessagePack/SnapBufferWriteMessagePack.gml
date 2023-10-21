@@ -1,3 +1,4 @@
+// Feather disable all
 /// @return Buffer that represents the struct/array nested data, using the MessagePack standard
 ///
 /// More information on messagepack can be found here: https://msgpack.org/index.html

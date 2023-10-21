@@ -1,3 +1,4 @@
+// Feather disable all
 /// @return JSON string that encodes the struct/array nested data
 /// 
 /// @param buffer                Buffer to write data into

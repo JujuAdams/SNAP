@@ -1,3 +1,4 @@
+// Feather disable all
 /// @return N/A (0)
 /// 
 /// Executes a method call for each element of the given struct/array/data structure.

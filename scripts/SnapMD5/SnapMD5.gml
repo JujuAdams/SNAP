@@ -1,3 +1,4 @@
+// Feather disable all
 /// Generates an MD5 hash of the data in a struct/array
 /// This function can also be used on non-struct/array data, though the hash may not line up with other MD5 implementations
 /// 

@@ -1,3 +1,4 @@
+// Feather disable all
 /// @return Nested struct/array data that represents the contents of the "Loose JSON" string
 /// 
 /// @param buffer  Buffer to read data from
@@ -253,6 +254,11 @@ function __SnapBufferReadLooseJSONValue(_buffer, _bufferSize, _firstByte)
     {
         return __SnapBufferReadLooseJSONDelimitedString(_buffer, _bufferSize);
     }
+    else if ((_firstByte == ord("@")) && (buffer_peek(_buffer, buffer_tell(_buffer), buffer_u8) == ord("'")))
+    {
+        buffer_seek(_buffer, buffer_seek_relative, 1);
+        return __SnapBufferReadLooseJSONMultilineString(_buffer, _bufferSize);
+    }
     else
     {
         return __SnapBufferReadLooseJSONString(_buffer, _bufferSize);
@@ -378,6 +384,41 @@ function __SnapBufferReadLooseJSONDelimitedString(_buffer, _bufferSize)
     }
     
     show_error("SNAP:\nFound unterminated string\n ", true);
+}
+
+function __SnapBufferReadLooseJSONMultilineString(_buffer, _bufferSize)
+{
+    static _cacheBuffer = buffer_create(1024, buffer_grow, 1);
+    buffer_seek(_cacheBuffer, buffer_seek_start, 0);
+    
+    var _start = buffer_tell(_buffer);
+    var _inString = false;
+    
+    while(buffer_tell(_buffer) < _bufferSize)
+    {
+        var _byte = buffer_read(_buffer, buffer_u8);
+        
+        if (_byte == ord("\""))
+        {
+            if ((buffer_peek(_buffer, buffer_tell(_buffer)-2, buffer_u8) != ord("\\"))
+            &&  (buffer_peek(_buffer, buffer_tell(_buffer)-3, buffer_u8) != ord("\\")))
+            {
+                _inString = !_inString;
+            }
+        }
+        else if (!_inString && (_byte == ord("'")))
+        {
+            var _end = buffer_tell(_buffer)-1;
+            var _oldByte = buffer_peek(_buffer, _end, buffer_u8);
+            buffer_poke(_buffer, _end, buffer_u8, 0x00);
+            var _result = buffer_peek(_buffer, _start, buffer_string);
+            buffer_poke(_buffer, _end, buffer_u8, _oldByte);
+            
+            return _result;
+        }
+    }
+    
+    show_error("SNAP:\nFound unterminated multiline string\n ", true);
 }
 
 function __SnapBufferReadLooseJSONString(_buffer, _bufferSize)

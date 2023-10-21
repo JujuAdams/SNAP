@@ -46,7 +46,8 @@ b: "2"
 */
 c: /*oops*/3,
 d: 4//done
-}';
+e: "string!            //"';
+_string += "\nf: @'multiline\n\nstring'\n}";
 
 show_debug_message(SnapFromLooseJSON(_string));
 

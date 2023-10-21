@@ -1,3 +1,4 @@
+// Feather disable all
 /// @returm Copy of the given struct/array, including a copy of any nested structs and arrays
 /// 
 /// This function is designed to copy simple tree-like structures that have been imported from SNAP functions.

@@ -1,3 +1,4 @@
+// Feather disable all
 /// @return QML string that encodes the struct/array nested data
 /// 
 /// @param buffer                   Buffer to write data into

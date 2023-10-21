@@ -1,6 +1,14 @@
-/// @param buffer
-/// @param offset
-/// @param layer
+// Feather disable all
+/// Creates a new tilemap on the given layer. The tilemap's dimensions and position will be set to
+/// whatever is in the data found in the buffer. If you do **not** specify an offset then SNAP will
+/// modify the buffer's "head" position. This allows you to read sequential data more easily.
+/// 
+///   N.B. The name of the tileset to use is embedded in the tilemap data so any renamed or
+///        deleted tilesets will fail to read.
+/// 
+/// @param buffer  Buffer to write the data into                                                                                                                      
+/// @param offset  The position in the buffer to read the tilemap from, relative to the start of the buffer. If set to <undefined>, the buffer's head position is used
+/// @param layer   Name of room layer to create the tilemap on                                                                                                        
 /// 
 /// @jujuadams 2023-04-25
 

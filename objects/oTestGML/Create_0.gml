@@ -28,7 +28,7 @@ struct = {
 };
 
 show_debug_message(SnapToGML(struct, true));
-show_debug_message(SnapToJSON(SnapFromGML(SnapToGML(struct, true)), true, true));
+show_debug_message(SnapVisualize(SnapFromGML(SnapToGML(struct, true))));
 
 var _string = @"
 //Here's a comment

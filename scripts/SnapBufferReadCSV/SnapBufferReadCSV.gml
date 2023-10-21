@@ -1,3 +1,4 @@
+// Feather disable all
 /// Decodes CSV data stored in a buffer and outputs a 2D array
 ///
 /// @return 2D array that represents the contents of the CSV string

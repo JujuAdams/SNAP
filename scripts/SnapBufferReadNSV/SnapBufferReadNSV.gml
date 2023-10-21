@@ -1,3 +1,4 @@
+// Feather disable all
 /// Decodes an NSV buffer and outputs a 2D array
 ///
 /// @return 2D array that represents the contents of the NSV buffer

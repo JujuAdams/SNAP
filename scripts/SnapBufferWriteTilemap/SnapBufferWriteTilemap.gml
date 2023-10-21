@@ -1,5 +1,11 @@
-/// @param buffer
-/// @param tilemap
+// Feather disable all
+/// Stores the contents of a tilemap in a buffer, starting at the buffer's current head position.
+/// 
+///   N.B. The name of the tileset to use is embedded in the tilemap data so any renamed or
+///        deleted tilesets will fail to read.
+/// 
+/// @param buffer   Buffer to write the data into
+/// @param tilemap  Tilemap to serialize
 /// 
 /// @jujuadams 2023-04-25
 

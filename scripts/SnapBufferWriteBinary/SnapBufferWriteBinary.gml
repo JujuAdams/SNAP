@@ -1,3 +1,4 @@
+// Feather disable all
 /// @return Buffer that contains binary encoded struct/array nested data, using a proprietary format
 /// 
 /// @param buffer                      Buffer to write data to

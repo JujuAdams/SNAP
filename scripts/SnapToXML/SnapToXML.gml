@@ -1,3 +1,4 @@
+// Feather disable all
 /// @return XML string that encodes the provided struct
 /// 
 /// @param struct  The data to encode

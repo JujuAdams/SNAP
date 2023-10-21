@@ -1,3 +1,4 @@
+// Feather disable all
 /// @return Struct/array that represents the data in the INI file
 ///
 /// N.B. That this script is only intended to read the .ini files that GM generates

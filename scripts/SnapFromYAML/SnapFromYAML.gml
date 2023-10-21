@@ -1,3 +1,4 @@
+// Feather disable all
 /// @return Nested struct/array data that represents the contents of the YAML string
 /// 
 /// @param string              The YAML string to be decoded

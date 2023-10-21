@@ -1,3 +1,4 @@
+// Feather disable all
 /// @param buffer   Buffer to write the data to
 /// @param struct   The data to be encoded
 /// 

@@ -22,6 +22,6 @@ var _string = @'
 </bookstore>';
 
 var _struct = SnapFromXML(_string);
-show_debug_message(SnapToJSON(_struct, true, true));
+show_debug_message(SnapVisualize(_struct));
 show_debug_message(SnapToXML(_struct, false));
 show_debug_message(SnapToXML(_struct, true ));
