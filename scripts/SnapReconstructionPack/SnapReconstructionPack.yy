@@ -5,7 +5,7 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Re-Construction",
-    "path": "folders/SNAP/Re-Construction.yy",
+    "name": "Reconstruction",
+    "path": "folders/SNAP/Reconstruction.yy",
   },
 }

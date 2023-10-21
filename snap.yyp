@@ -136,7 +136,7 @@
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"MessagePack","folderPath":"folders/SNAP/MessagePack.yy","order":8,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"NSV","folderPath":"folders/SNAP/NSV.yy","order":6,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"QML","folderPath":"folders/SNAP/QML.yy","order":13,},
-    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Re-Construction","folderPath":"folders/SNAP/Re-Construction.yy","order":16,},
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Reconstruction","folderPath":"folders/SNAP/Reconstruction.yy","order":16,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Utility","folderPath":"folders/SNAP/Utility.yy","order":0,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"VDF","folderPath":"folders/SNAP/VDF.yy","order":14,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"XML","folderPath":"folders/SNAP/XML.yy","order":9,},
