@@ -43,7 +43,19 @@ The order that values are sent into `method` is guaranteed for arrays and ds_lis
 
 ## `SnapDeepCopy`
 
-*Returns:* Struct or array, a deep copy of the input data
+*Returns:* Struct or array, a deep copy of the input data respecting constructors
+
+|Name      |Datatype    |Purpose     |
+|----------|------------|------------|
+|`data`    |struct/array|Data to copy|
+
+!> This function is only available in versions of GameMaker with the native functions `static_get()` and `static_set()`.
+
+&nbsp;
+
+## `SnapDeepCopyLegacy`
+
+*Returns:* Struct or array, a deep copy of the input data ignoring constructors
 
 |Name      |Datatype    |Purpose     |
 |----------|------------|------------|
