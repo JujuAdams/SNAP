@@ -63,6 +63,29 @@ The order that values are sent into `method` is guaranteed for arrays and ds_lis
 
 &nbsp;
 
+## `SnapDeepForeachStruct`
+
+*Returns:* N/A (`undefined`)
+
+|Name    |Datatype    |Purpose                                                                      |
+|--------|------------|-----------------------------------------------------------------------------|
+|`data`  |struct/array|Data to operate on. See below                                                |
+|`method`|method      |Method to call for each element of each struct in the given root struct/array|
+
+Executes a method call for each element of every struct found recursively by iterating over an input struct/array assembly. This iterator is deep and will also iterate over nested structs/arrays.
+
+The specified method is passed the following parameters:
+
+|Argument   |Purpose                                                                                     |
+|-----------|--------------------------------------------------------------------------------------------|
+|`argument0`|Value found in the given struct/array                                                       |
+|`argument1`|0-indexed index of the value e.g. `0` for the first element, `1` for the second element etc.|
+|`argument2`|The name of the variable that contains the given value; otherwise `undefined`               |
+
+The order that values are sent into `method` is not guaranteed due to the behaviour of GameMaker's internal hashmap.
+
+&nbsp;
+
 ## `SnapDeepAdd`
 
 *Returns:* N/A (`undefined`)
