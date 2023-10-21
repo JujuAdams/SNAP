@@ -64,7 +64,7 @@
     {"id":{"name":"SnapBufferWriteMessagePack","path":"scripts/SnapBufferWriteMessagePack/SnapBufferWriteMessagePack.yy",},"order":0,},
     {"id":{"name":"SnapFromINIString","path":"scripts/SnapFromINIString/SnapFromINIString.yy",},"order":0,},
     {"id":{"name":"SnapBufferReadJSON","path":"scripts/SnapBufferReadJSON/SnapBufferReadJSON.yy",},"order":3,},
-    {"id":{"name":"SnapForeachStruct","path":"scripts/SnapForeachStruct/SnapForeachStruct.yy",},"order":2,},
+    {"id":{"name":"SnapDeepForeachStruct","path":"scripts/SnapDeepForeachStruct/SnapDeepForeachStruct.yy",},"order":2,},
     {"id":{"name":"SnapBufferReadCSV","path":"scripts/SnapBufferReadCSV/SnapBufferReadCSV.yy",},"order":3,},
     {"id":{"name":"SnapBufferReadMessagePack","path":"scripts/SnapBufferReadMessagePack/SnapBufferReadMessagePack.yy",},"order":1,},
     {"id":{"name":"oTestMessagepack","path":"objects/oTestMessagepack/oTestMessagepack.yy",},"order":10,},

@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "SnapForeachStruct",
+  "name": "SnapDeepForeachStruct",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
