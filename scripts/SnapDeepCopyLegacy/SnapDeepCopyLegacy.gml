@@ -3,29 +3,21 @@
 /// 
 /// This function is designed to copy simple tree-like structures that have been imported from SNAP functions.
 /// It can be used in general to recursively copy struct/arrays. Be careful that your data doesn't have reference loops!
-/// This function, unlike SnapDeepCopyLegacy(), will correctly copy constructor behaviour too
 /// 
+///   N.B. This function will *NOT* copy constructor data. Please use SnapDeepCopy() instead.
+///   
 ///   N.B. Sequences structs are not "real" structs in GameMaker and cannot be copied in their entirety.
 /// 
 /// @param struct/array   The struct/array to be copied
 /// 
 /// @jujuadams 2023-10-21
 
-function SnapDeepCopy(_value)
+function SnapDeepCopyLegacy(_value)
 {
-    try
-    {
-        static_get(SnapDeepCopy);
-    }
-    catch(_error)
-    {
-        show_error("SNAP:\nSnapDeepCopy() not supported\nPlease update to a version of GameMaker with native function static_get()\nAlternatively, use SnapDeepCopyLegacy()\n ", true); 
-    }
-    
-    return __SnapDeepCopyInner(_value, self, self);
+    return __SnapDeepCopyLegacyInner(_value, self, self);
 }
 
-function __SnapDeepCopyInner(_value, _oldStruct, _newStruct)
+function __SnapDeepCopyLegacyInner(_value, _oldStruct, _newStruct)
 {
     var _copy = _value;
     
@@ -40,22 +32,18 @@ function __SnapDeepCopyInner(_value, _oldStruct, _newStruct)
         else if (_self != undefined)
         {
             //If the scope of the method isn't <undefined> (global) then spit out a warning
-            show_debug_message("SnapDeepCopy(): Warning! Deep copy found a method reference that could not be appropriately handled");
+            show_debug_message("SnapDeepCopyLegacy(): Warning! Deep copy found a method reference that could not be appropriately handled");
         }
     }
     else if (is_struct(_value))
     {
         var _namesArray = variable_struct_get_names(_value);
         var _copy = {};
-        
-        //Copy statics to replicate constructor behaviour
-        static_set(_copy, static_get(_value));
-        
         var _i = 0;
         repeat(array_length(_namesArray))
         {
             var _name = _namesArray[_i];
-            _copy[$ _name] = __SnapDeepCopyInner(_value[$ _name], _value, _copy);
+            _copy[$ _name] = __SnapDeepCopyLegacyInner(_value[$ _name], _value, _copy);
             ++_i;
         }
     }
@@ -66,7 +54,7 @@ function __SnapDeepCopyInner(_value, _oldStruct, _newStruct)
         var _i = 0;
         repeat(_count)
         {
-            _copy[@ _i] = __SnapDeepCopyInner(_value[_i], _oldStruct, _newStruct);
+            _copy[@ _i] = __SnapDeepCopyLegacyInner(_value[_i], _oldStruct, _newStruct);
             ++_i;
         }
     }
