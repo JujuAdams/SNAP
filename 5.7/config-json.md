@@ -27,7 +27,7 @@
 
 &nbsp;
 
-## `SnapBufferWriteLooseJSON`
+## `SnapBufferWriteConfigJSON`
 
 *Returns:* N/A (`undefined`)
 
@@ -45,7 +45,7 @@ The "config JSON" string will be inserted into the buffer at the current "head" 
 
 &nbsp;
 
-## `SnapBufferReadLooseJSON`
+## `SnapBufferReadConfigJSON`
 
 *Returns:* Array or struct, the root node of the "config JSON" data
 
