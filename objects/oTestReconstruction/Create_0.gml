@@ -7,7 +7,7 @@ show_debug_message(SnapVisualize(testInput));
 SnapReconstructionCleanUp(testInput);
 show_debug_message(SnapVisualize(testInput));
 
-SnapReconstructionPack(testInput);
+SnapReconstructionPack(testInput, undefined, true);
 show_debug_message(SnapVisualize(testInput));
 
 var _copy = SnapDeepCopy(testInput);
