@@ -4,6 +4,17 @@ SNAP has a handful of utility scripts that you might find useful when working wi
 
 &nbsp;
 
+## `SnapVisualize`
+
+*Returns:* String, a human-readable "ASCII art" diagram showing the structure of the input struct/array.
+
+|Name     |Datatype    |Purpose                                                                       |
+|---------|------------|------------------------------------------------------------------------------|
+|`value`  |struct/array|Value to process for display                                                  |
+|`[ascii]`|boolean     |Whether to use ASCII compatibility mode. If not specified, defaults to `false`|
+
+&nbsp;
+
 ## `SnapForeach`
 
 *Returns:* N/A (`undefined`)
