@@ -55,6 +55,5 @@ The VDF string will be inserted into the buffer at the current "head" position, 
 |----------|--------|-------------------------------------------------------------------------------------------------------------------------------------------------|
 |`buffer`  |buffer  |The buffer to read the VDF string from                                                                                                           |
 |`[offset]`|integer |The position in the buffer to read the VDF string from, relative to the start of the buffer. If not specified, the buffer's head position is used|
-|`[size]`  |integer |Number of bytes to read from the buffer. If not specified, the whole buffer is read                                                              |
 
 ?> If you do **not** specify an offset then SNAP will modify the buffer's "head" position. This allows you to read sequential data more easily.

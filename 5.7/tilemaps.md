@@ -31,6 +31,8 @@ Creates a new tilemap on the given layer. The tilemap's dimensions and position 
 
 !> The name of the tileset to use is embedded in the tilemap data (see above) so any renamed or deleted tilesets will fail to read.
 
+?> If you do **not** specify an offset then SNAP will modify the buffer's "head" position. This allows you to read sequential data more easily.
+
 &nbsp;
 
 ## `SnapBufferReadTilemapOverwrite`
@@ -47,3 +49,5 @@ Creates a new tilemap on the given layer. The tilemap's dimensions and position 
 Overwrites the contents of an already existing tilemap based on data serialized by `SnapBufferWriteTilemap()`. If the width or height of the incoming tilemap is larger than the current tilemap, extra tiles will not be created. If the width or height is smaller than the current tilemap, the empty space will be set to `0` (no tile).
 
 !> The name of the tileset to use is embedded in the tilemap data (see above) so any renamed or deleted tilesets will fail to read.
+
+?> If you do **not** specify an offset then SNAP will modify the buffer's "head" position. This allows you to read sequential data more easily.
