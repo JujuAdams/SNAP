@@ -25,8 +25,11 @@ struct = {
     test2 : "\"Hello world!\"",
     url : "https://www.jujuadams.com/",
     func : function() { d += 1 },
+    constructed : new TestGlobalConstructor(),
 };
 
 show_debug_message(SnapVisualize(struct));
+copy = SnapDeepCopyLegacy(struct);
+show_debug_message(SnapVisualize(copy));
 copy = SnapDeepCopy(struct);
 show_debug_message(SnapVisualize(copy));
