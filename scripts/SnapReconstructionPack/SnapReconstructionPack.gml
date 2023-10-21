@@ -24,9 +24,13 @@ function __SnapReconstructionPackInner(_value, _instanceofVariableName)
         var _i = 0;
         repeat(array_length(_value))
         {
-            __SnapReconstructionPackInner(_value, _instanceofVariableName);
+            __SnapReconstructionPackInner(_value[_i], _instanceofVariableName);
             ++_i;
         }
+    }
+    else if (is_method(_value))
+    {
+        //Ignore
     }
     else if (is_struct(_value))
     {
@@ -38,6 +42,10 @@ function __SnapReconstructionPackInner(_value, _instanceofVariableName)
             {
                 show_error("SNAP:\nConstructor \"" + string(_instanceof) + "\" not found", true); 
             }
+            else if (string_copy(_instanceof, 1, 5) == "anon_")
+            {
+                show_error("SNAP:\nConstructor \"" + string(_instanceof) + "\" not a globally scoped function, or has an invalid name", true); 
+            }
             else
             {
                 _value[$ _instanceofVariableName] = _instanceof;
@@ -46,7 +54,7 @@ function __SnapReconstructionPackInner(_value, _instanceofVariableName)
         
         var _namesArray = variable_struct_get_names(_value);
         var _i = 0;
-        repeat(array_length(_value))
+        repeat(array_length(_namesArray))
         {
             __SnapReconstructionPackInner(_value[$ _namesArray[_i]], _instanceofVariableName);
             ++_i;

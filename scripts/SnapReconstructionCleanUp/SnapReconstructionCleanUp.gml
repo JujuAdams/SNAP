@@ -24,9 +24,13 @@ function __SnapReconstructionCleanUpInner(_value, _instanceofVariableName)
         var _i = 0;
         repeat(array_length(_value))
         {
-            __SnapReconstructionCleanUpInner(_value, _instanceofVariableName);
+            __SnapReconstructionCleanUpInner(_value[_i], _instanceofVariableName);
             ++_i;
         }
+    }
+    else if (is_method(_value))
+    {
+        //Ignore
     }
     else if (is_struct(_value))
     {
@@ -34,7 +38,7 @@ function __SnapReconstructionCleanUpInner(_value, _instanceofVariableName)
         
         var _namesArray = variable_struct_get_names(_value);
         var _i = 0;
-        repeat(array_length(_value))
+        repeat(array_length(_namesArray))
         {
             __SnapReconstructionCleanUpInner(_value[$ _namesArray[_i]], _instanceofVariableName);
             ++_i;
