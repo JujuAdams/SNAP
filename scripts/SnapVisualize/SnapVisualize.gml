@@ -1,6 +1,8 @@
 // Feather disable all
-/// @param value
-/// @param [ascii=false]
+/// Returns a human-readable "ASCII art" diagram showing the structure of the input struct/array.
+/// 
+/// @param value          Value to process for display
+/// @param [ascii=false]  Whether to use ASCII compatibility mode
 
 function SnapVisualize(_value, _ascii = false)
 {
