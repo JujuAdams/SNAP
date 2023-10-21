@@ -1,5 +1,31 @@
 // Feather disable all
-
+/// Recursively navigates over a nested struct/array and writes the instanceof() value for structs
+/// into a special value in the struct itself. This value can then be serialized with the rest of
+/// the struct's non-static variables using a SNAP function or json_stringify() etc.  When
+/// deserializing data, either using a SNAP function or json_parse(), you should reconstruct the
+/// constructor for structs by calling SnapReconstructionUnpack().
+/// 
+/// If <unsetConstructor> is set to <true>, the constructor for structs is also cleared which is
+/// handy to work around current (2023.8, 2023-10-21) bugs in json_stringify(). You will need to
+/// restore the instanceof() value using SnapReconstructionUnpack() if you intend to keep using
+/// static variables/methods in these structs.
+/// 
+///   N.B. There are significant limitations to what constructors can be serialized. This is mostly
+///        to avoid unpleasant situations where it's not possible to deserialize. You cannot use
+///        anonymous and/or non-global constructors with SnapReconstructionPack() as these cannot
+///        be reliably resolved later on when using SnapReconstructionUnpack().
+/// 
+/// Intended use is:
+///    
+///    //On save
+///    SnapReconstructionPack(jsonToSave);
+///    SnapStringToFile(SnapToJSON(jsonToSave, "filename.txt"));
+///    SnapReconstructionCleanUp(jsonToSave);
+///
+///    //On load
+///    loadedJson = SnapFromJSON(SnapStringFromFile("filename.txt"));
+///    SnapReconstructionCleanUp(loadedJson);
+/// 
 /// @param value
 /// @param [instanceofVariableName="__instanceof__"]
 /// @param [unsetConstructor=false]

@@ -1,5 +1,14 @@
 // Feather disable all
-
+/// Recursively navigates over a nested struct/array and restores instanceof() values for structs
+/// based on the value of a special variable in each struct. These special variables are set by the
+/// companion function SnapReconstructionPack().
+/// 
+/// If <unsetConstructor> is set to <false>, the special variable used to store the instanceof()
+/// value for each struct will be maintained rather than deleted.
+/// 
+///   N.B. You cannot use anonymous and/or non-global constructors with SnapReconstructionPack()
+///        as these cannot be reliably resolved.
+/// 
 /// @param value
 /// @param [instanceofVariableName="__instanceof__"]
 /// @param [cleanUp=true]

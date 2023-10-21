@@ -1,5 +1,6 @@
 // Feather disable all
-
+/// Cleans up special variables inserted into structs by SnapReconstructionPack().
+/// 
 /// @param value
 /// @param [instanceofVariableName="__instanceof__"]
 
