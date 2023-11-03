@@ -8,7 +8,7 @@
 - ### [Download the .yymps](https://github.com/JujuAdams/SNAP/releases/)
 - ### Read the [documentation](http://jujuadams.github.io/SNAP)
 - ### Talk about SNAP on the [Discord server](https://discord.gg/8krYCqr)
-- ### Find further experiment data formats [here](https://github.com/JujuAdams/ExtendingJSON/)
+- ### Find further experimental data formats [here](https://github.com/JujuAdams/ExtendingJSON/)
 
 &nbsp;
 
