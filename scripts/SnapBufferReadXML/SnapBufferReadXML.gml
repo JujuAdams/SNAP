@@ -92,21 +92,21 @@ function SnapBufferReadXML(_buffer, _offset, _size)
                         {
                             buffer_poke(_buffer, buffer_tell(_buffer)-1, buffer_u8, 0x0);
                             buffer_seek(_buffer, buffer_seek_start, _string_start);
-                            _value = buffer_read(_buffer, buffer_string);
+                            var _substring = buffer_read(_buffer, buffer_string);
                         
                             if (_text_has_ampersand) //Only run these checks if we found an ampersand
                             {
-                                _value = string_replace_all(_value, "&lt;"  , "<");
-                                _value = string_replace_all(_value, "&gt;"  , ">");
-                                _value = string_replace_all(_value, "&amp;" , "&");
-                                _value = string_replace_all(_value, "&apos;", "'");
-                                _value = string_replace_all(_value, "&quot;", "\"");
+                                _substring = string_replace_all(_substring, "&lt;"  , "<");
+                                _substring = string_replace_all(_substring, "&gt;"  , ">");
+                                _substring = string_replace_all(_substring, "&amp;" , "&");
+                                _substring = string_replace_all(_substring, "&apos;", "'");
+                                _substring = string_replace_all(_substring, "&quot;", "\"");
                             }
                         
                             if (!_tag_is_comment)
                             {
                                 if (!variable_struct_exists(_stack_top, "attributes")) _stack_top.attributes = {};
-                                _stack_top.attributes[$ _key] = _value;
+                                _stack_top.attributes[$ _key] = _substring;
                             }
                         
                             _in_key          = true;
