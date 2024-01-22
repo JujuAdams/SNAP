@@ -138,19 +138,8 @@ function __SnapBufferWriteBinary(_buffer, _value, _alphabetizeStructs)
     }
     else if (is_real(_value))
     {
-        if (_value == 0)
-        {
-            buffer_write(_buffer, buffer_u8, 0x05); //<false>
-        }
-        else if (_value == 1)
-        {
-            buffer_write(_buffer, buffer_u8, 0x06); //<true>
-        }
-        else
-        {
-            buffer_write(_buffer, buffer_u8, 0x04); //f64
-            buffer_write(_buffer, buffer_f64, _value);
-        }
+        buffer_write(_buffer, buffer_u8, 0x04); //f64
+        buffer_write(_buffer, buffer_f64, _value);
     }
     else if (is_bool(_value))
     {
@@ -245,19 +234,8 @@ function __SnapBufferWriteBinaryLegacy(_buffer, _value, _alphabetizeStructs)
     }
     else if (is_real(_value))
     {
-        if (_value == 0)
-        {
-            buffer_write(_buffer, buffer_u8, 0x05); //<false>
-        }
-        else if (_value == 1)
-        {
-            buffer_write(_buffer, buffer_u8, 0x06); //<true>
-        }
-        else
-        {
-            buffer_write(_buffer, buffer_u8, 0x04); //f64
-            buffer_write(_buffer, buffer_f64, _value);
-        }
+        buffer_write(_buffer, buffer_u8, 0x04); //f64
+        buffer_write(_buffer, buffer_f64, _value);
     }
     else if (is_bool(_value))
     {
