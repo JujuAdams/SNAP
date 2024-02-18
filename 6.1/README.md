@@ -4,7 +4,6 @@
 <p align="center">Data format converters for GameMaker LTS 2022 by <b>@jujuadams</b></p>
 
 <p align="center"><a href="https://github.com/JujuAdams/SNAP/releases/">Download the .yymps</a></p>
-<p align="center">Chat about SNAP on the <a href="https://discord.gg/B4TwGZyKcB">Discord server</a></p>
 
 &nbsp;
 
