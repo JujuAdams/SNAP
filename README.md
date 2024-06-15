@@ -5,6 +5,7 @@
 
 &nbsp;
 
+- ### Got questions? [Make a new issue!](https://github.com/JujuAdams/SNAP/issues/new)
 - ### [Download the .yymps](https://github.com/JujuAdams/SNAP/releases/)
 - ### Read the [documentation](http://jujuadams.github.io/SNAP)
 - ### Find further experimental data formats [here](https://github.com/JujuAdams/ExtendingJSON/)
