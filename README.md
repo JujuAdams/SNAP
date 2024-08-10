@@ -6,6 +6,7 @@
 &nbsp;
 
 - ### Got questions? [Make a new issue!](https://github.com/JujuAdams/SNAP/issues/new)
+- ### There is also a [Discord server](https://discord.gg/hwgWpnsNw2) (but GitHub issues are preferred)
 - ### [Download the .yymps](https://github.com/JujuAdams/SNAP/releases/)
 - ### Read the [documentation](http://jujuadams.github.io/SNAP)
 - ### Find further experimental data formats [here](https://github.com/JujuAdams/ExtendingJSON/)
