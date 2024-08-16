@@ -193,16 +193,11 @@ function SnapBufferReadGMLNew(_buffer, _offset, _size, _scope = {}, _aliasStruct
         switch(_state)
         {
             case __SHUNT_TOKEN_STATE.__IDENTIFIER: //Identifier (variable/function)
-                if ((_byte == ord(","))
-                ||  (_byte == ord(")"))
-                ||  (_byte == ord(">"))
-                ||  (_byte == ord("<"))
-                ||  (_byte == ord("="))
-                ||  (_byte == ord("+"))
-                ||  (_byte == ord("-"))
-                ||  (_byte == ord("*"))
-                ||  (_byte == ord("/"))
-                ||  (_byte == ord("?")))
+                if ((_byte == ord("\"")) || (_byte == ord("%")) || (_byte == ord("&")) || (_byte == ord("(")) || (_byte == ord(")"))
+                ||  (_byte == ord( "*")) || (_byte == ord("+")) || (_byte == ord(",")) || (_byte == ord("-")) || (_byte == ord("."))
+                ||  (_byte == ord( "/")) || (_byte == ord(":")) || (_byte == ord(";")) || (_byte == ord("<")) || (_byte == ord("="))
+                ||  (_byte == ord( ">")) || (_byte == ord("?")) || (_byte == ord("[")) || (_byte == ord("]")) || (_byte == ord("^"))
+                ||  (_byte == ord( "_")) || (_byte == ord("{")) || (_byte == ord("|")) || (_byte == ord("}")) || (_byte == ord("~")))
                 {
                     _nextState = __SHUNT_TOKEN_STATE.__SYMBOL;
                 }
