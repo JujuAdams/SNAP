@@ -12,12 +12,14 @@
 
 enum __SNAP_GML_TOKEN_STATE
 {
-    __NULL       = -1,
-    __UNKNOWN    =  0,
-    __IDENTIFIER =  1,
-    __STRING     =  2,
-    __NUMBER     =  3,
-    __SYMBOL     =  4,
+    __NULL          = -3,
+    __BLOCK_COMMENT = -2,
+    __LINE_COMMENT  = -1,
+    __UNKNOWN       =  0,
+    __IDENTIFIER    =  1,
+    __STRING        =  2,
+    __NUMBER        =  3,
+    __SYMBOL        =  4,
 }
 
 #macro __SNAP_GML_TOKEN_SYMBOL    0
@@ -194,6 +196,28 @@ function SnapBufferReadGML(_buffer, _offset, _size, _scope = {}, _aliasStruct = 
         
         switch(_state)
         {
+            case __SNAP_GML_TOKEN_STATE.__LINE_COMMENT:
+                if (_lastByte == ord("\n")) //Newline
+                {
+                    _new = true;
+                }
+                else
+                {
+                    _nextState = __SNAP_GML_TOKEN_STATE.__LINE_COMMENT;
+                }
+            break;
+            
+            case __SNAP_GML_TOKEN_STATE.__BLOCK_COMMENT:
+                if ((_lastByte == ord("/")) && (buffer_peek(_buffer, _b-2, buffer_u8) == ord("*"))) // */
+                {
+                    _new = true;
+                }
+                else
+                {
+                    _nextState = __SNAP_GML_TOKEN_STATE.__BLOCK_COMMENT;
+                }
+            break;
+            
             case __SNAP_GML_TOKEN_STATE.__IDENTIFIER: //Identifier (variable/function)
                 if ((_byte == ord("\"")) || (_byte == ord("%")) || (_byte == ord("&")) || (_byte == ord(")"))
                 ||  (_byte == ord( "*")) || (_byte == ord("+")) || (_byte == ord(",")) || (_byte == ord("-")) || (_byte == ord("."))
@@ -377,9 +401,25 @@ function SnapBufferReadGML(_buffer, _offset, _size, _scope = {}, _aliasStruct = 
             {
                 _nextState = __SNAP_GML_TOKEN_STATE.__SYMBOL; //Symbol
             }
-            else if ((_byte >= 42) && (_byte <= 47)) //* + , - . /
+            else if ((_byte >= 42) && (_byte <= 46)) //* + , - .
             {
                 _nextState = __SNAP_GML_TOKEN_STATE.__SYMBOL; //Symbol
+            }
+            else if (_byte == 47) // /
+            {
+                var _nextByte = buffer_peek(_buffer, _b+1, buffer_u8);
+                if (_nextByte == 47) // /
+                {
+                    _nextState = __SNAP_GML_TOKEN_STATE.__LINE_COMMENT;
+                }
+                else if (_nextByte == 42) // *
+                {
+                    _nextState = __SNAP_GML_TOKEN_STATE.__BLOCK_COMMENT;
+                }
+                else
+                {
+                    _nextState = __SNAP_GML_TOKEN_STATE.__SYMBOL;
+                }
             }
             else if ((_byte >= 48) && (_byte <= 57)) //0 1 2 3 4 5 6 7 8 9
             {
