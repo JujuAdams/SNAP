@@ -135,15 +135,17 @@ function SnapBufferReadGMLNew(_buffer, _offset, _size, _scope = {}, _aliasStruct
         return _struct;
     })();
     
-    static _reorderArray  = [];
-    static _opStack       = [];
-    static _evaluateStack = [];
+    static _reorderArray    = [];
+    static _opStack         = [];
+    static _commaCountStack = [];
+    static _evaluateStack   = [];
     
     if (GM_build_type == "run")
     {
-        var _debugReorderArray  = _reorderArray;
-        var _debugOpStackArray  = _opStack;
-        var _debugEvaluateStack = _evaluateStack;
+        var _debugReorderArray    = _reorderArray;
+        var _debugCommaCountStack = _commaCountStack;
+        var _debugOpStackArray    = _opStack;
+        var _debugEvaluateStack   = _evaluateStack;
     }
     
     static _funcError = function()
@@ -193,7 +195,7 @@ function SnapBufferReadGMLNew(_buffer, _offset, _size, _scope = {}, _aliasStruct
         switch(_state)
         {
             case __SHUNT_TOKEN_STATE.__IDENTIFIER: //Identifier (variable/function)
-                if ((_byte == ord("\"")) || (_byte == ord("%")) || (_byte == ord("&")) || (_byte == ord("(")) || (_byte == ord(")"))
+                if ((_byte == ord("\"")) || (_byte == ord("%")) || (_byte == ord("&")) || (_byte == ord(")"))
                 ||  (_byte == ord( "*")) || (_byte == ord("+")) || (_byte == ord(",")) || (_byte == ord("-")) || (_byte == ord("."))
                 ||  (_byte == ord( "/")) || (_byte == ord(":")) || (_byte == ord(";")) || (_byte == ord("<")) || (_byte == ord("="))
                 ||  (_byte == ord( ">")) || (_byte == ord("?")) || (_byte == ord("[")) || (_byte == ord("]")) || (_byte == ord("^"))
@@ -433,8 +435,9 @@ function SnapBufferReadGMLNew(_buffer, _offset, _size, _scope = {}, _aliasStruct
     //                       //
     ///////////////////////////
     
-    array_resize(_reorderArray, 0);
     array_resize(_opStack, 0);
+    array_resize(_commaCountStack, 0);
+    array_resize(_reorderArray, 0);
     
     var _i = 0;
     repeat(array_length(_tokensArray) div 3)
@@ -457,6 +460,7 @@ function SnapBufferReadGMLNew(_buffer, _offset, _size, _scope = {}, _aliasStruct
             }
             else if ((_tokenValue == "(") || (_tokenValue == "[") || (_tokenValue == "{"))
             {
+                array_push(_commaCountStack, 0);
                 array_push(_opStack,   infinity, _tokenType, _tokenValue);
             }
             else if (_tokenValue == ",")
@@ -481,11 +485,17 @@ function SnapBufferReadGMLNew(_buffer, _offset, _size, _scope = {}, _aliasStruct
                 
                 array_resize(_opStack, _j+3);
                 
-                //Collect commas together so we can count the number of parameters later
-                array_push(_opStack,   infinity, __SHUNT_TOKEN_SYMBOL, _tokenValue);
+                _commaCountStack[array_length(_commaCountStack)-1] += 1;
             }
             else if ((_tokenValue == ")") || (_tokenValue == "]") || (_tokenValue == "}"))
             {
+                if (array_length(_commaCountStack) <= 0)
+                {
+                    _funcError("Unexpected token \"", _tokenValue, "\"");
+                }
+                
+                var _parameterCount = 1 + array_pop(_commaCountStack);
+                
                 if (_tokenValue == ")")
                 {
                     var _matchingSymbol = "(";
@@ -499,22 +509,13 @@ function SnapBufferReadGMLNew(_buffer, _offset, _size, _scope = {}, _aliasStruct
                     var _matchingSymbol = "{";
                 }
                 
-                var _parameterCount = 1;
-                
                 var _j = array_length(_opStack) - 3;
                 repeat(array_length(_opStack) div 3)
                 {
                     var _opValue = _opStack[_j+2];
                     if (_opValue == _matchingSymbol) break;
                     
-                    if (_opValue == ",")
-                    {
-                        ++_parameterCount;
-                    }
-                    else
-                    {
-                        array_push(_reorderArray,   _opStack[_j+1], _opValue, undefined);
-                    }
+                    array_push(_reorderArray,   _opStack[_j+1], _opValue, undefined);
                     
                     _j -= 3;
                 }
@@ -532,9 +533,14 @@ function SnapBufferReadGMLNew(_buffer, _offset, _size, _scope = {}, _aliasStruct
                     var _j = array_length(_opStack)-3;
                     
                     //Retroactively set the parameter count to 0 if the two brackets are adjacent: func(), [], {}
-                    if ((_parameterCount == 1) && (_tokensArray[(_i-3) + 1] == _matchingSymbol))
+                    var _prevToken = _tokensArray[(_i-3) + 1];
+                    if (_prevToken == _matchingSymbol)
                     {
                         _parameterCount = 0;
+                    }
+                    else if ((_tokenValue == "]") || (_tokenValue == "}")) && (_prevToken == ",")
+                    {
+                        --_parameterCount;
                     }
                     
                     if (_tokenValue == ")")
