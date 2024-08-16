@@ -30,15 +30,29 @@ struct = {
 show_debug_message(SnapToGML(struct, true));
 show_debug_message(SnapVisualize(SnapFromGML(SnapToGML(struct, true))));
 
+SnapEnvGMLSetVariable("TestVar", 4);
+SnapEnvGMLSetVariableFunction("TestVarFunc", function()
+{
+    return 0.1;
+});
+SnapEnvGMLSetVariable("max", max);
+SnapEnvGMLSetVariable("TestFunc", function()
+{
+    if (argument_count <= 0) return undefined;
+    
+    var _max = argument[0];
+    var _i = 1;
+    repeat(argument_count-1)
+    {
+        _max = max(argument[_i], _max);
+        ++_i;
+    }
+    
+    return _max;
+});
+
 var _string = @"
-//Here's a comment
-a = {b:10};
+c = 2000 + TestVar + TestVarFunc + TestFunc(100, 120, 110) + max(100, 120, 110)";
 
-/*Block comment
-c = -999;
-*/
-
-//In-line block comment
-d = /*888*/666;";
-
-show_debug_message(SnapFromGML(_string));
+//show_debug_message(SnapVisualize(SnapFromGML(_string)));
+show_debug_message(SnapVisualize(SnapFromGMLNew(_string)));
