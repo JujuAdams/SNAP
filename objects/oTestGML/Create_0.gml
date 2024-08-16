@@ -54,5 +54,4 @@ SnapEnvGMLSetVariable("TestFunc", function()
 var _string = @"
 c = 2000 + TestVar + TestVarFunc + TestFunc(100, 120, 110) + max(100, 120, 110)";
 
-//show_debug_message(SnapVisualize(SnapFromGML(_string)));
-show_debug_message(SnapVisualize(SnapFromGMLNew(_string)));
+show_debug_message(SnapVisualize(SnapFromGML(_string)));
