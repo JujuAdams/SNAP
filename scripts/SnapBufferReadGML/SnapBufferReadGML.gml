@@ -220,7 +220,7 @@ function SnapBufferReadGML(_buffer, _offset, _size, _scope = {}, _aliasStruct = 
             
             case __SNAP_GML_TOKEN_STATE.__IDENTIFIER: //Identifier (variable/function)
                 if ((_byte == ord("\"")) || (_byte == ord("%")) || (_byte == ord("&")) || (_byte == ord(")"))
-                ||  (_byte == ord( "*")) || (_byte == ord("+")) || (_byte == ord(",")) || (_byte == ord("-")) || (_byte == ord("."))
+                ||  (_byte == ord( "*")) || (_byte == ord("+")) || (_byte == ord(",")) || (_byte == ord("-"))
                 ||  (_byte == ord( "/")) || (_byte == ord(":")) || (_byte == ord(";")) || (_byte == ord("<")) || (_byte == ord("="))
                 ||  (_byte == ord( ">")) || (_byte == ord("?")) || (_byte == ord("[")) || (_byte == ord("]")) || (_byte == ord("^"))
                 ||  (_byte == ord( "_")) || (_byte == ord("{")) || (_byte == ord("|")) || (_byte == ord("}")) || (_byte == ord("~")))
