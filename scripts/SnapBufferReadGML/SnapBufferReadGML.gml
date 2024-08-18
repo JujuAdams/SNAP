@@ -1,17 +1,52 @@
 // Feather disable all
 
-/// Content should inclue a string including the null terminator.
+/// Parses and executes simple GML code stored in a buffer as a string. Returns the scope, as
+/// given by the `scope` parameter. This GML parser is very stripped back and supports a small
+/// subset of GML. The use of this parser should be limited to reading data in keeping with the
+/// overall intentions of SNAP as a data-oriented library.
 /// 
-/// @param buffer  The GML string to be decoded
+/// N.B. The string in the buffer should include the null terminator.
+/// 
+/// The parser supports:
+/// - Struct / array literals (JSON)
+/// - Most GML operators, including ternaries (`condition? valueIfTrue : valueIfFalse`)
+/// - Executing functions
+/// - Instantiating constructors (with `new`)
+/// - Setting global variables
+/// - Setting scoped variables
+///
+/// The parser does not support:
+/// - if/else, while, etc. flow control
+/// - Function and constructor definition
+/// - Dot notation for variable access in structs/instances
+/// - Square bracket notation for array value access
+/// - Anything else that's not explicitly mentioned
+/// 
+/// Tokens for macros, GML constants, assets etc. can be added by defining them as key-value pairs
+/// in the `tokenStruct` parameter. Tokens can be added globally for all executions of SnapFromGML()
+/// and SnapBufferReadGML() by calling SnapEnvGMLSetToken() and SnapEnvGMLSetTokenFunction().
+/// Please see those functions for more information.
+/// 
+/// The scope for setting variables is given by by `scope` parameter. By default, variables are set
+/// in global scope. You may want to replace this with a struct or an instance depending on your
+/// use case.
+/// 
+/// If you set the `allowAllAssets` parameter to `true` then the GML parser will treat all assets
+/// in your project as accessible (effectively this adds all assets in your project as valid
+/// tokens). It is not recommended to ship any code with this parameter set to `true` as it may
+/// introduce security issues; instead you should explicitly add tokens for assets that you would
+/// like to be made accessible.
+/// 
+/// @param buffer
 /// @param offset
 /// @param size
-/// @param [scope={}]
-/// @param [aliasStruct]
+/// @param [scope=global]
+/// @param [tokenStruct]
 /// @param [allowAllAssets=false]
 /// 
 /// @jujuadams 2024-08-16
 
-function SnapBufferReadGML(_buffer, _offset, _size, _scope = {}, _aliasStruct = {}, _allowAllAssets = false)
+function SnapBufferReadGML(_buffer, _offset, _size, _scope = global, _tokenStruct = {}, _allowAllAssets = false)
 {
     static _globalVariableStruct = __SnapEnvGML().__globalVariableStruct;
     
@@ -951,14 +986,14 @@ function SnapBufferReadGML(_buffer, _offset, _size, _scope = {}, _aliasStruct = 
         }
         else if (_tokenType == __SNAP_GML_TOKEN_VARIABLE)
         {
-            var _value = _aliasStruct[$ _tokenValue];
+            var _value = _tokenStruct[$ _tokenValue];
             if (_value == undefined)
             {
                 if (variable_struct_exists(_globalVariableStruct, _tokenValue))
                 {
                     _value = _globalVariableStruct[$ _tokenValue]();
                 }
-                else if (not variable_struct_exists(_aliasStruct, _tokenValue))
+                else if (not variable_struct_exists(_tokenStruct, _tokenValue))
                 {
                     _funcError("Variable \"", _tokenValue, "\" has no alias");
                 }
@@ -976,14 +1011,14 @@ function SnapBufferReadGML(_buffer, _offset, _size, _scope = {}, _aliasStruct = 
             }
             else
             {
-                var _function = _aliasStruct[$ _tokenValue];
+                var _function = _tokenStruct[$ _tokenValue];
                 if (_function == undefined)
                 {
                     if (variable_struct_exists(_globalVariableStruct, _tokenValue))
                     {
                         _function = _globalVariableStruct[$ _tokenValue]();
                     }
-                    else if (not variable_struct_exists(_aliasStruct, _tokenValue))
+                    else if (not variable_struct_exists(_tokenStruct, _tokenValue))
                     {
                         _funcError("Function \"", _tokenValue, "\" has no alias");
                     }
