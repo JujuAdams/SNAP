@@ -60,7 +60,7 @@ function SnapBufferReadGML(_buffer, _offset, _size, _scope = {}, _aliasStruct = 
         _struct[$ "{"] = 1;
         _struct[$ "}"] = 1;
         
-        _struct[$ "new"              ] = 2;
+        _struct[$ "new"                 ] = 2;
         _struct[$ __SNAP_GML_OP_NEGATIVE] = 2;
         _struct[$ __SNAP_GML_OP_POSITIVE] = 2;
         
@@ -103,7 +103,7 @@ function SnapBufferReadGML(_buffer, _offset, _size, _scope = {}, _aliasStruct = 
         _struct[$  "{"] = true;  //Left
         _struct[$  "}"] = true;  //Left
         
-        _struct[$ "new"              ] = false; //Right
+        _struct[$ "new"                 ] = false; //Right
         _struct[$ __SNAP_GML_OP_NEGATIVE] = false; //Right
         _struct[$ __SNAP_GML_OP_POSITIVE] = false; //Right
         
@@ -164,10 +164,6 @@ function SnapBufferReadGML(_buffer, _offset, _size, _scope = {}, _aliasStruct = 
         
         show_error(_string + "\n ", true);
     }
-    
-    
-    
-    
     
     //////////////////////
     //                  //
@@ -315,7 +311,7 @@ function SnapBufferReadGML(_buffer, _offset, _size, _scope = {}, _aliasStruct = 
                 }
             break;
             
-            case __SNAP_GML_TOKEN_STATE.__STRING: //Quote-delimited String
+            case __SNAP_GML_TOKEN_STATE.__STRING:
                 if ((_byte == 0) || ((_byte == 34) && (_lastByte != 92))) //null "
                 {
                     _changeState = false;
@@ -337,16 +333,16 @@ function SnapBufferReadGML(_buffer, _offset, _size, _scope = {}, _aliasStruct = 
                 }
                 else
                 {
-                    _nextState = __SNAP_GML_TOKEN_STATE.__STRING; //Quote-delimited String
+                    _nextState = __SNAP_GML_TOKEN_STATE.__STRING;
                 }
             break;
             
             case __SNAP_GML_TOKEN_STATE.__NUMBER: //Number
-                if (_byte == 46) //.
+                if (_byte == 46) // .
                 {
                     _nextState = __SNAP_GML_TOKEN_STATE.__NUMBER;
                 }
-                else if ((_byte >= 48) && (_byte <= 57)) //0 1 2 3 4 5 6 7 8 9
+                else if ((_byte >= 48) && (_byte <= 57)) // 0 1 2 3 4 5 6 7 8 9
                 {
                     _nextState = __SNAP_GML_TOKEN_STATE.__NUMBER;
                 }
@@ -374,8 +370,8 @@ function SnapBufferReadGML(_buffer, _offset, _size, _scope = {}, _aliasStruct = 
                 }
             break;
             
-            case __SNAP_GML_TOKEN_STATE.__SYMBOL: //Symbol
-                if (_byte == 61) //=
+            case __SNAP_GML_TOKEN_STATE.__SYMBOL:
+                if (_byte == 61) // =
                 {
                     if ((_lastByte == 33)  // !=
                     ||  (_lastByte == 42)  // *=
@@ -386,16 +382,16 @@ function SnapBufferReadGML(_buffer, _offset, _size, _scope = {}, _aliasStruct = 
                     ||  (_lastByte == 61)  // ==
                     ||  (_lastByte == 62)) // >=
                     {
-                        _nextState = __SNAP_GML_TOKEN_STATE.__SYMBOL; //Symbol
+                        _nextState = __SNAP_GML_TOKEN_STATE.__SYMBOL;
                     }
                 }
                 else if ((_byte == 38) && (_lastByte == 38)) //&
                 {
-                    _nextState = __SNAP_GML_TOKEN_STATE.__SYMBOL; //Symbol
+                    _nextState = __SNAP_GML_TOKEN_STATE.__SYMBOL;
                 }
                 else if ((_byte == 124) && (_lastByte == 124)) //|
                 {
-                    _nextState = __SNAP_GML_TOKEN_STATE.__SYMBOL; //Symbol
+                    _nextState = __SNAP_GML_TOKEN_STATE.__SYMBOL;
                 }
                 
                 if (_state != _nextState)
@@ -416,32 +412,32 @@ function SnapBufferReadGML(_buffer, _offset, _size, _scope = {}, _aliasStruct = 
         {
             if (_byte == 33) //!
             {
-                _nextState = __SNAP_GML_TOKEN_STATE.__SYMBOL; //Symbol
+                _nextState = __SNAP_GML_TOKEN_STATE.__SYMBOL;
             }
-            else if ((_byte == 34) && (_lastByte != 92)) //"
+            else if ((_byte == 34) && (_lastByte != 92)) // "
             {
-                _nextState = __SNAP_GML_TOKEN_STATE.__STRING; //Quote-delimited String
+                _nextState = __SNAP_GML_TOKEN_STATE.__STRING;
             }
-            else if ((_byte == 37) || (_byte == 38)) //% &
+            else if ((_byte == 37) || (_byte == 38)) // % &
             {
-                _nextState = __SNAP_GML_TOKEN_STATE.__SYMBOL; //Symbol
+                _nextState = __SNAP_GML_TOKEN_STATE.__SYMBOL;
             }
-            else if ((_byte == 40) || (_byte == 41)) //( )
+            else if ((_byte == 40) || (_byte == 41)) // ( )
             {
-                _nextState = __SNAP_GML_TOKEN_STATE.__SYMBOL; //Symbol
+                _nextState = __SNAP_GML_TOKEN_STATE.__SYMBOL;
             }
-            else if ((_byte >= 42) && (_byte <= 46)) //* + , - .
+            else if ((_byte >= 42) && (_byte <= 46)) // * + , - .
             {
-                _nextState = __SNAP_GML_TOKEN_STATE.__SYMBOL; //Symbol
+                _nextState = __SNAP_GML_TOKEN_STATE.__SYMBOL;
             }
             else if (_byte == 47) // /
             {
                 var _nextByte = buffer_peek(_buffer, _b+1, buffer_u8);
-                if (_nextByte == 47) // /
+                if (_nextByte == 47) // //
                 {
                     _nextState = __SNAP_GML_TOKEN_STATE.__LINE_COMMENT;
                 }
-                else if (_nextByte == 42) // *
+                else if (_nextByte == 42) // /*
                 {
                     _nextState = __SNAP_GML_TOKEN_STATE.__BLOCK_COMMENT;
                 }
@@ -450,41 +446,41 @@ function SnapBufferReadGML(_buffer, _offset, _size, _scope = {}, _aliasStruct = 
                     _nextState = __SNAP_GML_TOKEN_STATE.__SYMBOL;
                 }
             }
-            else if ((_byte >= 48) && (_byte <= 57)) //0 1 2 3 4 5 6 7 8 9
+            else if ((_byte >= 48) && (_byte <= 57)) // 0 1 2 3 4 5 6 7 8 9
             {
-                _nextState = __SNAP_GML_TOKEN_STATE.__NUMBER; //Number
+                _nextState = __SNAP_GML_TOKEN_STATE.__NUMBER;
             }
-            else if ((_byte >= 58) && (_byte <= 63))  //: ; < = > ?
+            else if ((_byte >= 58) && (_byte <= 63))  // : ; < = > ?
             {
-                _nextState = __SNAP_GML_TOKEN_STATE.__SYMBOL; //Symbol
+                _nextState = __SNAP_GML_TOKEN_STATE.__SYMBOL;
             }
-            else if ((_byte >= 65) && (_byte <= 90)) //a b c...x y z
+            else if ((_byte >= 65) && (_byte <= 90)) // a b c...x y z
             {
-                _nextState = __SNAP_GML_TOKEN_STATE.__IDENTIFIER; //Word/Variable Name
+                _nextState = __SNAP_GML_TOKEN_STATE.__IDENTIFIER;
             }
-            else if (_byte == 91) //[
+            else if (_byte == 91) // [
             {
-                _nextState = __SNAP_GML_TOKEN_STATE.__SYMBOL; //Symbol
+                _nextState = __SNAP_GML_TOKEN_STATE.__SYMBOL;
             }
-            else if (_byte == 93) //]
+            else if (_byte == 93) // ]
             {
-                _nextState = __SNAP_GML_TOKEN_STATE.__SYMBOL; //Symbol
+                _nextState = __SNAP_GML_TOKEN_STATE.__SYMBOL;
             }
-            else if (_byte == 94) //^
+            else if (_byte == 94) // ^
             {
-                _nextState = __SNAP_GML_TOKEN_STATE.__SYMBOL; //Symbol
+                _nextState = __SNAP_GML_TOKEN_STATE.__SYMBOL;
             }
-            else if (_byte == 95) //_
+            else if (_byte == 95) // _
             {
-                _nextState = __SNAP_GML_TOKEN_STATE.__IDENTIFIER; //Word/Variable Name
+                _nextState = __SNAP_GML_TOKEN_STATE.__IDENTIFIER;
             }
-            else if ((_byte >= 97) && (_byte <= 122)) //A B C...X Y Z
+            else if ((_byte >= 97) && (_byte <= 122)) // A B C...X Y Z
             {
-                _nextState = __SNAP_GML_TOKEN_STATE.__IDENTIFIER; //Word/Variable Name
+                _nextState = __SNAP_GML_TOKEN_STATE.__IDENTIFIER;
             }
             else if ((_byte >= 123) && (_byte <= 126)) // { | } ~
             {
-                _nextState = __SNAP_GML_TOKEN_STATE.__SYMBOL; //Symbol
+                _nextState = __SNAP_GML_TOKEN_STATE.__SYMBOL;
             }
         }
         
