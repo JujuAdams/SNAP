@@ -11,43 +11,6 @@
 /// 
 /// @jujuadams 2024-08-16
 
-enum __SNAP_GML_TOKEN_STATE
-{
-    __NULL          = -3,
-    __BLOCK_COMMENT = -2,
-    __LINE_COMMENT  = -1,
-    __UNKNOWN       =  0,
-    __IDENTIFIER    =  1,
-    __STRING        =  2,
-    __NUMBER        =  3,
-    __SYMBOL        =  4,
-}
-
-#macro __SNAP_GML_TOKEN_SYMBOL    0
-#macro __SNAP_GML_TOKEN_LITERAL   1
-#macro __SNAP_GML_TOKEN_FUNCTION  2
-#macro __SNAP_GML_TOKEN_VARIABLE  3
-
-#macro __SNAP_GML_OP_NEGATIVE        "__negative__"
-#macro __SNAP_GML_OP_POSITIVE        "__positive__"
-#macro __SNAP_GML_OP_TERNARY         "__ternary__"
-#macro __SNAP_GML_OP_ARRAY_LITERAL   "__arrayLiteral__"
-#macro __SNAP_GML_OP_STRUCT_LITERAL  "__structLiteral__"
-
-function __SnapEnvGML()
-{
-    static _system = undefined;
-    if (_system != undefined) return _system;
-    
-    _system = {};
-    with(_system)
-    {
-        __globalVariableStruct = {};
-    }
-    
-    return _system;
-}
-
 function SnapBufferReadGML(_buffer, _offset, _size, _scope = {}, _aliasStruct = {}, _allowAllAssets = false)
 {
     static _globalVariableStruct = __SnapEnvGML().__globalVariableStruct;
@@ -1128,4 +1091,41 @@ function SnapBufferReadGML(_buffer, _offset, _size, _scope = {}, _aliasStruct = 
     }
     
     return _scope;
+}
+
+enum __SNAP_GML_TOKEN_STATE
+{
+    __NULL          = -3,
+    __BLOCK_COMMENT = -2,
+    __LINE_COMMENT  = -1,
+    __UNKNOWN       =  0,
+    __IDENTIFIER    =  1,
+    __STRING        =  2,
+    __NUMBER        =  3,
+    __SYMBOL        =  4,
+}
+
+#macro __SNAP_GML_TOKEN_SYMBOL    0
+#macro __SNAP_GML_TOKEN_LITERAL   1
+#macro __SNAP_GML_TOKEN_FUNCTION  2
+#macro __SNAP_GML_TOKEN_VARIABLE  3
+
+#macro __SNAP_GML_OP_NEGATIVE        "__negative__"
+#macro __SNAP_GML_OP_POSITIVE        "__positive__"
+#macro __SNAP_GML_OP_TERNARY         "__ternary__"
+#macro __SNAP_GML_OP_ARRAY_LITERAL   "__arrayLiteral__"
+#macro __SNAP_GML_OP_STRUCT_LITERAL  "__structLiteral__"
+
+function __SnapEnvGML()
+{
+    static _system = undefined;
+    if (_system != undefined) return _system;
+    
+    _system = {};
+    with(_system)
+    {
+        __globalVariableStruct = {};
+    }
+    
+    return _system;
 }
