@@ -237,6 +237,24 @@ function SnapBufferReadGML(_buffer, _offset, _size, _scope = {}, _aliasStruct = 
                         if (_isFunction)
                         {
                             _read = string_copy(_read, 1, string_length(_read)-1); //Trim off the open bracket
+                            
+                            if (_allowAllAssets)
+                            {
+                                try
+                                {
+                                    var _asset = asset_get_index(_read);
+                                    if ((real(_asset) >= 0) && (asset_get_type(_read) != asset_unknown))
+                                    {
+                                        _isAsset = true;
+                                        _read = _asset;
+                                    }
+                                }
+                                catch(_error)
+                                {
+                                    
+                                }
+                            }
+                            
                             array_push(_tokensArray,   __SNAP_GML_TOKEN_FUNCTION, _read, undefined);
                             array_push(_tokensArray,   __SNAP_GML_TOKEN_SYMBOL,   "(",   undefined);
                         }
@@ -952,7 +970,7 @@ function SnapBufferReadGML(_buffer, _offset, _size, _scope = {}, _aliasStruct = 
         {
             var _parameterCount = _reorderArray[_i+2];
             
-            if (is_method(_tokenValue) || script_exists(_tokenValue))
+            if (is_method(_tokenValue) || (not is_string(_tokenValue) && script_exists(real(_tokenValue))))
             {
                 var _function = _tokenValue;
             }
