@@ -7,6 +7,7 @@
 /// @param size
 /// @param [scope={}]
 /// @param [aliasStruct]
+/// @param [allowAllAssets=false]
 /// 
 /// @jujuadams 2024-08-16
 
@@ -47,7 +48,7 @@ function __SnapEnvGML()
     return _system;
 }
 
-function SnapBufferReadGML(_buffer, _offset, _size, _scope = {}, _aliasStruct = {})
+function SnapBufferReadGML(_buffer, _offset, _size, _scope = {}, _aliasStruct = {}, _allowAllAssets = false)
 {
     static _globalVariableStruct = __SnapEnvGML().__globalVariableStruct;
     
@@ -236,7 +237,8 @@ function SnapBufferReadGML(_buffer, _offset, _size, _scope = {}, _aliasStruct = 
                 if ((_state != _nextState) || (_lastByte == ord("("))) //Cheeky hack to find functions
                 {
                     var _isSymbol   = false;
-                    var _isNumber   = false;
+                    var _isLiteral  = false;
+                    var _isAsset    = false;
                     var _isFunction = (_lastByte == ord("(")); //Cheeky hack to find functions
                     
                     //Just a normal keyboard/variable
@@ -267,19 +269,45 @@ function SnapBufferReadGML(_buffer, _offset, _size, _scope = {}, _aliasStruct = 
                     {
                         array_push(_tokensArray,   __SNAP_GML_TOKEN_SYMBOL, _read, undefined);
                     }
-                    else if (_isNumber)
+                    else if (_isLiteral)
                     {
                         array_push(_tokensArray,   __SNAP_GML_TOKEN_LITERAL, _read, undefined);
                     }
-                    else if (_isFunction)
-                    {
-                        _read = string_copy(_read, 1, string_length(_read)-1); //Trim off the open bracket
-                        array_push(_tokensArray,   __SNAP_GML_TOKEN_FUNCTION, _read, undefined);
-                        array_push(_tokensArray,   __SNAP_GML_TOKEN_SYMBOL, "(", undefined);
-                    }
                     else
                     {
-                        array_push(_tokensArray,   __SNAP_GML_TOKEN_VARIABLE, _read, undefined);
+                        if (_isFunction)
+                        {
+                            _read = string_copy(_read, 1, string_length(_read)-1); //Trim off the open bracket
+                            array_push(_tokensArray,   __SNAP_GML_TOKEN_FUNCTION, _read, undefined);
+                            array_push(_tokensArray,   __SNAP_GML_TOKEN_SYMBOL,   "(",   undefined);
+                        }
+                        else
+                        {
+                            if (_allowAllAssets)
+                            {
+                                try
+                                {
+                                    var _asset = asset_get_index(_read);
+                                    if ((real(_asset) >= 0) && (asset_get_type(_asset) != asset_unknown))
+                                    {
+                                        _isAsset = true;
+                                    }
+                                }
+                                catch(_error)
+                                {
+                                    
+                                }
+                            }
+                            
+                            if (_isAsset)
+                            {
+                                array_push(_tokensArray,   __SNAP_GML_TOKEN_LITERAL, _asset, undefined);
+                            }
+                            else
+                            {
+                                array_push(_tokensArray,   __SNAP_GML_TOKEN_VARIABLE, _read, undefined);
+                            }
+                        }
                     }
                     
                     _new = true;
