@@ -30,13 +30,13 @@ struct = {
 show_debug_message(SnapToGML(struct, true));
 show_debug_message(SnapVisualize(SnapFromGML(SnapToGML(struct, true))));
 
-SnapEnvGMLSetVariable("TestVar", 4);
-SnapEnvGMLSetVariableFunction("TestVarFunc", function()
+SnapEnvGMLSetToken("TestVar", 4);
+SnapEnvGMLSetTokenFunction("TestVarFunc", function()
 {
     return 0.1;
 });
-SnapEnvGMLSetVariable("max", max);
-SnapEnvGMLSetVariable("TestFunc", function()
+SnapEnvGMLSetToken("max", max);
+SnapEnvGMLSetToken("TestFunc", function()
 {
     if (argument_count <= 0) return undefined;
     

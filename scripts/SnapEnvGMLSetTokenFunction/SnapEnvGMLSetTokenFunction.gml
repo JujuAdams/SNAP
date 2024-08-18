@@ -1,14 +1,14 @@
 // Feather disable all
 
-/// @param variableName
+/// @param token
 /// @param function
 /// @param [metadata=undefined]
 
-function SnapEnvGMLSetVariableFunction(_variable, _function, _metadata = undefined)
+function SnapEnvGMLSetTokenFunction(_token, _function, _metadata = undefined)
 {
     static _globalVariableStruct = __SnapEnvGML().__globalVariableStruct;
     
-    _globalVariableStruct[$ _variable] = method(
+    _globalVariableStruct[$ _token] = method(
     {
         __function: _function,
         __metadata: _metadata,

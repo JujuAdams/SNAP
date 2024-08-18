@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "SnapEnvGMLSetVariable",
+  "name": "SnapEnvGMLSetToken",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
