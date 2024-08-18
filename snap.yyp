@@ -80,6 +80,7 @@
     {"id":{"name":"SnapBufferWriteVDF","path":"scripts/SnapBufferWriteVDF/SnapBufferWriteVDF.yy",},"order":2,},
     {"id":{"name":"SnapBufferWriteTilemap","path":"scripts/SnapBufferWriteTilemap/SnapBufferWriteTilemap.yy",},"order":5,},
     {"id":{"name":"SnapToXML","path":"scripts/SnapToXML/SnapToXML.yy",},"order":0,},
+    {"id":{"name":"SnapEnvGMLSetNativeTokens","path":"scripts/SnapEnvGMLSetNativeTokens/SnapEnvGMLSetNativeTokens.yy",},"order":8,},
     {"id":{"name":"SnapToVDF","path":"scripts/SnapToVDF/SnapToVDF.yy",},"order":0,},
     {"id":{"name":"SnapVisualize","path":"scripts/SnapVisualize/SnapVisualize.yy",},"order":0,},
     {"id":{"name":"SnapBufferWriteYAML","path":"scripts/SnapBufferWriteYAML/SnapBufferWriteYAML.yy",},"order":2,},
