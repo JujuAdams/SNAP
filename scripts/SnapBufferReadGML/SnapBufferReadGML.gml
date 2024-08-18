@@ -223,7 +223,7 @@ function SnapBufferReadGML(_buffer, _offset, _size, _scope = {}, _aliasStruct = 
                 ||  (_byte == ord( "*")) || (_byte == ord("+")) || (_byte == ord(",")) || (_byte == ord("-"))
                 ||  (_byte == ord( "/")) || (_byte == ord(":")) || (_byte == ord(";")) || (_byte == ord("<")) || (_byte == ord("="))
                 ||  (_byte == ord( ">")) || (_byte == ord("?")) || (_byte == ord("[")) || (_byte == ord("]")) || (_byte == ord("^"))
-                ||  (_byte == ord( "_")) || (_byte == ord("{")) || (_byte == ord("|")) || (_byte == ord("}")) || (_byte == ord("~")))
+                ||  (_byte == ord( "{")) || (_byte == ord("|")) || (_byte == ord("}")) || (_byte == ord("~")))
                 {
                     _nextState = __SNAP_GML_TOKEN_STATE.__SYMBOL;
                 }
