@@ -1,6 +1,5 @@
 // Feather disable all
 
-
 /// Adds a token to all future calls to SnapFromGML() and SnapBufferReadGML(). When evaluated, the
 /// token will execute the defined function. The return value from that function will be used as
 /// the value for the token. This is useful for dynamically updating values (time, mouse position
