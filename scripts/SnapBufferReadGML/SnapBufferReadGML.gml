@@ -993,16 +993,23 @@ function SnapBufferReadGML(_buffer, _offset, _size, _scope = {}, _aliasStruct = 
         {
             var _parameterCount = _reorderArray[_i+2];
             
-            var _function = _aliasStruct[$ _tokenValue];
-            if (_function == undefined)
+            if (is_method(_tokenValue) || script_exists(_tokenValue))
             {
-                if (variable_struct_exists(_globalVariableStruct, _tokenValue))
+                var _function = _tokenValue;
+            }
+            else
+            {
+                var _function = _aliasStruct[$ _tokenValue];
+                if (_function == undefined)
                 {
-                    _function = _globalVariableStruct[$ _tokenValue]();
-                }
-                else if (not variable_struct_exists(_aliasStruct, _tokenValue))
-                {
-                    _funcError("Function \"", _tokenValue, "\" has no alias");
+                    if (variable_struct_exists(_globalVariableStruct, _tokenValue))
+                    {
+                        _function = _globalVariableStruct[$ _tokenValue]();
+                    }
+                    else if (not variable_struct_exists(_aliasStruct, _tokenValue))
+                    {
+                        _funcError("Function \"", _tokenValue, "\" has no alias");
+                    }
                 }
             }
             
