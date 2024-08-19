@@ -24,10 +24,9 @@ function SnapBufferReadXML(_buffer, _offset, _size)
     var _string_start = 0;
     var _value        = "";
     
-    var _in_text            = false;
-    var _text               = "";
-    var _text_has_ampersand = false;
-    var _text_start         = 0;
+    var _in_text    = false;
+    var _text       = "";
+    var _text_start = 0;
     
     var _in_tag                 = false;
     var _tag                    = undefined;
@@ -84,17 +83,13 @@ function SnapBufferReadXML(_buffer, _offset, _size)
                 {
                     if (_in_string)
                     {
-                        if (_value == ord("&")) //Check for ampersands so we can trigger a find-replace on the output value
-                        {
-                            _text_has_ampersand = true;
-                        }
-                        else if (_value == ord("\"")) //End string
+                        if (_value == ord("\"")) //End string
                         {
                             buffer_poke(_buffer, buffer_tell(_buffer)-1, buffer_u8, 0x0);
                             buffer_seek(_buffer, buffer_seek_start, _string_start);
                             var _substring = buffer_read(_buffer, buffer_string);
-                        
-                            if (_text_has_ampersand) //Only run these checks if we found an ampersand
+                            
+                            if (string_pos("&", _text) > 0)
                             {
                                 _substring = string_replace_all(_substring, "&lt;"  , "<");
                                 _substring = string_replace_all(_substring, "&gt;"  , ">");
@@ -252,9 +247,8 @@ function SnapBufferReadXML(_buffer, _offset, _size)
                         }
                         else
                         {
-                            _in_text            = true;
-                            _text_has_ampersand = false;
-                            _text_start         = buffer_tell(_buffer);
+                            _in_text    = true;
+                            _text_start = buffer_tell(_buffer);
                         }
                     }
                     
@@ -280,6 +274,15 @@ function SnapBufferReadXML(_buffer, _offset, _size)
                     buffer_poke(_buffer, buffer_tell(_buffer)-1, buffer_u8, 0x0);
                     buffer_seek(_buffer, buffer_seek_start, _text_start);
                     _text = buffer_read(_buffer, buffer_string);
+                    
+                    if (string_pos("&", _text) > 0)
+                    {
+                        _text = string_replace_all(_text, "&lt;"  , "<");
+                        _text = string_replace_all(_text, "&gt;"  , ">");
+                        _text = string_replace_all(_text, "&amp;" , "&");
+                        _text = string_replace_all(_text, "&apos;", "'");
+                        _text = string_replace_all(_text, "&quot;", "\"");
+                    }
                     
                     _stack_top.text = _text;
                 }
