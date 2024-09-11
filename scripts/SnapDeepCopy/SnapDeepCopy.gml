@@ -35,7 +35,7 @@ function __SnapDeepCopyInner(_value, _oldStruct, _newStruct)
         if (_self == _oldStruct)
         {
             //If this method is bound to the source struct, create a new method bound to the new struct
-            _value = method(_newStruct, method_get_index(_value));
+            _copy = method(_newStruct, method_get_index(_value));
         }
         else if (_self != undefined)
         {
