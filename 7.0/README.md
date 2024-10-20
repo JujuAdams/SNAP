@@ -13,6 +13,12 @@ Everything apart from HTML5! I've not tested outside of Windows but SNAP relies 
 
 &nbsp;
 
+## Does this library support GMRT / "new runtime"?
+
+No, GMRT is not supported by this library.
+
+&nbsp;
+
 **How is SNAP licensed? Can I use it for commercial projects?**
 
 [SNAP is released under the MIT license](https://github.com/JujuAdams/SNAP/blob/main/LICENSE). This means you can use it for whatever purpose you want, including commercial projects. It'd mean a lot to me if you'd drop my name in the credits (Juju Adams) and/or say thanks, but you're under no obligation to do so.
