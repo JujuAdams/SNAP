@@ -116,7 +116,7 @@ function SnapBufferReadXML(_buffer, _offset, _size)
                         _string_start = buffer_tell(_buffer);
                     }
                 }
-                else
+                else if (!_tag_is_comment)
                 {
                     switch(_value)
                     {
@@ -169,7 +169,7 @@ function SnapBufferReadXML(_buffer, _offset, _size)
                                 _tag = buffer_read(_buffer, buffer_string);
                             }
                             
-                            if (!_tag_is_comment && !_tag_terminating)
+                            if (!_tag_terminating)
                             {
                                 _stack_top = {
                                     type: (_tag_is_prolog? "prolog" : _tag),
