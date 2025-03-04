@@ -6,37 +6,61 @@
 
 function SnapVisualize(_value, _ascii = false)
 {
+    static _referenceMap = ds_map_create();
+    
     static _buffer = buffer_create(1024, buffer_grow, 1);
     buffer_seek(_buffer, buffer_seek_start, 0);
     
     if (_ascii)
     {
-        __SnapVisualizeASCIIInner(_buffer, " ", _value);
+        __SnapVisualizeASCIIInner(_buffer, " ", _value, _referenceMap);
     }
     else
     {
-        __SnapVisualizeInner(_buffer, " ", _value);
+        __SnapVisualizeInner(_buffer, " ", _value, _referenceMap);
     }
     
     buffer_write(_buffer, buffer_u8, 0x00);
+    
+    ds_map_clear(_referenceMap);
+    
     return buffer_peek(_buffer, 0, buffer_string);
 }
 
-function __SnapVisualizeInner(_buffer, _prefix, _value)
+function __SnapVisualizePointer(_value)
+{
+    return string_delete(string(ptr(_value)), 1, 8);
+}
+
+function __SnapVisualizeInner(_buffer, _prefix, _value, _referenceMap)
 {
     if (is_struct(_value))
     {
+        if (ds_map_exists(_referenceMap, ptr(_value)))
+        {
+            buffer_write(_buffer, buffer_text, "{circ ref ");
+            buffer_write(_buffer, buffer_text, __SnapVisualizePointer(_value));
+            buffer_write(_buffer, buffer_text, "}");
+            return;
+        }
+        
+        _referenceMap[? ptr(_value)] = true;
+        
         var _struct = _value;
         
         var _instanceOf = instanceof(_struct);
         if (_instanceOf == "struct")
         {
-            buffer_write(_buffer, buffer_text, "{}");
+            buffer_write(_buffer, buffer_text, "{struct ");
+            buffer_write(_buffer, buffer_text, __SnapVisualizePointer(_value));
+            buffer_write(_buffer, buffer_text, "}");
         }
         else
         {
             buffer_write(_buffer, buffer_text, "{");
             buffer_write(_buffer, buffer_text, _instanceOf);
+            buffer_write(_buffer, buffer_text, " ");
+            buffer_write(_buffer, buffer_text, __SnapVisualizePointer(_value));
             buffer_write(_buffer, buffer_text, "}");
         }
         
@@ -60,7 +84,7 @@ function __SnapVisualizeInner(_buffer, _prefix, _value)
                 buffer_write(_buffer, buffer_text, "├─ ");
                 buffer_write(_buffer, buffer_text, _name);
                 buffer_write(_buffer, buffer_text, ":");
-                __SnapVisualizeInner(_buffer, _prefix, _struct[$ _name]);
+                __SnapVisualizeInner(_buffer, _prefix, _struct[$ _name], _referenceMap);
                 buffer_write(_buffer, buffer_u8, 0x0a); // newline
                 
                 ++_i;
@@ -74,20 +98,30 @@ function __SnapVisualizeInner(_buffer, _prefix, _value)
             
             _prefix = _oldPrefix + "     ";
             repeat(string_length(_name)) _prefix += " ";
-            __SnapVisualizeInner(_buffer, _prefix, _struct[$ _name]);
+            __SnapVisualizeInner(_buffer, _prefix, _struct[$ _name], _referenceMap);
         }
     }
     else if (is_array(_value))
     {
-        if (array_length(_value) <= 0)
+        if (ds_map_exists(_referenceMap, ptr(_value)))
         {
-            buffer_write(_buffer, buffer_text, "[]");
+            buffer_write(_buffer, buffer_text, "[circ ref ");
+            buffer_write(_buffer, buffer_text, __SnapVisualizePointer(_value));
+            buffer_write(_buffer, buffer_text, "]");
+            return;
         }
-        else
+        
+        _referenceMap[? ptr(_value)] = true;
+        
+        buffer_write(_buffer, buffer_text, "[");
+        buffer_write(_buffer, buffer_text, __SnapVisualizePointer(_value));
+        buffer_write(_buffer, buffer_text, "]");
+        
+        if (array_length(_value) > 0)
         {
-            var _array = _value;
+            buffer_write(_buffer, buffer_text, "\n");
             
-            buffer_write(_buffer, buffer_text, "[]\n");
+            var _array = _value;
             
             var _oldPrefix = _prefix;
             _prefix += "│  ";
@@ -97,7 +131,7 @@ function __SnapVisualizeInner(_buffer, _prefix, _value)
             {
                 buffer_write(_buffer, buffer_text, _oldPrefix);
                 buffer_write(_buffer, buffer_text, "├─");
-                __SnapVisualizeInner(_buffer, _prefix, _array[_i]);
+                __SnapVisualizeInner(_buffer, _prefix, _array[_i], _referenceMap);
                 buffer_write(_buffer, buffer_u8, 0x0a); // newline
                 ++_i;
             }
@@ -105,7 +139,7 @@ function __SnapVisualizeInner(_buffer, _prefix, _value)
             _prefix = _oldPrefix + "   ";
             buffer_write(_buffer, buffer_text, _oldPrefix);
             buffer_write(_buffer, buffer_text, "╰─");
-            __SnapVisualizeInner(_buffer, _prefix, _array[_i]);
+            __SnapVisualizeInner(_buffer, _prefix, _array[_i], _referenceMap);
         }
     }
     else if (is_string(_value))
@@ -128,21 +162,35 @@ function __SnapVisualizeInner(_buffer, _prefix, _value)
     }
 }
 
-function __SnapVisualizeASCIIInner(_buffer, _prefix, _value)
+function __SnapVisualizeASCIIInner(_buffer, _prefix, _value, _referenceMap)
 {
     if (is_struct(_value))
     {
+        if (ds_map_exists(_referenceMap, ptr(_value)))
+        {
+            buffer_write(_buffer, buffer_text, "{circ ref ");
+            buffer_write(_buffer, buffer_text, __SnapVisualizePointer(_value));
+            buffer_write(_buffer, buffer_text, "}");
+            return;
+        }
+        
+        _referenceMap[? ptr(_value)] = true;
+        
         var _struct = _value;
         
         var _instanceOf = instanceof(_struct);
         if (_instanceOf == "struct")
         {
-            buffer_write(_buffer, buffer_text, "{}");
+            buffer_write(_buffer, buffer_text, "{struct ");
+            buffer_write(_buffer, buffer_text, __SnapVisualizePointer(_value));
+            buffer_write(_buffer, buffer_text, "}");
         }
         else
         {
             buffer_write(_buffer, buffer_text, "{");
             buffer_write(_buffer, buffer_text, _instanceOf);
+            buffer_write(_buffer, buffer_text, " ");
+            buffer_write(_buffer, buffer_text, __SnapVisualizePointer(_value));
             buffer_write(_buffer, buffer_text, "}");
         }
         
@@ -166,7 +214,7 @@ function __SnapVisualizeASCIIInner(_buffer, _prefix, _value)
                 buffer_write(_buffer, buffer_text, "|- ");
                 buffer_write(_buffer, buffer_text, _name);
                 buffer_write(_buffer, buffer_text, ":");
-                __SnapVisualizeASCIIInner(_buffer, _prefix, _struct[$ _name]);
+                __SnapVisualizeASCIIInner(_buffer, _prefix, _struct[$ _name], _referenceMap);
                 buffer_write(_buffer, buffer_text, "\n");
                 
                 ++_i;
@@ -180,18 +228,30 @@ function __SnapVisualizeASCIIInner(_buffer, _prefix, _value)
             
             _prefix = _oldPrefix + "     ";
             repeat(string_length(_name)) _prefix += " ";
-            __SnapVisualizeASCIIInner(_buffer, _prefix, _struct[$ _name]);
+            __SnapVisualizeASCIIInner(_buffer, _prefix, _struct[$ _name], _referenceMap);
         }
     }
     else if (is_array(_value))
     {
-        if (array_length(_value) <= 0)
+        if (ds_map_exists(_referenceMap, ptr(_value)))
         {
-            buffer_write(_buffer, buffer_text, "[]");
+            buffer_write(_buffer, buffer_text, "[circ ref ");
+            buffer_write(_buffer, buffer_text, __SnapVisualizePointer(_value));
+            buffer_write(_buffer, buffer_text, "]");
+            return;
         }
-        else
+        
+        _referenceMap[? ptr(_value)] = true;
+        
+        buffer_write(_buffer, buffer_text, "[");
+        buffer_write(_buffer, buffer_text, __SnapVisualizePointer(_value));
+        buffer_write(_buffer, buffer_text, "]");
+        
+        if (array_length(_value) > 0)
         {
-            buffer_write(_buffer, buffer_text, "[]\n");
+            buffer_write(_buffer, buffer_text, "\n");
+            
+            var _array = _value;
             
             var _oldPrefix = _prefix;
             _prefix += "|  ";
@@ -202,7 +262,7 @@ function __SnapVisualizeASCIIInner(_buffer, _prefix, _value)
             {
                 buffer_write(_buffer, buffer_text, _oldPrefix);
                 buffer_write(_buffer, buffer_text, "|-");
-                __SnapVisualizeASCIIInner(_buffer, _prefix, _array[_i]);
+                __SnapVisualizeASCIIInner(_buffer, _prefix, _array[_i], _referenceMap);
                 buffer_write(_buffer, buffer_text, "\n");
                 ++_i;
             }
@@ -211,7 +271,7 @@ function __SnapVisualizeASCIIInner(_buffer, _prefix, _value)
             _prefix = _oldPrefix + "   ";
             
             buffer_write(_buffer, buffer_text, "\\-");
-            __SnapVisualizeASCIIInner(_buffer, _prefix, _array[_i]);
+            __SnapVisualizeASCIIInner(_buffer, _prefix, _array[_i], _referenceMap);
         }
     }
     else if (is_string(_value))
