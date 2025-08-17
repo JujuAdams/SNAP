@@ -36,13 +36,13 @@
 /// like to be made accessible.
 /// 
 /// @param string
-/// @param [scope=global]
+/// @param [scope={}]
 /// @param [aliasStruct]
 /// @param [allowAllAssets=false]
 /// 
 /// @jujuadams 2024-08-16
 
-function SnapFromGML(_string, _scope = global, _aliasStruct = {}, _allowAllAssets = false)
+function SnapFromGML(_string, _scope = {}, _aliasStruct = {}, _allowAllAssets = false)
 {
     var _buffer = buffer_create(string_byte_length(_string)+1, buffer_fixed, 1);
     buffer_write(_buffer, buffer_string, _string);

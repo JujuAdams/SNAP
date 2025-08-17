@@ -40,13 +40,13 @@
 /// @param buffer
 /// @param offset
 /// @param size
-/// @param [scope=global]
+/// @param [scope={}]
 /// @param [tokenStruct]
 /// @param [allowAllAssets=false]
 /// 
 /// @jujuadams 2024-08-16
 
-function SnapBufferReadGML(_buffer, _offset, _size, _scope = global, _tokenStruct = {}, _allowAllAssets = false)
+function SnapBufferReadGML(_buffer, _offset, _size, _scope = {}, _tokenStruct = {}, _allowAllAssets = false)
 {
     static _globalVariableStruct = __SnapEnvGML().__globalVariableStruct;
     
