@@ -93,16 +93,16 @@ function SnapBufferReadJSON(_buffer, _inOffset = undefined, _trackFieldOrder = f
                 {
                     _expectingColon = true;
                     _structKey      = _value;
-                    
-                    if (_trackFieldOrder)
-                    {
-                        array_push(_fieldOrderArray, _structKey);
-                    }
                 }
                 else if (_inStructValue)
                 {
                     _expectingComma = true;
                     _stackTop[$ _structKey] = _value;
+					
+					if (_trackFieldOrder)
+                    {
+                        array_push(_stackTop.__snapFieldOrder, _structKey);
+                    }
                     _structKey = undefined;
                 }
                 else if (_inArray)
@@ -249,6 +249,11 @@ function SnapBufferReadJSON(_buffer, _inOffset = undefined, _trackFieldOrder = f
                 if (_inStructValue)
                 {
                     _stackTop[$ _structKey] = _value;
+					if (_trackFieldOrder)
+                    {
+                        array_push(_stackTop.__snapFieldOrder, _structKey);
+                    }
+					
                     _structKey = undefined;
                 }
                 else if (_inArray)
@@ -346,6 +351,10 @@ function SnapBufferReadJSON(_buffer, _inOffset = undefined, _trackFieldOrder = f
                         else if (_inStructValue)
                         {
                             _stackTop[$ _structKey] = _new_stack_top;
+							if (_trackFieldOrder)
+		                    {
+		                        array_push(_stackTop.__snapFieldOrder, _structKey);
+		                    }
                         }
                         else if (_inArray)
                         {
@@ -406,20 +415,15 @@ function SnapBufferReadJSON(_buffer, _inOffset = undefined, _trackFieldOrder = f
                     else
                     {
                         var _new_stack_top = {};
-                        if (_trackFieldOrder)
-                        {
-                            _fieldOrderArray = [];
-                            
-                            if (_trackFieldOrder)
-                            {
-                                _new_stack_top.__snapFieldOrder = _fieldOrderArray;
-                            }
-                        }
                         
                         if (_inStructValue)
                         {
                             _expectingComma = true;
                             _stackTop[$ _structKey] = _new_stack_top;
+							if (_trackFieldOrder)
+		                    {
+		                        array_push(_stackTop.__snapFieldOrder, _structKey); //getting field order here was weird; so im just enforcing we push to the same field order corresponding to the struct we just added a new field to
+		                    }
                         }
                         else if (_inArray)
                         {
@@ -434,6 +438,16 @@ function SnapBufferReadJSON(_buffer, _inOffset = undefined, _trackFieldOrder = f
                         _inStructKey    = true;
                         _inStructValue  = false;
                         _inArray        = false;
+						
+						if (_trackFieldOrder)
+                        {
+                            _fieldOrderArray = [];
+                            
+                            if (_trackFieldOrder)
+                            {
+                                _new_stack_top.__snapFieldOrder = _fieldOrderArray;
+                            }
+                        }
                     }
                 break;
                 
