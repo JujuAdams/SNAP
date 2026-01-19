@@ -20,8 +20,9 @@ The JSON parser (`SnapFromJSON()` and `SnapBufferReadJSON()`) functions cover ba
 |`[pretty]`            |boolean     |Whether to output a "pretty" JSON string, one that uses indentation for easier reading. Defaults to `false`|
 |`[alphabetizeStructs]`|boolean     |Whether to alphabetize structs by variable name. Defaults to `false`                                       |
 |`[accurateFloats]`    |boolean     |Whether to output floats using a greater number of decimal points. Defaults to `false`                     |
+|`[useFieldOrder]`     |boolean     |Whether to respect the special `.__snapFieldOrder` array when writing struct fields. Defaults to `true`    |
 
-!> Setting any of the optional arguments to `true` will incur a memory and performance penalty. You will generally only want to turn the optional features on during development.
+?> Setting any of the optional arguments to `true` will incur a memory and performance penalty. You will generally only want to turn the optional features on during development.
 
 &nbsp;
 
@@ -29,9 +30,10 @@ The JSON parser (`SnapFromJSON()` and `SnapBufferReadJSON()`) functions cover ba
 
 *Returns:* Array or struct, the root node of the JSON data
 
-|Name    |Datatype|Purpose                 |
-|--------|--------|------------------------|
-|`string`|string  |The JSON string to parse|
+|Name               |Datatype|Purpose                                                                                                                                                    |
+|-------------------|--------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
+|`string`           |string  |The JSON string to parse                                                                                                                                   |
+|`[trackFieldOrder]`|boolean |Whether to track the order of struct fields as they appear in the JSON string (stored in `.__snapFieldOrder` field on each GML struct). Defaults to `false`|
 
 &nbsp;
 
@@ -46,6 +48,7 @@ The JSON parser (`SnapFromJSON()` and `SnapBufferReadJSON()`) functions cover ba
 |`[pretty]`            |boolean     |Whether to output a "pretty" JSON string, one that uses indentation for easier reading. Defaults to `false`|
 |`[alphabetizeStructs]`|boolean     |Whether to alphabetize structs by variable name. Defaults to `false`                                       |
 |`[accurateFloats]`    |boolean     |Whether to output floats using a greater number of decimal points. Defaults to `false`                     |
+|`[useFieldOrder]`     |boolean     |Whether to respect the special `.__snapFieldOrder` array when writing struct fields. Defaults to `true`    |
 
 The JSON string will be inserted into the buffer at the current "head" position, as determined by GameMaker's native `buffer_tell()` function.
 
@@ -56,10 +59,11 @@ The JSON string will be inserted into the buffer at the current "head" position,
 ## `SnapBufferReadJSON`
 
 *Returns:* Array or struct, the root node of the JSON data
-
-|Name      |Datatype|Purpose                                                                                                                                           |
-|----------|--------|--------------------------------------------------------------------------------------------------------------------------------------------------|
-|`buffer`  |buffer  |The buffer to read the JSON string from                                                                                                           |
-|`[offset]`|integer |The position in the buffer to read the JSON string from, relative to the start of the buffer. If not specified, the buffer's head position is used|
+ 
+|Name               |Datatype|Purpose                                                                                                                                                    |
+|-------------------|--------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
+|`buffer`           |buffer  |The buffer to read the JSON string from                                                                                                                    |
+|`[offset]`         |integer |The position in the buffer to read the JSON string from, relative to the start of the buffer. If not specified, the buffer's head position is used         |
+|`[trackFieldOrder]`|boolean |Whether to track the order of struct fields as they appear in the JSON string (stored in `.__snapFieldOrder` field on each GML struct). Defaults to `false`|
 
 ?> If you do **not** specify an offset then SNAP will modify the buffer's "head" position. This allows you to read sequential data more easily.
