@@ -5,6 +5,7 @@
 - [NSV](nsv)
 - [Custom Binary](custom-binary)
 - [Messagepack](messagepack)
+- [BSON](bson)
 - [XML](xml)
 - [INI](ini)
 - [GML](gml)
