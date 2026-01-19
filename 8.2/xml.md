@@ -39,8 +39,11 @@ The XML string will be inserted into the buffer at the current "head" position, 
 
 *Returns:* Struct, the struct/array resprentation of the input XML data
 
-|Name    |Datatype|Purpose                                                                              |
-|--------|--------|-------------------------------------------------------------------------------------|
-|`buffer`|buffer  |Buffer to read the CSV data from                                                     |
-|`offset`|integer |Position in the buffer to read the CSV data from, relative to the start of the buffer|
-|`size`  |integer |Number of bytes to read                                                              |
+|Name           |Datatype|Purpose                                                                              |
+|---------------|--------|-------------------------------------------------------------------------------------|
+|`buffer`       |buffer  |Buffer to read the CSV data from                                                     |
+|`offset`       |integer |Position in the buffer to read the CSV data from, relative to the start of the buffer|
+|`size`         |integer |Number of bytes to read                                                              |
+|`[destructive]`|boolean |Whether it is permitted for the buffer to be permanently modified during reading     |
+
+Decodes XML data stored in a buffer and outputs a sorta-JSON equivalent. If the optional `destructive` parameter is set to `true` (the default) then the buffer will be modified during reading. If you set this parameter to `false` then no changes will be made but at a performance penalty.
