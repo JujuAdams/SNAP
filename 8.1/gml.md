@@ -17,9 +17,12 @@
 
 *Returns:* Struct, the resprentation of the input GML code
 
-|Name    |Datatype|Purpose     |
-|--------|--------|------------|
-|`string`|string  |GML to parse|
+|Name              |Datatype       |Purpose                                                                                               |
+|------------------|---------------|------------------------------------------------------------------------------------------------------|
+|`string`          |string         |GML to parse                                                                                          |
+|`[scope]`         |struct/instance|Scope to add root variables into. Default to `global` scope                                           |
+|`[tokenStruct]`   |struct         |Dictionary to look up constant values. See below                                                      |
+|`[allowAllAssets]`|boolean        |Whether to allow access to all assets. This is dangerous for production but helpful during development|
 
 Parses and executes simple GML code stored in a string. Returns the scope, as given by the `scope` parameter. This GML parser is very stripped back and supports a small subset of GML. The use of this parser should be limited to reading data in keeping with the overall intentions of SNAP as a data-oriented library.
 
@@ -64,11 +67,13 @@ The GML string will be inserted into the buffer at the current "head" position, 
 
 *Returns:* Struct, the struct/array resprentation of the input GML code
 
-|Name    |Datatype|Purpose                                                                              |
-|--------|--------|-------------------------------------------------------------------------------------|
-|`buffer`|buffer  |Buffer to read the GML code from                                                     |
-|`offset`|integer |Position in the buffer to read the GML code from, relative to the start of the buffer|
-|`size`  |integer |Number of bytes to read                                                              |
+|Name              |Datatype       |Purpose                                                                                               |
+|------------------|---------------|------------------------------------------------------------------------------------------------------|
+|`buffer`          |buffer         |Buffer to read the GML code from                                                                      |
+|`offset`          |integer        |Position in the buffer to read the GML code from, relative to the start of the buffer                 |
+|`[scope]`         |struct/instance|Scope to add root variables into. Default to `global` scope                                           |
+|`[tokenStruct]`   |struct         |Dictionary to look up constant values. See below                                                      |
+|`[allowAllAssets]`|boolean        |Whether to allow access to all assets. This is dangerous for production but helpful during development|
 
 Parses and executes simple GML code stored in a buffer as a string. Returns the scope, as given by the `scope` parameter. This GML parser is very stripped back and supports a small subset of GML. The use of this parser should be limited to reading data in keeping with the overall intentions of SNAP as a data-oriented library.
 
