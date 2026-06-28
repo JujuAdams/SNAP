@@ -81,7 +81,7 @@ function __SnapToXMLBufferInner(_buffer, _struct, _indent)
     buffer_write(_buffer, buffer_text, ">");
     
     var _content = _struct[$ "text"];
-    if (_content != undefined)
+    if (is_string(_content) && (_content != ""))
     {
         __SnapToXMLWriteEscapedString(_buffer, _content);
     }
@@ -118,7 +118,7 @@ function __SnapToXMLBufferInner(_buffer, _struct, _indent)
 
 function __SnapToXMLWriteEscapedString(_buffer, _string)
 {
-    if (string_pos(_string, "&") > 0)
+    if (string_pos("&", _string) > 0)
     {
         _string = string_replace_all(_string, "\"", "&quot;");
         _string = string_replace_all(_string, "'",  "&apos;");

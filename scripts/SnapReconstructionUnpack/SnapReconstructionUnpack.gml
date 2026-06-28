@@ -14,7 +14,7 @@
 /// @param [cleanUp=true]
 
 function SnapReconstructionUnpack(_value, _instanceofVariableName = "__instanceof__", _cleanUp = true)
-
+{
     __SnapReconstructionUnpackInner(_value, _instanceofVariableName, _cleanUp);
 }
 
