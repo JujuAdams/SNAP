@@ -72,7 +72,7 @@ function SnapDeepAdd(_src, _dst, _ignore_non_numbers = false)
         if (_srcLength > _dstLength) array_resize(_dst, _srcLength);
         
         var _i = 0;
-        repeat(array_length(_srcLength))
+        repeat(_srcLength)
         {
             var _srcValue = _src[_i];
             var _dstValue = _dst[_i];
