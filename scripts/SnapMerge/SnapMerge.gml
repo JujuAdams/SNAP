@@ -1,5 +1,5 @@
 // Feather disable all
-/// @returm N/A (undefined)
+/// @return N/A (undefined)
 /// 
 /// This function is designed to merge one simple tree-like structures into another. Values from the source tree are copied
 /// into the destination tree recursively. Values from the source will overwrite values in the destination, but any values

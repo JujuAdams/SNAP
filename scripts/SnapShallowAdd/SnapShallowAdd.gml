@@ -1,5 +1,5 @@
 // Feather disable all
-/// @returm N/A (undefined)
+/// @return N/A (undefined)
 /// 
 /// This function adds numbers stored in one struct/array to numbers stored in another struct/array. This is a non-recursive operation.
 /// If the structure of the two inputs do not match then the source struct/array takes precedence, albeit softly:
